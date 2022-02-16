@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import BudgetCard from "../budget-card";
 
 const Dashboard = () => {
   return (
@@ -7,6 +8,9 @@ const Dashboard = () => {
       <div>
         <button>Add Budget</button>
         <button>Add Expense</button>
+      </div>
+      <div className="budget">
+        <BudgetCard />
       </div>
     </Container>
   );
@@ -20,7 +24,7 @@ const Container = styled.div`
   justify-content: flex-start;
   align-items: center;
   border: 1px solid black;
-  width: 50%;
+  width: 60%;
   min-height: 100vh;
 
   button {
@@ -28,5 +32,9 @@ const Container = styled.div`
     padding: 5px 10px;
     outline: none;
     cursor: pointer;
+  }
+
+  div.budget {
+    width: 100%;
   }
 `;
