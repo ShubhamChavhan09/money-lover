@@ -48,21 +48,23 @@ const BudgetModal = ({ handleBudget, budgetModal }) => {
 export default BudgetModal;
 const Overlay = styled.div`
   position: absolute;
-  z-index: 2;
+  z-index: 1;
   inset: 0;
   background: rgba(0, 0, 0, 0.2);
-  display: flex;
+  display: block;
+  padding-top: 70px;
 
   div.modal {
-    margin: auto;
+    margin: 0 auto;
     background: #fff;
-    height: 80%;
+    height: 500px;
     width: 60%;
     position: relative;
     padding: 40px 25px;
     border-radius: 30px;
     background: linear-gradient(145deg, #ffffff, #e6e6e6);
     box-shadow: 35px 35px 70px #a8a8a8, -35px -35px 70px #ffffff;
+    z-index: 2;
   }
   span {
     position: absolute;
