@@ -1,14 +1,22 @@
 import React, { useRef } from "react";
 import styled from "styled-components";
+import { useBudgets } from "../../context";
 
 const BudgetModal = ({ handleBudget, budgetModal }) => {
   const nameRef = useRef("");
   const maxRef = useRef("");
+  const { budgets, addBudget } = useBudgets();
+
   const handleSubmit = (event) => {
     event.preventDefault();
-    // name: nameRef.current.value;
-    // max: parseFloat(maxRef.current.value);
+    addBudget({
+      name: nameRef.current.value,
+      max: parseFloat(maxRef.current.value),
+    });
+    handleBudget();
   };
+
+  console.log(budgets);
 
   return (
     <>
