@@ -2,12 +2,8 @@ import React from "react";
 import styled from "styled-components";
 import { useBudgets } from "../../context";
 
-const BudgetCard = () => {
+const BudgetCard = ({ handleExpense }) => {
   const { budgets } = useBudgets();
-
-  const handleClick = (id) => {
-    console.log(id);
-  };
 
   return (
     <>
@@ -20,7 +16,7 @@ const BudgetCard = () => {
             </div>
             <progress value="50" max="100" />
             <div>
-              <button onClick={() => handleClick(budget.id)}>
+              <button onClick={() => handleExpense(budget.id)}>
                 Add Expense
               </button>
               <button>View Expenses</button>
