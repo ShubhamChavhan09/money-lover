@@ -2,9 +2,10 @@ import React, { useRef } from "react";
 import styled from "styled-components";
 import { useBudgets, MISCELLANEOUS_BUDGET_ID } from "../../context";
 
-const ExpenseModal = ({ expenseModal, handleExpense }) => {
+const ExpenseModal = ({ expenseModal, handleExpense, expenseBudgetId }) => {
   const descriptionRef = useRef("");
   const amountRef = useRef("");
+  const budgetIdRef = useRef("");
 
   const { budgets, expenses, addExpense } = useBudgets();
 
@@ -13,6 +14,7 @@ const ExpenseModal = ({ expenseModal, handleExpense }) => {
     addExpense({
       description: descriptionRef.current.value,
       amount: amountRef.current.value,
+      budgetId: budgetIdRef.current.value,
     });
     handleExpense();
   };
@@ -38,10 +40,14 @@ const ExpenseModal = ({ expenseModal, handleExpense }) => {
                 </div>
                 <div>
                   <label>Budget Category: </label>
-                  <select>
+                  <select defaultValue={expenseBudgetId} ref={budgetIdRef}>
                     <option id={MISCELLANEOUS_BUDGET_ID}>Miscellaneous</option>;
                     {budgets.map((budget) => {
-                      return <option key={budget.id}>{budget.name}</option>;
+                      return (
+                        <option key={budget.id} value={budget.id}>
+                          {budget.name}
+                        </option>
+                      );
                     })}
                   </select>
                 </div>
