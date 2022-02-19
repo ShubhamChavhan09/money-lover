@@ -13,7 +13,7 @@ const ExpenseModal = ({ expenseModal, handleExpense, expenseBudgetId }) => {
     event.preventDefault();
     addExpense({
       description: descriptionRef.current.value,
-      amount: amountRef.current.value,
+      amount: parseFloat(amountRef.current.value),
       budgetId: budgetIdRef.current.value,
     });
     handleExpense();
