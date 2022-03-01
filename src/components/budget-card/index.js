@@ -2,28 +2,36 @@ import React from "react";
 import styled from "styled-components";
 import { useBudgets } from "../../context";
 
-const BudgetCard = ({ handleExpense }) => {
+const BudgetCard = ({
+  handleExpense,
+  handleViewExpense,
+  amount,
+  name,
+  max,
+  id,
+  hidden,
+}) => {
   const { budgets } = useBudgets();
+
+  const rate = (amount / max) * 100;
 
   return (
     <>
-      {budgets.map((budget) => {
-        return (
-          <Card key={budget.id}>
-            <div>
-              <h2>{budget.name}</h2>
-              <span>Amount / {budget.max}</span>
-            </div>
-            <progress value="50" max="100" />
-            <div>
-              <button onClick={() => handleExpense(budget.id)}>
-                Add Expense
-              </button>
-              <button>View Expenses</button>
-            </div>
-          </Card>
-        );
-      })}
+      <Card>
+        <div>
+          <h2>{name}</h2>
+          <span>
+            {amount} {max && `/ ${max}`}
+          </span>
+        </div>
+        {max && <progress value={rate} max="100" />}
+        {!hidden && (
+          <div>
+            <button onClick={() => handleExpense(id)}>Add Expense</button>
+            <button onClick={() => handleViewExpense(id)}>View Expenses</button>
+          </div>
+        )}
+      </Card>
     </>
   );
 };
