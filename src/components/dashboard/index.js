@@ -3,11 +3,18 @@ import styled from "styled-components";
 import BudgetCard from "../budget-card";
 import BudgetModal from "../budget-modal";
 import ExpenseModal from "../expense-modal";
+import MiscellaneousCard from "../miscellaneous-card";
+import ViewExpenseModal from "../view-expense-modal";
+import { useBudgets } from "../../context";
+import TotalCard from "../total-card";
 
 const Dashboard = () => {
   const [budgetModal, setBudgetModal] = useState(false);
   const [expenseModal, setExpenseModal] = useState(false);
   const [expenseBudgetId, setExpenseBudgetId] = useState();
+  const [viewExpenses, setViewExpenses] = useState(false);
+
+  const { budgets, getBudgetExpenses } = useBudgets();
 
   const handleBudget = () => {
     setBudgetModal(!budgetModal);
@@ -16,7 +23,10 @@ const Dashboard = () => {
   const handleExpense = (budgetId) => {
     setExpenseModal(!expenseModal);
     setExpenseBudgetId(budgetId);
-    console.log(budgetId);
+  };
+
+  const handleViewExpense = (id) => {
+    setViewExpenses(!viewExpenses);
   };
 
   return (
@@ -28,7 +38,29 @@ const Dashboard = () => {
           <button onClick={handleExpense}>Add Expense</button>
         </div>
         <div className="budget">
-          <BudgetCard handleExpense={handleExpense} />
+          {budgets.map((budget) => {
+            const amount = getBudgetExpenses(budget.id).reduce(
+              (total, expense) => total + expense.amount,
+              0
+            );
+            return (
+              <BudgetCard
+                key={budget.id}
+                handleExpense={handleExpense}
+                handleViewExpense={handleViewExpense}
+                amount={amount}
+                name={budget.name}
+                max={budget.max}
+                id={budget.id}
+              />
+            );
+          })}
+
+          <MiscellaneousCard
+            handleViewExpense={handleViewExpense}
+            handleExpense={handleExpense}
+          />
+          <TotalCard />
         </div>
       </Container>
       <BudgetModal handleBudget={handleBudget} budgetModal={budgetModal} />
@@ -36,6 +68,10 @@ const Dashboard = () => {
         handleExpense={handleExpense}
         expenseModal={expenseModal}
         expenseBudgetId={expenseBudgetId}
+      />
+      <ViewExpenseModal
+        viewExpenses={viewExpenses}
+        handleViewExpense={handleViewExpense}
       />
     </>
   );
@@ -48,7 +84,6 @@ const Container = styled.div`
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-  border: 1px solid black;
   width: 100vw;
   min-height: 100vh;
   position: relative;
