@@ -2,8 +2,8 @@ import React from "react";
 import styled from "styled-components";
 import { useBudgets } from "../../context";
 
-const ViewExpenseModal = ({ handleViewExpense, viewExpenses }) => {
-  const { expenses } = useBudgets();
+const ViewExpenseModal = ({ handleViewExpense, viewExpenses, expensedId }) => {
+  const { getBudgetExpenses } = useBudgets();
 
   return (
     <>
@@ -13,8 +13,11 @@ const ViewExpenseModal = ({ handleViewExpense, viewExpenses }) => {
             <span onClick={handleViewExpense}>X</span>
             <h2>Expenses</h2>
             <div>
-              {expenses.map((expense) => (
-                <p key={expense.id}>{expense.amount}</p>
+              {getBudgetExpenses(expensedId).map((expense) => (
+                <p key={expense.id}>
+                  <h3>{expense.description}</h3>
+                  <h3>{expense.amount}</h3>
+                </p>
               ))}
             </div>
           </div>
