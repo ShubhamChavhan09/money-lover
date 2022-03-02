@@ -13,6 +13,7 @@ const Dashboard = () => {
   const [expenseModal, setExpenseModal] = useState(false);
   const [expenseBudgetId, setExpenseBudgetId] = useState();
   const [viewExpenses, setViewExpenses] = useState(false);
+  const [expensedId, setExpensedId] = useState();
 
   const { budgets, getBudgetExpenses } = useBudgets();
 
@@ -27,6 +28,7 @@ const Dashboard = () => {
 
   const handleViewExpense = (id) => {
     setViewExpenses(!viewExpenses);
+    setExpensedId(id);
   };
 
   return (
@@ -72,6 +74,7 @@ const Dashboard = () => {
       <ViewExpenseModal
         viewExpenses={viewExpenses}
         handleViewExpense={handleViewExpense}
+        expensedId={expensedId}
       />
     </>
   );
