@@ -1,10 +1,12 @@
 import React, { useRef } from "react";
 import styled from "styled-components";
 import { useBudgets } from "../../context";
+import { CgClose } from "react-icons/cg";
 
 const BudgetModal = ({ handleBudget, budgetModal }) => {
   const nameRef = useRef("");
   const maxRef = useRef("");
+  const modalRef = useRef("");
   const { budgets, addBudget } = useBudgets();
 
   const handleSubmit = (event) => {
@@ -16,14 +18,20 @@ const BudgetModal = ({ handleBudget, budgetModal }) => {
     handleBudget();
   };
 
-  console.log(budgets);
+  const close = (e) => {
+    if (modalRef.current === e.target) {
+      handleBudget();
+    }
+  };
 
   return (
     <>
       {budgetModal ? (
-        <Overlay>
+        <Overlay ref={modalRef} onClick={close}>
           <div className="modal">
-            <span onClick={() => handleBudget()}>X</span>
+            <span onClick={() => handleBudget()}>
+              <CgClose />
+            </span>
             <h2>Budget</h2>
             <section>
               <form onSubmit={handleSubmit}>
@@ -47,10 +55,10 @@ const BudgetModal = ({ handleBudget, budgetModal }) => {
 
 export default BudgetModal;
 const Overlay = styled.div`
-  position: absolute;
+  position: fixed;
   z-index: 1;
   inset: 0;
-  background: rgba(0, 0, 0, 0.2);
+  background: rgba(0, 0, 0, 0.5);
   display: block;
   padding-top: 70px;
 
@@ -63,8 +71,8 @@ const Overlay = styled.div`
     padding: 40px 25px;
     border-radius: 30px;
     background: linear-gradient(145deg, #ffffff, #e6e6e6);
-    box-shadow: 35px 35px 70px #a8a8a8, -35px -35px 70px #ffffff;
-    z-index: 2;
+    // box-shadow: 35px 35px 70px #a8a8a8, -35px -35px 70px #ffffff;
+    // z-index: 2;
   }
   span {
     position: absolute;

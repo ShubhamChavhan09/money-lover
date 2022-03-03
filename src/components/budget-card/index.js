@@ -21,10 +21,10 @@ const BudgetCard = ({
         <div>
           <h2>{name}</h2>
           <span>
-            {amount} {max && `/ ${max}`}
+            {amount} {(max || max === `0`) && `/ ${max}`}
           </span>
         </div>
-        {max && <progress value={rate} max="100" />}
+        {(max || max === `0`) && <progress value={rate} max="100" />}
         {!hidden && (
           <div>
             <button onClick={() => handleExpense(id)}>Add Expense</button>

@@ -1,6 +1,7 @@
 import React, { useRef } from "react";
 import styled from "styled-components";
 import { useBudgets, MISCELLANEOUS_BUDGET_ID } from "../../context";
+import { CgClose } from "react-icons/cg";
 
 const ExpenseModal = ({ expenseModal, handleExpense, expenseBudgetId }) => {
   const descriptionRef = useRef("");
@@ -26,7 +27,9 @@ const ExpenseModal = ({ expenseModal, handleExpense, expenseBudgetId }) => {
       {expenseModal ? (
         <Overlay>
           <div className="modal">
-            <span onClick={() => handleExpense()}>X</span>
+            <span onClick={() => handleExpense()}>
+              <CgClose />
+            </span>
             <h2>Expense</h2>
             <section>
               <form onSubmit={handleSubmitExp}>
@@ -63,7 +66,7 @@ const ExpenseModal = ({ expenseModal, handleExpense, expenseBudgetId }) => {
 export default ExpenseModal;
 
 const Overlay = styled.div`
-  position: absolute;
+  position: fixed;
   z-index: 1;
   inset: 0;
   background: rgba(0, 0, 0, 0.2);
