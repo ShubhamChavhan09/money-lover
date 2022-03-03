@@ -43,9 +43,36 @@ export const BudgetsProvider = ({ children }) => {
     return expenses.filter((expense) => expense.budgetId === budgetId);
   };
 
+  const deleteBudget = (id) => {
+    setExpenses((prevExpense) => {
+      return prevExpense.map((expense) => {
+        if (expense.budgetId !== id) return expense;
+        return { ...expense, budgetId: MISCELLANEOUS_BUDGET_ID };
+      });
+    });
+
+    setBudgets((prevBudgets) => {
+      return prevBudgets.filter((prevBudget) => prevBudget.id !== id);
+    });
+  };
+
+  const deleteExpense = (id) => {
+    setExpenses((prevExpense) => {
+      return prevExpense.filter((expense) => expense.id !== id);
+    });
+  };
+
   return (
     <budgetsContext.Provider
-      value={{ budgets, addBudget, expenses, addExpense, getBudgetExpenses }}
+      value={{
+        budgets,
+        addBudget,
+        expenses,
+        addExpense,
+        getBudgetExpenses,
+        deleteBudget,
+        deleteExpense,
+      }}
     >
       {children}
     </budgetsContext.Provider>
