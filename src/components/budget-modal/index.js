@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useEffect } from "react";
 import styled from "styled-components";
 import { useBudgets } from "../../context";
 import { CgClose } from "react-icons/cg";
@@ -7,7 +7,13 @@ const BudgetModal = ({ handleBudget, budgetModal }) => {
   const nameRef = useRef("");
   const maxRef = useRef("");
   const modalRef = useRef("");
-  const { budgets, addBudget } = useBudgets();
+  const { addBudget } = useBudgets();
+
+  useEffect(() => {
+    if (nameRef.current) {
+      nameRef.current.focus();
+    }
+  }, [handleBudget]);
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -32,7 +38,7 @@ const BudgetModal = ({ handleBudget, budgetModal }) => {
             <span onClick={() => handleBudget()}>
               <CgClose />
             </span>
-            <h2>Budget</h2>
+            <h2>Add Budget</h2>
             <section>
               <form onSubmit={handleSubmit}>
                 <div>
