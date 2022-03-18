@@ -25,7 +25,7 @@ export const BudgetsProvider = ({ children }) => {
     });
   };
 
-  const addExpense = ({ description, amount, budgetId }) => {
+  const addExpense = ({ description, amount, budgetId, date }) => {
     setExpenses((prevExpense) => {
       return [
         ...prevExpense,
@@ -34,6 +34,7 @@ export const BudgetsProvider = ({ children }) => {
           description,
           amount,
           budgetId,
+          date,
         },
       ];
     });
