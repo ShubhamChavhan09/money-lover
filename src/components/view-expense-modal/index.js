@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { useBudgets, MISCELLANEOUS_BUDGET_ID } from "../../context";
 import { CgCloseR, CgClose } from "react-icons/cg";
+import { formatDistanceToNowStrict } from "date-fns";
 
 const ViewExpenseModal = ({ handleViewExpense, viewExpenses, expensedId }) => {
   const { getBudgetExpenses, budgets, deleteBudget, deleteExpense } =
@@ -23,29 +24,41 @@ const ViewExpenseModal = ({ handleViewExpense, viewExpenses, expensedId }) => {
         ? expensedId != null && (
             <Overlay>
               <div className="modal">
-                <div>
-                  <span className="close" onClick={handleViewExpense}>
-                    <CgClose />
-                  </span>
-                  <h2>{budget?.name} - Expenses</h2>
+                <div className="header">
+                  <h2>Expenses - {budget?.name} </h2>
                   {expensedId !== MISCELLANEOUS_BUDGET_ID && (
                     <button onClick={() => handleBudgetDelete(expensedId)}>
                       Delete
                     </button>
                   )}
+                  <span className="close" onClick={handleViewExpense}>
+                    <CgClose />
+                  </span>
                 </div>
                 <div>
-                  {getBudgetExpenses(expensedId).map((expense) => (
-                    <div className="expenses" key={expense.id}>
-                      <span>{expense.description}</span>
-                      <span>
-                        {expense.amount}
-                        <span onClick={() => deleteExpense(expense.id)}>
-                          <CgCloseR />
+                  {getBudgetExpenses(expensedId).map((expense) => {
+                    let result = formatDistanceToNowStrict(
+                      new Date(expense.date),
+                      {
+                        includeSeconds: true,
+                      }
+                    );
+
+                    return (
+                      <Expenses key={expense.id}>
+                        <span>{expense.description}</span>
+                        <span>{result} ago</span>
+
+                        <span>
+                          {expense.amount}
+
+                          <span onClick={() => deleteExpense(expense.id)}>
+                            <Close />
+                          </span>
                         </span>
-                      </span>
-                    </div>
-                  ))}
+                      </Expenses>
+                    );
+                  })}
                 </div>
               </div>
             </Overlay>
@@ -62,11 +75,10 @@ const Overlay = styled.div`
   z-index: 1;
   inset: 0;
   background: rgba(0, 0, 0, 0.2);
-  display: block;
-  padding-top: 70px;
+  display: flex;
 
   div.modal {
-    margin: 0 auto;
+    margin: auto;
     background: #fff;
     height: 500px;
     width: 60%;
@@ -77,19 +89,32 @@ const Overlay = styled.div`
     box-shadow: 20px 20px 60px #d6b8b4, -20px -20px 60px #fff8f4;
   }
   span.close {
-    position: absolute;
-    top: 15px;
-    right: 20px;
     font-size: 1.2rem;
     cursor: pointer;
+    margin-left: auto;
   }
 
-  div.expenses {
+  div.header {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    span {
-      margin: 0 10px;
+    justify-content: flex-start;
+
+    h2 {
+      margin-right: 1rem;
+    }
+    button {
+      padding: 5px;
     }
   }
+`;
+
+const Close = styled(CgCloseR)`
+  font-size: 1.6rem;
+  margin-left: 20px;
+`;
+
+const Expenses = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid black;
 `;
