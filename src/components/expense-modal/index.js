@@ -34,9 +34,8 @@ const ExpenseModal = ({ expenseModal, handleExpense, expenseBudgetId }) => {
 
   // const date = new Date();
   // const defaultValue = date.toLocaleDateString("en-CA");
-  const date = format(new Date(), "yyyy-MM-dd'T'hh:mm");
+  const date = format(new Date(), "yyyy-MM-dd'T'H:mm");
   const defaultValue = date;
-  console.log(date);
 
   return (
     <>
