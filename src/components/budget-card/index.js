@@ -11,8 +11,6 @@ const BudgetCard = ({
   id,
   hidden,
 }) => {
-  const { budgets } = useBudgets();
-
   const rate = (amount / max) * 100;
 
   return (
@@ -43,7 +41,7 @@ const Card = styled.div`
   border: 2px solid green;
   border-radius: 8px;
   height: 180px;
-  width: 500px;
+  width: 280px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -54,6 +52,7 @@ const Card = styled.div`
   div {
     display: flex;
     justify-content: space-between;
+    align-items: center;
   }
   button {
     border-radius: 8px;
