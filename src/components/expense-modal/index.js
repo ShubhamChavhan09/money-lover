@@ -1,14 +1,21 @@
-import React, { useRef } from "react";
+import React, { useRef, useEffect } from "react";
 import styled from "styled-components";
 import { useBudgets, MISCELLANEOUS_BUDGET_ID } from "../../context";
 import { CgClose } from "react-icons/cg";
+import format from "date-fns/format";
 
 const ExpenseModal = ({ expenseModal, handleExpense, expenseBudgetId }) => {
   const descriptionRef = useRef("");
   const amountRef = useRef("");
   const budgetIdRef = useRef("");
+  const dateRef = useRef("");
+  const { budgets, addExpense } = useBudgets();
 
-  const { budgets, expenses, addExpense } = useBudgets();
+  useEffect(() => {
+    if (amountRef.current) {
+      amountRef.current.focus();
+    }
+  }, [expenseModal]);
 
   const handleSubmitExp = (event) => {
     event.preventDefault();
@@ -16,11 +23,20 @@ const ExpenseModal = ({ expenseModal, handleExpense, expenseBudgetId }) => {
       description: descriptionRef.current.value,
       amount: parseFloat(amountRef.current.value),
       budgetId: budgetIdRef.current.value,
+      date: dateRef.current.value,
     });
     handleExpense();
   };
 
-  console.log(expenses);
+  // const today = new Date();
+  // const date = today.setDate(today.getDate());
+  // const defaultValue = new Date(date).toISOString().split("T")[0];
+
+  // const date = new Date();
+  // const defaultValue = date.toLocaleDateString("en-CA");
+  const date = format(new Date(), "yyyy-MM-dd'T'hh:mm");
+  const defaultValue = date;
+  console.log(date);
 
   return (
     <>
@@ -30,19 +46,15 @@ const ExpenseModal = ({ expenseModal, handleExpense, expenseBudgetId }) => {
             <span onClick={() => handleExpense()}>
               <CgClose />
             </span>
-            <h2>Expense</h2>
+            <h2>Add Expense</h2>
             <section>
               <form onSubmit={handleSubmitExp}>
-                <div>
-                  <label>Description: </label>
-                  <input type="text" required ref={descriptionRef} />
-                </div>
                 <div>
                   <label>Amount: </label>
                   <input type="number" required min="0" ref={amountRef} />
                 </div>
                 <div>
-                  <label>Budget Category: </label>
+                  <label>Select Category: </label>
                   <select defaultValue={expenseBudgetId} ref={budgetIdRef}>
                     <option id={MISCELLANEOUS_BUDGET_ID}>Miscellaneous</option>;
                     {budgets.map((budget) => {
@@ -53,6 +65,23 @@ const ExpenseModal = ({ expenseModal, handleExpense, expenseBudgetId }) => {
                       );
                     })}
                   </select>
+                </div>
+                <div>
+                  <label>Description: </label>
+                  <input
+                    type="text"
+                    required
+                    ref={descriptionRef}
+                    placeholder="Write note"
+                  />
+                </div>
+                <div>
+                  <label>Date: </label>
+                  <input
+                    type="datetime-local"
+                    ref={dateRef}
+                    defaultValue={defaultValue}
+                  />
                 </div>
                 <button type="submit">Add Expense</button>
               </form>
