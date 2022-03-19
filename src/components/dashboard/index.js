@@ -33,7 +33,11 @@ const Dashboard = () => {
 
   return (
     <>
-      <Container budgetModal={budgetModal} expenseModal={expenseModal}>
+      <Container
+        budgetModal={budgetModal}
+        expenseModal={expenseModal}
+        viewExpenses={viewExpenses}
+      >
         <h1>Money Lover</h1>
         <div>
           <button onClick={handleBudget}>Add Budget</button>
@@ -83,25 +87,31 @@ const Dashboard = () => {
 export default Dashboard;
 
 const Container = styled.div`
+  width: 60rem;
+  border: 1px solid black;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-  width: 100vw;
   min-height: 100vh;
-  position: relative;
-  filter: ${(props) => (props.budgetModal ? `blur(2px)` : null)};
-  filter: ${(props) => (props.expenseModal ? `blur(2px)` : null)};
-  transition: all 0.3s ease;
+  padding: 1rem;
+  filter: ${(props) =>
+    props.budgetModal || props.expenseModal || props.viewExpenses
+      ? `blur(1.5px)`
+      : null};
+  transition: all 0.2s ease-in-out;
 
   button {
-    margin: 0 10px;
+    margin: 0 20px;
     padding: 5px 10px;
     outline: none;
     cursor: pointer;
   }
 
   div.budget {
-    width: 100%;
+    // width: 100%;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
   }
 `;
