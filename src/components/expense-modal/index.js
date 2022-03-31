@@ -34,8 +34,8 @@ const ExpenseModal = ({ expenseModal, handleExpense, expenseBudgetId }) => {
 
   // const date = new Date();
   // const defaultValue = date.toLocaleDateString("en-CA");
-  const date = format(new Date(), "yyyy-MM-dd'T'H:mm");
-  const defaultValue = date;
+
+  const defaultDate = format(new Date(), "yyyy-MM-dd'T'H:mm");
 
   return (
     <>
@@ -79,7 +79,7 @@ const ExpenseModal = ({ expenseModal, handleExpense, expenseBudgetId }) => {
                   <input
                     type="datetime-local"
                     ref={dateRef}
-                    defaultValue={defaultValue}
+                    defaultValue={defaultDate}
                   />
                 </div>
                 <button type="submit">Add Expense</button>
