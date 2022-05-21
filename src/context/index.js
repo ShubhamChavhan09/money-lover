@@ -10,33 +10,38 @@ export const BudgetsProvider = ({ children }) => {
   const [budgets, setBudgets] = useState([]);
   const [expenses, setExpenses] = useState([]);
 
-  // fetching budgets data from supabase
+  //fetching budgets data from supabase
   useEffect(() => {
     fetchBudgets();
   }, []);
 
   const fetchBudgets = async () => {
-    const { data } = await supabase.from("budgets").select();
-    setBudgets(data);
+    const { data, error } = await supabase.from("budgets").select();
+    if (error) console.log("error", error);
+    else setBudgets(data);
   };
-  //
 
   const addBudget = async ({ name, max }) => {
-    const id = uuidv4();
-    await supabase.from("budgets").insert([{ id, name, max }]);
-    setBudgets((prevBudget) => {
-      if (prevBudget.find((budget) => budget.name === name)) {
-        return prevBudget;
-      }
-      return [
-        ...prevBudget,
-        {
-          id,
-          name,
-          max,
-        },
-      ];
-    });
+    try {
+      const id = uuidv4();
+      await supabase.from("budgets").insert([{ id, name, max }]);
+
+      setBudgets((prevBudget) => {
+        if (prevBudget.find((budget) => budget.name === name)) {
+          return prevBudget;
+        }
+        return [
+          ...prevBudget,
+          {
+            id,
+            name,
+            max,
+          },
+        ];
+      });
+    } catch (error) {
+      console.log("error", error);
+    }
   };
 
   //fetching expenses data from supabase
@@ -45,28 +50,33 @@ export const BudgetsProvider = ({ children }) => {
   }, []);
 
   const fetchExpenses = async () => {
-    const { data } = await supabase.from("expenses").select();
-    setExpenses(data);
+    const { data, error } = await supabase.from("expenses").select();
+    if (error) console.log("error", error);
+    else setExpenses(data);
   };
-  //
 
   const addExpense = async ({ description, amount, budgetId, date }) => {
-    const id = uuidv4();
-    await supabase
-      .from("expenses")
-      .insert([{ id, description, amount, budgetId, date }]);
-    setExpenses((prevExpense) => {
-      return [
-        ...prevExpense,
-        {
-          id,
-          description,
-          amount,
-          budgetId,
-          date,
-        },
-      ];
-    });
+    try {
+      const id = uuidv4();
+
+      await supabase
+        .from("expenses")
+        .insert([{ id, description, amount, budgetId, date }]);
+      setExpenses((prevExpense) => {
+        return [
+          ...prevExpense,
+          {
+            id,
+            description,
+            amount,
+            budgetId,
+            date,
+          },
+        ];
+      });
+    } catch (error) {
+      console.log("error", error);
+    }
   };
 
   const getBudgetExpenses = (budgetId) => {
@@ -74,25 +84,33 @@ export const BudgetsProvider = ({ children }) => {
   };
 
   const deleteBudget = async (id) => {
-    await supabase.from("budgets").delete().match({ id });
+    try {
+      await supabase.from("budgets").delete().match({ id });
 
-    setExpenses((prevExpense) => {
-      return prevExpense.map((expense) => {
-        if (expense.budgetId !== id) return expense;
-        return { ...expense, budgetId: MISCELLANEOUS_BUDGET_ID };
+      setExpenses((prevExpense) => {
+        return prevExpense.map((expense) => {
+          if (expense.budgetId !== id) return expense;
+          return { ...expense, budgetId: MISCELLANEOUS_BUDGET_ID };
+        });
       });
-    });
 
-    setBudgets((prevBudgets) => {
-      return prevBudgets.filter((prevBudget) => prevBudget.id !== id);
-    });
+      setBudgets((prevBudgets) => {
+        return prevBudgets.filter((prevBudget) => prevBudget.id !== id);
+      });
+    } catch (error) {
+      console.log("error", error);
+    }
   };
 
   const deleteExpense = async (id) => {
-    await supabase.from("expenses").delete().match({ id });
-    setExpenses((prevExpense) => {
-      return prevExpense.filter((expense) => expense.id !== id);
-    });
+    try {
+      await supabase.from("expenses").delete().match({ id });
+      setExpenses((prevExpense) => {
+        return prevExpense.filter((expense) => expense.id !== id);
+      });
+    } catch (error) {
+      console.log("error", error);
+    }
   };
 
   return (
