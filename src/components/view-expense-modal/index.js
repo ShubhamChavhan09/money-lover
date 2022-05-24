@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { useBudgets, MISCELLANEOUS_BUDGET_ID } from "../../context";
 import { CgCloseR, CgClose } from "react-icons/cg";
-import { formatDistanceToNowStrict } from "date-fns";
+import { formatDistanceToNowStrict, format } from "date-fns";
 
 const ViewExpenseModal = ({ handleViewExpense, viewExpenses, expensedId }) => {
   const { getBudgetExpenses, budgets, deleteBudget, deleteExpense } =
@@ -43,11 +43,19 @@ const ViewExpenseModal = ({ handleViewExpense, viewExpenses, expensedId }) => {
                         includeSeconds: true,
                       }
                     );
+                    let day = format(
+                      new Date(expense.date),
+                      "d LLL, yyyy 'at' h:mm aaa"
+                    );
 
                     return (
                       <Expenses key={expense.id}>
                         <span>{expense.description}</span>
-                        <span>{result} ago</span>
+                        <span>
+                          {/* {result} - */}
+                          {day}
+                          {/* ago */}
+                        </span>
 
                         <span>
                           {expense.amount}
@@ -87,6 +95,7 @@ const Overlay = styled.div`
     border-radius: 30px;
     background: #fcd8d4;
     box-shadow: 20px 20px 60px #d6b8b4, -20px -20px 60px #fff8f4;
+    overflow: scroll;
   }
   span.close {
     font-size: 1.2rem;

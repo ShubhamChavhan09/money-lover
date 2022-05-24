@@ -9,6 +9,7 @@ export const MISCELLANEOUS_BUDGET_ID = "Miscellaneous";
 export const BudgetsProvider = ({ children }) => {
   const [budgets, setBudgets] = useState([]);
   const [expenses, setExpenses] = useState([]);
+  const [inputText, setInputText] = useState("");
 
   //fetching budgets data from supabase
   useEffect(() => {
@@ -113,6 +114,11 @@ export const BudgetsProvider = ({ children }) => {
     }
   };
 
+  const searchBudget = (e) => {
+    const lowercase = e.target.value.toLowerCase();
+    setInputText(lowercase);
+  };
+
   return (
     <budgetsContext.Provider
       value={{
@@ -123,6 +129,8 @@ export const BudgetsProvider = ({ children }) => {
         getBudgetExpenses,
         deleteBudget,
         deleteExpense,
+        searchBudget,
+        inputText,
       }}
     >
       {children}

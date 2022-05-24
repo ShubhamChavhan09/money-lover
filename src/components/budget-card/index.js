@@ -1,6 +1,8 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { useBudgets } from "../../context";
+import { currencyFormatter } from "../../utils";
 
 const BudgetCard = ({
   handleExpense,
@@ -31,7 +33,9 @@ const BudgetCard = ({
         <div>
           <h2>{name}</h2>
           <span>
-            {amount} {(max || max === `0`) && `/ ${max}`}
+            {currencyFormatter.format(amount)}
+
+            {(max || max === `0`) && ` / ${currencyFormatter.format(max)}`}
           </span>
         </div>
         <ProgressBar col={setProgressVariant(amount, max)}>
@@ -41,6 +45,9 @@ const BudgetCard = ({
           <div>
             <button onClick={() => handleExpense(id)}>Add Expense</button>
             <button onClick={() => handleViewExpense(id)}>View Expenses</button>
+            {/* <Link to={`expenses/${name}`}>
+              <button>View Expenses</button>
+            </Link> */}
           </div>
         )}
       </Card>

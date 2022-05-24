@@ -7,6 +7,8 @@ import MiscellaneousCard from "../miscellaneous-card";
 import ViewExpenseModal from "../view-expense-modal";
 import { useBudgets } from "../../context";
 import TotalCard from "../total-card";
+import SearchBudget from "../search-budget";
+import NewCard from "../new-card";
 
 const Dashboard = () => {
   const [budgetModal, setBudgetModal] = useState(false);
@@ -31,6 +33,14 @@ const Dashboard = () => {
     setExpensedId(id);
   };
 
+  // const date = () => {
+  //   const data = budgets.sort((a, b) => {
+  //     return new Date(b.created).getTime() - new Date(a.created).getTime();
+  //   });
+  //   console.log(data);
+  // };
+  // date();
+
   return (
     <>
       <Container
@@ -38,13 +48,13 @@ const Dashboard = () => {
         expenseModal={expenseModal}
         viewExpenses={viewExpenses}
       >
-        <h1>Money Lover</h1>
         <div>
           <button onClick={handleBudget}>Add Budget</button>
           <button onClick={handleExpense}>Add Expense</button>
         </div>
+
         <div className="budget">
-          {budgets.map((budget) => {
+          {/* {budgets.map((budget) => {
             const amount = getBudgetExpenses(budget.id).reduce(
               (total, expense) => total + expense.amount,
               0
@@ -60,13 +70,19 @@ const Dashboard = () => {
                 id={budget.id}
               />
             );
-          })}
+          })} */}
+
+          {/*  */}
+          <NewCard
+            handleExpense={handleExpense}
+            handleViewExpense={handleViewExpense}
+          />
 
           <MiscellaneousCard
             handleViewExpense={handleViewExpense}
             handleExpense={handleExpense}
           />
-          <TotalCard />
+          {/* <TotalCard /> */}
         </div>
       </Container>
       <BudgetModal handleBudget={handleBudget} budgetModal={budgetModal} />
@@ -87,8 +103,8 @@ const Dashboard = () => {
 export default Dashboard;
 
 const Container = styled.div`
-  width: 60rem;
-  border: 1px solid black;
+  width: 90%;
+  // border: 1px solid black;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
