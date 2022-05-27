@@ -28,14 +28,7 @@ const ExpenseModal = ({ expenseModal, handleExpense, expenseBudgetId }) => {
     handleExpense();
   };
 
-  // const today = new Date();
-  // const date = today.setDate(today.getDate());
-  // const defaultValue = new Date(date).toISOString().split("T")[0];
-
-  // const date = new Date();
-  // const defaultValue = date.toLocaleDateString("en-CA");
-
-  const defaultDate = format(new Date(), "yyyy-MM-dd'T'H:mm");
+  const defaultDate = format(new Date(), "yyyy-MM-dd'T'HH:mm");
 
   return (
     <>

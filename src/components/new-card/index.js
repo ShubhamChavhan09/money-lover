@@ -17,7 +17,6 @@ const NewCard = ({ handleExpense, handleViewExpense }) => {
 
   return (
     <Budget>
-      <SearchBudget />
       {filteredData.map((budget) => {
         const amount = getBudgetExpenses(budget.id).reduce(
           (total, expense) => total + expense.amount,
@@ -42,8 +41,8 @@ const NewCard = ({ handleExpense, handleViewExpense }) => {
 export default NewCard;
 
 const Budget = styled.div`
-  // width: 100%;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1rem;
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
 `;
