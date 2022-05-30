@@ -8,8 +8,10 @@ const GlobalStyle = createGlobalStyle`
     padding: 0;
 }
 
-body{
-    background: #ecf0f1;  
+body, html{
+    background: #ecf0f1;
+    width: 100vw;
+    height: 100vh;
 }
 `;
 
