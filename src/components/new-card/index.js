@@ -7,7 +7,11 @@ import SearchBudget from "../search-budget";
 const NewCard = ({ handleExpense, handleViewExpense }) => {
   const { budgets, getBudgetExpenses, inputText } = useBudgets();
 
-  const filteredData = budgets.filter((budget) => {
+  const data = budgets.sort((a, b) => {
+    return new Date(b.created) - new Date(a.created);
+  });
+
+  const filteredData = data.filter((budget) => {
     if (inputText === "") {
       return budget;
     } else {
@@ -41,8 +45,8 @@ const NewCard = ({ handleExpense, handleViewExpense }) => {
 export default NewCard;
 
 const Budget = styled.div`
-    width: 100%;
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1rem;
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
 `;
