@@ -1,10 +1,15 @@
-import React, { useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import styled from "styled-components";
 import { useBudgets, MISCELLANEOUS_BUDGET_ID } from "../../context";
 import { CgClose } from "react-icons/cg";
 import format from "date-fns/format";
+import { groupedOptions } from "../../data/data";
+import Select from "react-select";
 
 const ExpenseModal = ({ expenseModal, handleExpense, expenseBudgetId }) => {
+  const [category, setCategory] = useState("");
+  const [icon, setIcon] = useState();
+
   const descriptionRef = useRef("");
   const amountRef = useRef("");
   const budgetIdRef = useRef("");
@@ -17,6 +22,11 @@ const ExpenseModal = ({ expenseModal, handleExpense, expenseBudgetId }) => {
     }
   }, [expenseModal]);
 
+  const handleSelectChange = (e) => {
+    setIcon(e.value.type.name);
+    setCategory(e.label);
+  };
+
   const handleSubmitExp = (event) => {
     event.preventDefault();
     addExpense({
@@ -24,11 +34,14 @@ const ExpenseModal = ({ expenseModal, handleExpense, expenseBudgetId }) => {
       amount: parseFloat(amountRef.current.value),
       budgetId: budgetIdRef.current.value,
       date: dateRef.current.value,
+      category,
+      icon,
     });
     handleExpense();
   };
 
-  const defaultDate = format(new Date(), "yyyy-MM-dd'T'HH:mm");
+  // const defaultDate = format(new Date(), "yyyy-MM-dd'T'HH:mm");
+  const defaultDate = format(new Date(), "yyyy-MM-dd");
 
   return (
     <>
@@ -46,7 +59,7 @@ const ExpenseModal = ({ expenseModal, handleExpense, expenseBudgetId }) => {
                   <input type="number" required min="0" ref={amountRef} />
                 </div>
                 <div>
-                  <label>Select Category: </label>
+                  <label>Budget Category: </label>
                   <select defaultValue={expenseBudgetId} ref={budgetIdRef}>
                     <option id={MISCELLANEOUS_BUDGET_ID}>Miscellaneous</option>;
                     {budgets.map((budget) => {
@@ -58,11 +71,31 @@ const ExpenseModal = ({ expenseModal, handleExpense, expenseBudgetId }) => {
                     })}
                   </select>
                 </div>
+                <SelectOne>
+                  <label>Exp</label>
+
+                  <SelectCategories
+                    onChange={handleSelectChange}
+                    options={groupedOptions}
+                    placeholder="Select category"
+                    getOptionLabel={(e) => (
+                      <div
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                        }}
+                      >
+                        {e.value}
+                        {e.label}
+                      </div>
+                    )}
+                  />
+                </SelectOne>
                 <div>
                   <label>Description: </label>
                   <input
                     type="text"
-                    required
                     ref={descriptionRef}
                     placeholder="Write note"
                   />
@@ -70,7 +103,8 @@ const ExpenseModal = ({ expenseModal, handleExpense, expenseBudgetId }) => {
                 <div>
                   <label>Date: </label>
                   <input
-                    type="datetime-local"
+                    type="date"
+                    // type="datetime-local"
                     ref={dateRef}
                     defaultValue={defaultDate}
                   />
@@ -112,4 +146,17 @@ const Overlay = styled.div`
     font-size: 1.2rem;
     cursor: pointer;
   }
+`;
+
+const SelectOne = styled.div`
+  width: 250px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 20px;
+  margin: 15px;
+`;
+const SelectCategories = styled(Select)`
+  width: 80%;
+  font-size: 14px;
 `;
