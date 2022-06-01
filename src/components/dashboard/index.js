@@ -5,10 +5,10 @@ import BudgetModal from "../budget-modal";
 import ExpenseModal from "../expense-modal";
 import MiscellaneousCard from "../miscellaneous-card";
 import ViewExpenseModal from "../view-expense-modal";
-import { useBudgets } from "../../context";
 import TotalCard from "../total-card";
 import SearchBudget from "../search-budget";
 import NewCard from "../new-card";
+import TotalExpenseReport from "../total-expense-report";
 
 const Dashboard = () => {
   const [budgetModal, setBudgetModal] = useState(false);
@@ -16,8 +16,6 @@ const Dashboard = () => {
   const [expenseBudgetId, setExpenseBudgetId] = useState();
   const [viewExpenses, setViewExpenses] = useState(false);
   const [expensedId, setExpensedId] = useState();
-
-  const { budgets, getBudgetExpenses } = useBudgets();
 
   const handleBudget = () => {
     setBudgetModal(!budgetModal);
@@ -33,14 +31,6 @@ const Dashboard = () => {
     setExpensedId(id);
   };
 
-  // const date = () => {
-  //   const data = budgets.sort((a, b) => {
-  //     return new Date(b.created).getTime() - new Date(a.created).getTime();
-  //   });
-  //   console.log(data);
-  // };
-  // date();
-
   return (
     <>
       <Container
@@ -48,43 +38,39 @@ const Dashboard = () => {
         expenseModal={expenseModal}
         viewExpenses={viewExpenses}
       >
-        <div>
-          <button onClick={handleBudget}>Add Budget</button>
-          <button onClick={handleExpense}>Add Expense</button>
-        </div>
-
-        <div className="budget">
-          {/* {budgets.map((budget) => {
-            const amount = getBudgetExpenses(budget.id).reduce(
-              (total, expense) => total + expense.amount,
-              0
-            );
-            return (
-              <BudgetCard
-                key={budget.id}
-                handleExpense={handleExpense}
-                handleViewExpense={handleViewExpense}
-                amount={amount}
-                name={budget.name}
-                max={budget.max}
-                id={budget.id}
-              />
-            );
-          })} */}
-
-          {/*  */}
-          <NewCard
-            handleExpense={handleExpense}
-            handleViewExpense={handleViewExpense}
-          />
-
-          <MiscellaneousCard
-            handleViewExpense={handleViewExpense}
-            handleExpense={handleExpense}
-          />
-          {/* <TotalCard /> */}
-        </div>
+        {/* <Section> */}
+        <Left>
+          <Search>
+            <div>
+              <SearchBudget />
+            </div>
+            <div>
+              <button onClick={handleBudget}>Add Budget</button>
+              <button onClick={handleExpense}>Add Expense</button>
+            </div>
+          </Search>
+          <Grid>
+            <MiscellaneousCard
+              handleViewExpense={handleViewExpense}
+              handleExpense={handleExpense}
+            />
+            <NewCard
+              handleExpense={handleExpense}
+              handleViewExpense={handleViewExpense}
+            />
+          </Grid>
+        </Left>
+        <Right>
+          <Up>
+            <TotalCard />
+          </Up>
+          <Down>
+            <TotalExpenseReport />
+          </Down>
+        </Right>
+        {/* </Section> */}
       </Container>
+
       <BudgetModal handleBudget={handleBudget} budgetModal={budgetModal} />
       <ExpenseModal
         handleExpense={handleExpense}
@@ -103,14 +89,13 @@ const Dashboard = () => {
 export default Dashboard;
 
 const Container = styled.div`
-  width: 90%;
+  width: 100%;
   // border: 1px solid black;
   display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: center;
-  min-height: 100vh;
-  padding: 1rem;
+  // flex-direction: column;
+  justify-content: space-between;
+  // align-items: center;
+  height: 100%;
   filter: ${(props) =>
     props.budgetModal || props.expenseModal || props.viewExpenses
       ? `blur(1.5px)`
@@ -122,12 +107,43 @@ const Container = styled.div`
     padding: 5px 10px;
     outline: none;
     cursor: pointer;
+    border-radius: 5px;
+    border: none;
   }
+`;
 
-  div.budget {
-    // width: 100%;
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1rem;
-  }
+const Left = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem;
+  flex: 1;
+  max-height: 655px;
+  overflow-y: scroll;
+`;
+const Right = styled.div`
+  flex: 1;
+  padding: 1rem;
+`;
+
+const Grid = styled.div`
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-direction: column;
+  padding-bottom: 20px;
+`;
+
+const Up = styled.div`
+  margin: 10px auto;
+`;
+
+const Down = styled.div``;
+
+const Search = styled.div`
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 0;
+  width: 100%;
+  margin-bottom: 20px;
 `;

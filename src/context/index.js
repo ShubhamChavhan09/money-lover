@@ -14,6 +14,9 @@ export const BudgetsProvider = ({ children }) => {
   //fetching budgets data from supabase
   useEffect(() => {
     fetchBudgets();
+    return () => {
+      setBudgets({});
+    };
   }, []);
 
   const fetchBudgets = async () => {
@@ -22,10 +25,10 @@ export const BudgetsProvider = ({ children }) => {
     else setBudgets(data);
   };
 
-  const addBudget = async ({ name, max }) => {
+  const addBudget = async ({ name, max, created }) => {
     try {
       const id = uuidv4();
-      await supabase.from("budgets").insert([{ id, name, max }]);
+      await supabase.from("budgets").insert([{ id, name, max, created }]);
 
       setBudgets((prevBudget) => {
         if (prevBudget.find((budget) => budget.name === name)) {
@@ -37,6 +40,7 @@ export const BudgetsProvider = ({ children }) => {
             id,
             name,
             max,
+            created,
           },
         ];
       });
@@ -48,6 +52,9 @@ export const BudgetsProvider = ({ children }) => {
   //fetching expenses data from supabase
   useEffect(() => {
     fetchExpenses();
+    return () => {
+      setExpenses({});
+    };
   }, []);
 
   const fetchExpenses = async () => {
@@ -56,13 +63,20 @@ export const BudgetsProvider = ({ children }) => {
     else setExpenses(data);
   };
 
-  const addExpense = async ({ description, amount, budgetId, date }) => {
+  const addExpense = async ({
+    description,
+    amount,
+    budgetId,
+    date,
+    category,
+    icon,
+  }) => {
     try {
       const id = uuidv4();
 
       await supabase
         .from("expenses")
-        .insert([{ id, description, amount, budgetId, date }]);
+        .insert([{ id, description, amount, budgetId, date, category, icon }]);
       setExpenses((prevExpense) => {
         return [
           ...prevExpense,
@@ -72,6 +86,8 @@ export const BudgetsProvider = ({ children }) => {
             amount,
             budgetId,
             date,
+            category,
+            icon,
           },
         ];
       });

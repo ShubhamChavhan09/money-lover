@@ -7,9 +7,9 @@ const Navbar = () => {
     <Bar>
       <h1>Money Lover</h1>
       <Nav>
-        <Link to="">Home</Link>
-        <Link to="expenses">Expenses</Link>
-        <Link to="report">Report</Link>
+        <NavLink to="">Home</NavLink>
+        <NavLink to="expenses">Expenses</NavLink>
+        <NavLink to="report">Report</NavLink>
       </Nav>
     </Bar>
   );
@@ -18,14 +18,29 @@ const Navbar = () => {
 export default Navbar;
 
 const Bar = styled.div`
-  background: gray;
+  background: rgba(0, 0, 0, 0.3);
   display: flex;
   width: 100%;
-  justify-content: end;
-
-  h1 {
-    margin-right: auto;
-  }
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px;
+  color: #fff;
 `;
 
-const Nav = styled.nav``;
+const Nav = styled.nav`
+  font-size: 18px;
+`;
+
+const NavLink = styled(Link)`
+  text-decoration: none;
+  margin: 0 20px;
+  color: #fff;
+  transition: all 0.5s ease;
+
+  &:hover {
+    border-bottom: 2px solid gray;
+  }
+  .active {
+    background: red;
+  }
+`;
