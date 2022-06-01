@@ -1,49 +1,51 @@
 import React, { useState } from "react";
-import { Outlet } from "react-router-dom";
+import { Link, Outlet } from "react-router-dom";
 import styled from "styled-components";
-import { useBudgets } from "../context";
+import { useBudgets, MISCELLANEOUS_BUDGET_ID } from "../context";
+import Lists from "./Lists";
 
 const Expenses = () => {
   const { budgets, expenses } = useBudgets();
 
-  const [filteredExp, setFilteredExp] = useState(expenses);
-
-  const filterItems = (Id) => {
-    const items = expenses.filter((expense) => {
-      return expense.budgetId === Id;
-    });
-    setFilteredExp(items);
-  };
+  const misExp = expenses.filter((exp) => {
+    return exp.budgetId === MISCELLANEOUS_BUDGET_ID;
+  });
 
   return (
-    <div>
-      <h1>Expenses</h1>
+    <Container>
       <div>
-        <button onClick={() => setFilteredExp(expenses)}>All</button>
+        <h2>Expenses List </h2>
+        <NavLink to="/expenses">All</NavLink>
+        <NavLink to={misExp[0].budgetId}>{misExp[0].budgetId}</NavLink>
         {budgets.map((budget) => {
           return (
-            <button key={budget.id} onClick={() => filterItems(budget.id)}>
+            <NavLink key={budget.id} to={budget.id}>
               {budget.name}
-            </button>
+            </NavLink>
           );
         })}
+        <Lists />
       </div>
-      <Exp>
-        {filteredExp.map((exp) => {
-          return (
-            <>
-              <p key={exp.id}>
-                {exp.description} - {exp.date}
-              </p>
-            </>
-          );
-        })}
-      </Exp>
-      {/* <Outlet /> */}
-    </div>
+    </Container>
   );
 };
 
 export default Expenses;
 
-const Exp = styled.div``;
+const Container = styled.div`
+  width: 70%;
+  height: 100%;
+  padding: 3rem;
+  transition: all 1sec linear;
+`;
+const NavLink = styled(Link)`
+  text-decoration: none;
+  color: #fff;
+  margin-right: 10px;
+  padding: 5px 10px;
+  border-radius: 5px;
+
+  &:hover {
+    background: rgba(170, 166, 157, 0.3);
+  }
+`;
