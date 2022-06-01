@@ -20,6 +20,7 @@ const BudgetModal = ({ handleBudget, budgetModal }) => {
     addBudget({
       name: nameRef.current.value,
       max: parseFloat(maxRef.current.value),
+      created: new Date(),
     });
     handleBudget();
   };
