@@ -18,13 +18,22 @@ const Navbar = () => {
 export default Navbar;
 
 const Bar = styled.div`
-  background: rgba(0, 0, 0, 0.3);
+  // background: rgba(0, 0, 0, 0.3);
   display: flex;
   width: 100%;
   justify-content: space-between;
   align-items: center;
-  padding: 15px;
+  // padding: 15px;
   color: #fff;
+  margin-bottom: 20px;
+
+  h1 {
+    // background: rgba(211, 84, 0, 0.7);
+    background: rgba(0, 0, 0, 0.4);
+    padding: 15px;
+    margin-left: 250px;
+    outline: 1px dotted red;
+  }
 `;
 
 const Nav = styled.nav`

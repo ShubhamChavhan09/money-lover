@@ -39,6 +39,18 @@ const Dashboard = () => {
         viewExpenses={viewExpenses}
       >
         {/* <Section> */}
+        <Right>
+          <Up>
+            <TotalCard />
+            <MiscellaneousCard
+              handleViewExpense={handleViewExpense}
+              handleExpense={handleExpense}
+            />
+          </Up>
+          <Down>
+            <TotalExpenseReport />
+          </Down>
+        </Right>
         <Left>
           <Search>
             <div>
@@ -50,24 +62,13 @@ const Dashboard = () => {
             </div>
           </Search>
           <Grid>
-            <MiscellaneousCard
-              handleViewExpense={handleViewExpense}
-              handleExpense={handleExpense}
-            />
             <NewCard
               handleExpense={handleExpense}
               handleViewExpense={handleViewExpense}
             />
           </Grid>
         </Left>
-        <Right>
-          <Up>
-            <TotalCard />
-          </Up>
-          <Down>
-            <TotalExpenseReport />
-          </Down>
-        </Right>
+
         {/* </Section> */}
       </Container>
 
@@ -93,7 +94,7 @@ const Container = styled.div`
   // border: 1px solid black;
   display: flex;
   // flex-direction: column;
-  justify-content: space-between;
+  // justify-content: space-between;
   // align-items: center;
   height: 100%;
   filter: ${(props) =>
@@ -124,6 +125,9 @@ const Left = styled.div`
 const Right = styled.div`
   flex: 1;
   padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 `;
 
 const Grid = styled.div`
@@ -135,15 +139,32 @@ const Grid = styled.div`
 `;
 
 const Up = styled.div`
-  margin: 10px auto;
+  // padding: 0 20px;
+  margin-bottom: 30px;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 `;
 
-const Down = styled.div``;
+const Down = styled.div`
+  height: 380px;
+  width: 100%;
+  // background: rgba(44, 62, 80, 0.3);
+  // background: rgba(47, 54, 64, 0.3);
+  background: rgba(30, 39, 46, 1);
+  padding: 10px;
+  border-radius: 5px;
+`;
 
 const Search = styled.div`
   display: flex;
   justify-content: space-between;
-  padding: 10px 0;
+  align-items: center;
   width: 100%;
   margin-bottom: 20px;
+
+  & > div {
+    flex: 1;
+  }
 `;
