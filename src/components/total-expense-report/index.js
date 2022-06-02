@@ -31,7 +31,7 @@ const TotalExpenseReport = () => {
     labels: mis ? allBudgetsName : budgetsName,
     datasets: [
       {
-        label: "Total Spendings",
+        label: "Spending Overview",
         data: expenseArr,
 
         backgroundColor: [

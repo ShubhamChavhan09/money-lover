@@ -19,7 +19,7 @@ const Report = () => {
   //
   const date1 = new Date();
   const date2 = new Date();
-  date2.setDate(date2.getDate() - 7); // just for example so that we do not have the same date twice
+  date2.setDate(date2.getDate() - 7);
 
   const dateString1 = format(date1, "yyyy-MM-dd'T'HH:mm");
   const dateString2 = format(date2, "yyyy-MM-dd'T'HH:mm");
@@ -111,4 +111,5 @@ export default Report;
 
 const Data = styled.div`
   // width: 700px;
+  background: rgba(30, 39, 46, 1);
 `;

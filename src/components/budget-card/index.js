@@ -38,8 +38,8 @@ const BudgetCard = ({ handleExpense, amount, name, max, id, hidden }) => {
           </div>
           {(max || max === `0`) && (
             <div>
-              <span>{rate >= 100 ? "Over Budget" : "Left"}</span>
-              <span>{currencyFormatter.format(max - amount)}</span>
+              <span>{rate >= 100 ? "Over Spent" : "Left"}</span>
+              <span>{currencyFormatter.format(Math.abs(max - amount))}</span>
             </div>
           )}
         </Data>
@@ -83,7 +83,7 @@ const Card = styled.div`
   }
 
   &.danger {
-    background-color: rgba(255, 127, 80, 0.3);
+    background-color: rgba(255, 127, 80, 0.5);
   }
 `;
 
