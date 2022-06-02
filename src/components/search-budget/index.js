@@ -19,7 +19,7 @@ const SearchBudget = () => {
 export default SearchBudget;
 
 const Search = styled.input`
-  width: 300px;
+  width: 320px;
   margin: 0 20px;
   height: 30px;
   border-radius: 4px;

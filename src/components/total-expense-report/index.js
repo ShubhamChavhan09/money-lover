@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { Bar, Line, Pie } from "react-chartjs-2";
-import { CategoryScale, Scale } from "chart.js";
+import { CategoryScale } from "chart.js";
 import Chart from "chart.js/auto";
 import { useBudgets, MISCELLANEOUS_BUDGET_ID } from "../../context";
 Chart.register(CategoryScale);
