@@ -19,6 +19,7 @@ const MiscellaneousCard = (props) => {
         name="Miscellaneous"
         id={MISCELLANEOUS_BUDGET_ID}
         amount={amount}
+        noDelete
       />
     </div>
   );

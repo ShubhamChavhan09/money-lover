@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import BudgetCard from "../budget-card";
 import BudgetModal from "../budget-modal";
 import ExpenseModal from "../expense-modal";
 import MiscellaneousCard from "../miscellaneous-card";
@@ -148,7 +147,6 @@ const Up = styled.div`
 `;
 
 const Down = styled.div`
-  height: 380px;
   width: 100%;
   // background: rgba(44, 62, 80, 0.3);
   // background: rgba(47, 54, 64, 0.3);

@@ -10,7 +10,7 @@ const TotalCard = () => {
 
   if (amount === 0) return null;
 
-  return <BudgetCard name="Total" amount={amount} max={max} hidden />;
+  return <BudgetCard name="Total" amount={amount} max={max} hidden noDelete />;
 };
 
 export default TotalCard;

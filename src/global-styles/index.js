@@ -15,10 +15,8 @@ body, html{
     width: 100vw;
     height: 100vh;
     font-family: 'Inter', sans-serif;
-    font-weight: 300;
-
-
-   
+    color: rgba(189, 195, 199,1); 
+    font-size: 15px;
 }
 `;
 

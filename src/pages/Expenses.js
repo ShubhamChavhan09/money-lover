@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link, Outlet } from "react-router-dom";
 import styled from "styled-components";
+import MiscellaneousCard from "../components/miscellaneous-card";
 import { useBudgets, MISCELLANEOUS_BUDGET_ID } from "../context";
 import Lists from "./Lists";
 
@@ -14,9 +15,15 @@ const Expenses = () => {
   return (
     <Container>
       <div>
-        <h2>Expenses List </h2>
-        <NavLink to="/expenses">All</NavLink>
-        <NavLink to={misExp[0].budgetId}>{misExp[0].budgetId}</NavLink>
+        {!misExp ? (
+          <>
+            <h2>Expenses List </h2>
+            <NavLink to="/expenses">All</NavLink>
+            <NavLink to={misExp[0].budgetId}>{misExp[0].budgetId}</NavLink>
+          </>
+        ) : (
+          <p>No expenses</p>
+        )}
         {budgets.map((budget) => {
           return (
             <NavLink key={budget.id} to={budget.id}>
