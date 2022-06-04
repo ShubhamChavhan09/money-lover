@@ -56,21 +56,21 @@ const TotalExpenseReport = () => {
   };
 
   return (
-    <>
-      <Bar
+    <div style={{ textAlign: "center" }}>
+      <Pie
         data={data}
         height={400}
         width={600}
         options={{
           maintainAspectRatio: false,
-          scales: {
-            y: {
-              beginAtZero: true,
-            },
-          },
+          // scales: {
+          //   y: {
+          //     beginAtZero: true,
+          //   },
+          // },
         }}
       />
-    </>
+    </div>
   );
 };
 

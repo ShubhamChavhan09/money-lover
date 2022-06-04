@@ -2,8 +2,21 @@ import React from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { currencyFormatter } from "../../utils";
+import { BsTrash } from "react-icons/bs";
+import { useBudgets } from "../../context";
 
-const BudgetCard = ({ handleExpense, amount, name, max, id, hidden }) => {
+const BudgetCard = ({
+  handleExpense,
+  handleViewExpense,
+  amount,
+  name,
+  max,
+  id,
+  hidden,
+  noDelete,
+}) => {
+  const { deleteBudget } = useBudgets();
+
   const rate = (amount / max) * 100;
 
   function setProgressVariant(amount, max) {
@@ -18,10 +31,17 @@ const BudgetCard = ({ handleExpense, amount, name, max, id, hidden }) => {
     classNames.push("danger");
   }
 
+  const handleDeleteBudget = (id) => {
+    deleteBudget(id);
+  };
+
+  console.log(id);
+
   return (
     <>
-      <Card className={classNames}>
-        <h3>{name}</h3>
+      <Card>
+        {!noDelete && <DeleteBudget onClick={() => handleDeleteBudget(id)} />}
+        <p style={{ fontSize: "20px" }}>{name}</p>
         {(max || max === `0`) && (
           <div>
             <p> {currencyFormatter.format(max)}</p>
@@ -37,7 +57,7 @@ const BudgetCard = ({ handleExpense, amount, name, max, id, hidden }) => {
             <span>{currencyFormatter.format(amount)}</span>
           </div>
           {(max || max === `0`) && (
-            <div>
+            <div className={classNames}>
               <span>{rate >= 100 ? "Over Spent" : "Left"}</span>
               <span>{currencyFormatter.format(Math.abs(max - amount))}</span>
             </div>
@@ -51,7 +71,6 @@ const BudgetCard = ({ handleExpense, amount, name, max, id, hidden }) => {
           </div>
           <div>
             {!hidden && (
-              // <button onClick={() => handleViewExpense(id)}>View Expenses</button>
               <Link to={`expenses/${id}`}>
                 <button>View Expenses</button>
               </Link>
@@ -67,7 +86,7 @@ export default BudgetCard;
 
 const Card = styled.div`
   // border: 2px solid #718093;
-  border-radius: 8px;
+  border-radius: 5px;
   height: 200px;
   width: 320px;
   display: flex;
@@ -75,15 +94,17 @@ const Card = styled.div`
   justify-content: space-between;
   padding: 10px 20px;
   transition: all 0.5s ease;
-  background: rgba(178, 190, 195, 0.2);
+  // background: rgba(178, 190, 195, 0.2);
+  background: #333333;
+  position: relative;
+
+  &:hover {
+    background: #444;
+  }
 
   h3,
   p {
     text-align: center;
-  }
-
-  &.danger {
-    background-color: rgba(255, 127, 80, 0.5);
   }
 `;
 
@@ -101,8 +122,8 @@ const ProgressBar = styled.div`
     ::-webkit-progress-bar {
       height: 25px;
       border-radius: 5px;
-      background-color: rgba(45, 52, 54, 0.8);
-      outline: 1px solid rgba(30, 39, 46, 1);
+      background-color: #222222;
+      outline: 1px solid #010101;
     }
 
     ::-webkit-progress-value {
@@ -134,7 +155,10 @@ const Data = styled.div`
     flex: 1;
   }
   & > div:nth-child(2) {
-    border-left: 1.3px solid #34495e;
+    border-left: 2px solid #0c0c0c;
+  }
+  &.danger {
+    background-color: rgba(255, 127, 80, 0.5);
   }
 `;
 
@@ -146,17 +170,30 @@ const Buttons = styled.div`
     border-radius: 5px;
     outline: none;
     border: none;
-    background: #81ecec;
+    background: rgba(30, 39, 46, 1);
+    color: rgba(189, 195, 199, 1);
     // padding: 8px 12px;
     width: 120px;
     font-size: 12px;
   }
   button:hover {
-    background: #00cec9;
+    background: rgba(30, 39, 46, 0.7);
     transition: all 0.1s linear;
   }
   button:active {
     background: #55efc4;
     transition: all 0.1s ease-in-out;
+  }
+`;
+
+const DeleteBudget = styled(BsTrash)`
+  font-size: 18px;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+
+  &: hover {
+    color: rgba(232, 65, 24, 0.6);
   }
 `;

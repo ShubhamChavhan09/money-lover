@@ -34,24 +34,24 @@ const BudgetModal = ({ handleBudget, budgetModal }) => {
   return (
     <>
       {budgetModal ? (
-        <Overlay ref={modalRef} onClick={close}>
+        <Overlay ref={modalRef} onClick={close} width="400px" height="400px">
           <div className="modal">
-            <span onClick={() => handleBudget()}>
-              <CgClose />
-            </span>
-            <h2>Add Budget</h2>
+            <CloseModal onClick={() => handleBudget()} />
+            <h2>Add a new budget</h2>
             <section>
-              <form onSubmit={handleSubmit}>
+              <Form onSubmit={handleSubmit}>
                 <div>
-                  <label>Name: </label>
+                  <label>Name</label>
                   <input type="text" required ref={nameRef} />
                 </div>
                 <div>
-                  <label>Amount: </label>
+                  <label>Amount</label>
                   <input type="number" required min="0" ref={maxRef} />
                 </div>
-                <button type="submit">Add Budget</button>
-              </form>
+                <div>
+                  <Button type="submit">Add Budget</Button>
+                </div>
+              </Form>
             </section>
           </div>
         </Overlay>
@@ -61,31 +61,73 @@ const BudgetModal = ({ handleBudget, budgetModal }) => {
 };
 
 export default BudgetModal;
-const Overlay = styled.div`
+export const Overlay = styled.div`
   position: fixed;
   z-index: 1;
+  display: flex;
   inset: 0;
   background: rgba(0, 0, 0, 0.5);
-  display: block;
-  padding-top: 70px;
 
   div.modal {
-    margin: 0 auto;
+    color: black;
+    margin: auto;
     background: #fff;
-    height: 500px;
-    width: 60%;
+    height: ${(props) => props.height};
+    width: ${(props) => props.width};
     position: relative;
     padding: 40px 25px;
-    border-radius: 30px;
+    border-radius: 5px;
     background: linear-gradient(145deg, #ffffff, #e6e6e6);
     // box-shadow: 35px 35px 70px #a8a8a8, -35px -35px 70px #ffffff;
     // z-index: 2;
+    h2 {
+      margin-bottom: 10px;
+    }
   }
-  span {
-    position: absolute;
-    top: 15px;
-    right: 20px;
-    font-size: 1.2rem;
-    cursor: pointer;
+`;
+
+export const CloseModal = styled(CgClose)`
+  position: absolute;
+  top: 40px;
+  right: 25px;
+  font-size: 25px;
+  cursor: pointer;
+  // vertical-align: bottom;
+`;
+
+export const Form = styled.form`
+  display: flex;
+  flex-direction: column;
+
+  & > div {
+    display: flex;
+    flex-direction: column;
+    margin: 15px 0;
+    font-size: 17px;
+    font-weight: 300;
+  }
+  input {
+    height: 30px;
+    margin: 10px 0;
+    font-size: 16px;
+    background: rgba(30, 39, 46, 0.2);
+    border: none;
+    border-radius: 5px;
+    padding: 0 10px;
+  }
+`;
+
+export const Button = styled.button`
+  height: 40px;
+  margin: 20px 0;
+  border-radius: 5px;
+  background: #222222;
+  color: rgba(189, 195, 199, 1);
+  cursor: pointer;
+  border: none;
+  outline: none;
+
+  &:hover {
+    background: #3d3f43;
   }
 `;

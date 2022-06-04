@@ -21,8 +21,8 @@ const Report = () => {
   const date2 = new Date();
   date2.setDate(date2.getDate() - 7);
 
-  const dateString1 = format(date1, "yyyy-MM-dd'T'HH:mm");
-  const dateString2 = format(date2, "yyyy-MM-dd'T'HH:mm");
+  const dateString1 = format(date1, "yyyy-MM-dd");
+  const dateString2 = format(date2, "yyyy-MM-dd");
 
   useEffect(() => {
     week();
@@ -111,5 +111,6 @@ export default Report;
 
 const Data = styled.div`
   // width: 700px;
-  background: rgba(30, 39, 46, 1);
+  background: #333;
+  display: flex;
 `;

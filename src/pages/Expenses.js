@@ -15,22 +15,17 @@ const Expenses = () => {
   return (
     <Container>
       <div>
-        {!misExp ? (
-          <>
-            <h2>Expenses List </h2>
-            <NavLink to="/expenses">All</NavLink>
-            <NavLink to={misExp[0].budgetId}>{misExp[0].budgetId}</NavLink>
-          </>
-        ) : (
-          <p>No expenses</p>
-        )}
-        {budgets.map((budget) => {
-          return (
-            <NavLink key={budget.id} to={budget.id}>
-              {budget.name}
-            </NavLink>
-          );
-        })}
+        <h2>Expenses List </h2>
+        <NavLink to="/expenses">All</NavLink>
+        {misExp && <NavLink to={misExp[0].budgetId}>Miscellaneous</NavLink>}
+        {expenses &&
+          budgets.map((budget) => {
+            return (
+              <NavLink key={budget.id} to={budget.id}>
+                {budget.name}
+              </NavLink>
+            );
+          })}
         <Lists />
       </div>
     </Container>

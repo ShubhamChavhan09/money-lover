@@ -9,14 +9,17 @@ const GlobalStyle = createGlobalStyle`
     padding: 0;
 }
 
-body, html{
-    // background-image: linear-gradient(to right, #141e30, #243b55);
-    background: linear-gradient(to right , #434343 0%, black 100% );
+body{
+    // background: #222222;
+    background: linear-gradient(to right  , #111111 ,#222222 );
     width: 100vw;
     height: 100vh;
     font-family: 'Inter', sans-serif;
-    color: rgba(189, 195, 199,1); 
+    color: #FDFDFD; 
+    font-weight: 300;
     font-size: 15px;
+    // background-repeat: no-repeat;
+    background-size: cover;
 }
 `;
 

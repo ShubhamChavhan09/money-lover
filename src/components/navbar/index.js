@@ -29,15 +29,17 @@ const Bar = styled.div`
 
   h1 {
     // background: rgba(211, 84, 0, 0.7);
-    background: rgba(0, 0, 0, 0.4);
-    padding: 15px;
+    background: #d6806e;
+    padding: 15px 20px;
     margin-left: 250px;
-    outline: 1px dotted red;
+    color: #010101;
+    font-weight: 500;
   }
 `;
 
 const Nav = styled.nav`
-  font-size: 18px;
+  font-size: 16px;
+  font-weight: 300;
 `;
 
 const NavLink = styled(Link)`

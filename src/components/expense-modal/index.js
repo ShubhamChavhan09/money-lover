@@ -5,6 +5,7 @@ import { CgClose } from "react-icons/cg";
 import format from "date-fns/format";
 import { groupedOptions } from "../../data/data";
 import Select from "react-select";
+import { Overlay, CloseModal, Button } from "../budget-modal";
 
 const ExpenseModal = ({ expenseModal, handleExpense, expenseBudgetId }) => {
   const [category, setCategory] = useState("");
@@ -43,23 +44,39 @@ const ExpenseModal = ({ expenseModal, handleExpense, expenseBudgetId }) => {
   // const defaultDate = format(new Date(), "yyyy-MM-dd'T'HH:mm");
   const defaultDate = format(new Date(), "yyyy-MM-dd");
 
+  const customStyles = {
+    control: () => ({
+      backgroundColor: "rgba(30, 39, 46, 0.2)",
+      position: "relative ",
+      borderRadius: "5px",
+      height: "30px",
+      width: "160px",
+      display: "flex",
+      alignItems: "center",
+    }),
+    dropdownIndicator: () => ({
+      position: "absolute",
+      right: 5,
+      top: 5,
+    }),
+  };
+
   return (
     <>
       {expenseModal ? (
-        <Overlay>
+        <Overlay width="500px" height="500px">
           <div className="modal">
-            <span onClick={() => handleExpense()}>
-              <CgClose />
-            </span>
+            <CloseModal onClick={() => handleExpense()} />
+
             <h2>Add Expense</h2>
             <section>
-              <form onSubmit={handleSubmitExp}>
+              <Form onSubmit={handleSubmitExp}>
                 <div>
-                  <label>Amount: </label>
+                  <label>Amount</label>
                   <input type="number" required min="0" ref={amountRef} />
                 </div>
                 <div>
-                  <label>Budget Category: </label>
+                  <label>Budget Category</label>
                   <select defaultValue={expenseBudgetId} ref={budgetIdRef}>
                     <option id={MISCELLANEOUS_BUDGET_ID}>Miscellaneous</option>;
                     {budgets.map((budget) => {
@@ -71,10 +88,11 @@ const ExpenseModal = ({ expenseModal, handleExpense, expenseBudgetId }) => {
                     })}
                   </select>
                 </div>
-                <SelectOne>
-                  <label>Exp</label>
+                <div>
+                  <label>Expense category</label>
 
                   <SelectCategories
+                    styles={customStyles}
                     onChange={handleSelectChange}
                     options={groupedOptions}
                     placeholder="Select category"
@@ -91,9 +109,9 @@ const ExpenseModal = ({ expenseModal, handleExpense, expenseBudgetId }) => {
                       </div>
                     )}
                   />
-                </SelectOne>
+                </div>
                 <div>
-                  <label>Description: </label>
+                  <label>Description</label>
                   <input
                     type="text"
                     ref={descriptionRef}
@@ -101,16 +119,17 @@ const ExpenseModal = ({ expenseModal, handleExpense, expenseBudgetId }) => {
                   />
                 </div>
                 <div>
-                  <label>Date: </label>
+                  <label>Date</label>
                   <input
+                    style={{ width: "160px" }}
                     type="date"
                     // type="datetime-local"
                     ref={dateRef}
                     defaultValue={defaultDate}
                   />
                 </div>
-                <button type="submit">Add Expense</button>
-              </form>
+                <Button type="submit">Add Expense</Button>
+              </Form>
             </section>
           </div>
         </Overlay>
@@ -120,43 +139,42 @@ const ExpenseModal = ({ expenseModal, handleExpense, expenseBudgetId }) => {
 };
 export default ExpenseModal;
 
-const Overlay = styled.div`
-  position: fixed;
-  z-index: 1;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.2);
-  display: block;
-  padding-top: 70px;
-
-  div.modal {
-    margin: 0 auto;
-    background: #fff;
-    height: 500px;
-    width: 60%;
-    position: relative;
-    padding: 40px 25px;
-    border-radius: 30px;
-    background: #fcd8d4;
-    box-shadow: 20px 20px 60px #d6b8b4, -20px -20px 60px #fff8f4;
-  }
-  span {
-    position: absolute;
-    top: 15px;
-    right: 20px;
-    font-size: 1.2rem;
-    cursor: pointer;
-  }
-`;
-
-const SelectOne = styled.div`
-  width: 250px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  height: 20px;
-  margin: 15px;
-`;
 const SelectCategories = styled(Select)`
-  width: 80%;
+  // width: 80%;
   font-size: 14px;
+`;
+
+const Form = styled.form`
+  display: flex;
+  flex-direction: column;
+
+  select {
+    width: 160px;
+    height: 30px;
+    border-radius: 5px;
+    background: rgba(30, 39, 46, 0.2);
+    font-size: 14px;
+  }
+
+  & > div {
+    display: flex;
+    margin: 20px 0;
+    font-size: 17px;
+    font-weight: 300;
+    width: 100%;
+  }
+
+  label {
+    // background: salmon;
+    width: 150px;
+  }
+  input {
+    height: 30px;
+    font-size: 14px;
+    background: rgba(30, 39, 46, 0.2);
+    border: none;
+    border-radius: 5px;
+    padding: 0 10px;
+    width: ${(props) => (props.width ? `160px` : `70%`)};
+  }
 `;

@@ -149,8 +149,8 @@ const Up = styled.div`
 const Down = styled.div`
   width: 100%;
   // background: rgba(44, 62, 80, 0.3);
-  // background: rgba(47, 54, 64, 0.3);
-  background: rgba(30, 39, 46, 1);
+  background: #333;
+  // background: rgba(30, 39, 46, 1);
   padding: 10px;
   border-radius: 5px;
 `;
