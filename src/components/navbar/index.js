@@ -5,7 +5,6 @@ import styled from "styled-components";
 const Navbar = () => {
   return (
     <Bar>
-      <h1>Money Lover</h1>
       <Nav>
         <NavLink to="">Home</NavLink>
         <NavLink to="expenses">Expenses</NavLink>
@@ -19,11 +18,8 @@ export default Navbar;
 
 const Bar = styled.div`
   // background: rgba(0, 0, 0, 0.3);
-  display: flex;
-  width: 100%;
-  justify-content: space-between;
+  height: 100vh;
   align-items: center;
-  // padding: 15px;
   color: #fff;
   margin-bottom: 20px;
 
@@ -40,18 +36,20 @@ const Bar = styled.div`
 const Nav = styled.nav`
   font-size: 16px;
   font-weight: 300;
+  display: flex;
+  flex-direction: column;
 `;
 
 const NavLink = styled(Link)`
   text-decoration: none;
   margin: 0 20px;
-  color: #fff;
+  color: #303030;
   transition: all 0.5s ease;
 
   &:hover {
-    border-bottom: 2px solid gray;
+    color: #d6806e;
   }
-  .active {
+  &.active {
     background: red;
   }
 `;
