@@ -70,13 +70,10 @@ const Lists = () => {
     <div>
       {items.map((item) => {
         const date = format(new Date(item.date), "dd MMM, yyyy");
-        // console.log(item);
         return (
           <List key={item.id}>
             <Name>
-              <Tag>
-                <DynamicFaIcon name={item.icon} />
-              </Tag>
+              <Tag>{/* <DynamicFaIcon name={item.icon} /> */}</Tag>
               <Details>
                 <p>{item.category}</p>
                 <span>{item.description}</span>
@@ -102,7 +99,8 @@ const List = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: rgba(72, 219, 251, 0.3);
+  // background: rgba(72, 219, 251, 0.3);
+  background: #4b6d62;
   border-radius: 6px;
 `;
 

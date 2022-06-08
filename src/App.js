@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import Dashboard from "./components/dashboard";
 import GlobalStyle from "./global-styles";
 import { BrowserRouter as Router } from "react-router-dom";
 import RouterFiles from "./router-files";
@@ -22,6 +21,7 @@ export default App;
 
 const Container = styled.div`
   display: flex;
-  flex-direction: column;
-  align-items: center;
+  width: 100%;
+  align-items: start;
+  height: 100vh;
 `;

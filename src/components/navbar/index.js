@@ -22,6 +22,9 @@ const Bar = styled.div`
   align-items: center;
   color: #fff;
   margin-bottom: 20px;
+  // box-shadow: #000000 0px 0px 2px;
+  box-shadow: 0 3px 7px 0 rgb(0 0 0 / 27%);
+  z-index: 2;
 
   h1 {
     // background: rgba(211, 84, 0, 0.7);
@@ -38,18 +41,22 @@ const Nav = styled.nav`
   font-weight: 300;
   display: flex;
   flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  height: 100%;
+
+  Link.activeBtn {
+    color: red;
+  }
 `;
 
 const NavLink = styled(Link)`
   text-decoration: none;
   margin: 0 20px;
-  color: #303030;
+  color: #bdbdbd;
   transition: all 0.5s ease;
 
   &:hover {
     color: #d6806e;
-  }
-  &.active {
-    background: red;
   }
 `;
