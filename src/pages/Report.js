@@ -111,6 +111,6 @@ export default Report;
 
 const Data = styled.div`
   // width: 700px;
-  background: #333;
+  // background: #333;
   display: flex;
 `;

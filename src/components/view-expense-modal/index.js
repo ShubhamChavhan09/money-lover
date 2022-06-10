@@ -20,58 +20,60 @@ const ViewExpenseModal = ({ handleViewExpense, viewExpenses, expensedId }) => {
 
   return (
     <>
-      {viewExpenses
-        ? expensedId != null && (
-            <Overlay>
-              <div className="modal">
-                <div className="header">
-                  <h2>Expenses - {budget?.name} </h2>
-                  {expensedId !== MISCELLANEOUS_BUDGET_ID && (
-                    <button onClick={() => handleBudgetDelete(expensedId)}>
-                      Delete
-                    </button>
-                  )}
-                  <span className="close" onClick={handleViewExpense}>
-                    <CgClose />
-                  </span>
-                </div>
-                <div>
-                  {getBudgetExpenses(expensedId).map((expense) => {
-                    let result = formatDistanceToNowStrict(
-                      new Date(expense.date),
-                      {
-                        includeSeconds: true,
-                      }
-                    );
-                    let day = format(
-                      new Date(expense.date),
-                      "d LLL, yyyy 'at' h:mm aaa"
-                    );
-
-                    return (
-                      <Expenses key={expense.id}>
-                        <span>{expense.description}</span>
-                        <span>
-                          {/* {result} - */}
-                          {day}
-                          {/* ago */}
-                        </span>
-
-                        <span>
-                          {expense.amount}
-
-                          <span onClick={() => deleteExpense(expense.id)}>
-                            <Close />
-                          </span>
-                        </span>
-                      </Expenses>
-                    );
-                  })}
-                </div>
+      {
+        viewExpenses && (
+          // ? expensedId != null
+          <Overlay>
+            <div className="modal">
+              <div className="header">
+                <h2>Expenses - {budget?.name} </h2>
+                {expensedId !== MISCELLANEOUS_BUDGET_ID && (
+                  <button onClick={() => handleBudgetDelete(expensedId)}>
+                    Delete
+                  </button>
+                )}
+                <span className="close" onClick={handleViewExpense}>
+                  <CgClose />
+                </span>
               </div>
-            </Overlay>
-          )
-        : null}
+              <div>
+                {getBudgetExpenses(expensedId).map((expense) => {
+                  let result = formatDistanceToNowStrict(
+                    new Date(expense.date),
+                    {
+                      includeSeconds: true,
+                    }
+                  );
+                  let day = format(
+                    new Date(expense.date),
+                    "d LLL, yyyy 'at' h:mm aaa"
+                  );
+
+                  return (
+                    <Expenses key={expense.id}>
+                      <span>{expense.description}</span>
+                      <span>
+                        {/* {result} - */}
+                        {day}
+                        {/* ago */}
+                      </span>
+
+                      <span>
+                        {expense.amount}
+
+                        <span onClick={() => deleteExpense(expense.id)}>
+                          <Close />
+                        </span>
+                      </span>
+                    </Expenses>
+                  );
+                })}
+              </div>
+            </div>
+          </Overlay>
+        )
+        // : null
+      }
     </>
   );
 };

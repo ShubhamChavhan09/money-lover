@@ -5,7 +5,16 @@ import { CgClose } from "react-icons/cg";
 import format from "date-fns/format";
 import { groupedOptions } from "../../data/data";
 import Select from "react-select";
-import { Overlay, CloseModal, Button } from "../budget-modal";
+import {
+  Overlay,
+  CloseModal,
+  Button,
+  Title,
+  Box,
+  ButtonContainer,
+  Form,
+} from "../budget-modal";
+import ModalButtons from "../modal-buttons";
 
 const ExpenseModal = ({ expenseModal, handleExpense, expenseBudgetId }) => {
   const [category, setCategory] = useState("");
@@ -64,31 +73,70 @@ const ExpenseModal = ({ expenseModal, handleExpense, expenseBudgetId }) => {
   return (
     <>
       {expenseModal ? (
-        <Overlay width="500px" height="500px">
+        <Overlay width="350px" height="466px">
           <div className="modal">
-            <CloseModal onClick={() => handleExpense()} />
-
-            <h2>Add Expense</h2>
-            <section>
-              <Form onSubmit={handleSubmitExp}>
-                <div>
-                  <label>Amount</label>
-                  <input type="number" required min="0" ref={amountRef} />
-                </div>
-                <div>
-                  <label>Budget Category</label>
-                  <select defaultValue={expenseBudgetId} ref={budgetIdRef}>
-                    <option id={MISCELLANEOUS_BUDGET_ID}>Miscellaneous</option>;
-                    {budgets.map((budget) => {
-                      return (
-                        <option key={budget.id} value={budget.id}>
-                          {budget.name}
-                        </option>
-                      );
-                    })}
-                  </select>
-                </div>
-                <div>
+            {/* <CloseModal onClick={() => handleExpense()} /> */}
+            <Title>
+              <p>Add Expense</p>
+            </Title>
+            <Form section="315px" onSubmit={handleSubmitExp}>
+              <section>
+                <Box>
+                  <div>
+                    <p>Budget Category</p>
+                  </div>
+                  <div>
+                    <select defaultValue={expenseBudgetId} ref={budgetIdRef}>
+                      <option id={MISCELLANEOUS_BUDGET_ID}>
+                        Miscellaneous
+                      </option>
+                      ;
+                      {budgets.map((budget) => {
+                        return (
+                          <option key={budget.id} value={budget.id}>
+                            {budget.name}
+                          </option>
+                        );
+                      })}
+                    </select>
+                  </div>
+                </Box>
+                <Box>
+                  <div>
+                    <p>Amount</p>
+                  </div>
+                  <div>
+                    <input type="number" required min="0" ref={amountRef} />
+                  </div>
+                </Box>
+                <Box>
+                  <div>
+                    <p>Date</p>
+                  </div>
+                  <div>
+                    <input
+                      style={{ width: "160px" }}
+                      type="date"
+                      // type="datetime-local"
+                      ref={dateRef}
+                      defaultValue={defaultDate}
+                    />
+                  </div>
+                </Box>
+                <Box>
+                  <div>
+                    <p>Note</p>
+                  </div>
+                  <div>
+                    <input
+                      type="text"
+                      ref={descriptionRef}
+                      placeholder="Note"
+                    />
+                  </div>
+                </Box>
+              </section>
+              {/* <div>
                   <label>Expense category</label>
 
                   <SelectCategories
@@ -109,28 +157,9 @@ const ExpenseModal = ({ expenseModal, handleExpense, expenseBudgetId }) => {
                       </div>
                     )}
                   />
-                </div>
-                <div>
-                  <label>Description</label>
-                  <input
-                    type="text"
-                    ref={descriptionRef}
-                    placeholder="Write note"
-                  />
-                </div>
-                <div>
-                  <label>Date</label>
-                  <input
-                    style={{ width: "160px" }}
-                    type="date"
-                    // type="datetime-local"
-                    ref={dateRef}
-                    defaultValue={defaultDate}
-                  />
-                </div>
-                <Button type="submit">Add Expense</Button>
-              </Form>
-            </section>
+                </div> */}
+              <ModalButtons cancel={handleExpense} />
+            </Form>
           </div>
         </Overlay>
       ) : null}
@@ -142,39 +171,4 @@ export default ExpenseModal;
 const SelectCategories = styled(Select)`
   // width: 80%;
   font-size: 14px;
-`;
-
-const Form = styled.form`
-  display: flex;
-  flex-direction: column;
-
-  select {
-    width: 160px;
-    height: 30px;
-    border-radius: 5px;
-    background: rgba(30, 39, 46, 0.2);
-    font-size: 14px;
-  }
-
-  & > div {
-    display: flex;
-    margin: 20px 0;
-    font-size: 17px;
-    font-weight: 300;
-    width: 100%;
-  }
-
-  label {
-    // background: salmon;
-    width: 150px;
-  }
-  input {
-    height: 30px;
-    font-size: 14px;
-    background: rgba(30, 39, 46, 0.2);
-    border: none;
-    border-radius: 5px;
-    padding: 0 10px;
-    width: ${(props) => (props.width ? `160px` : `70%`)};
-  }
 `;

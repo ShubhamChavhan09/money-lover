@@ -3,8 +3,14 @@ import styled from "styled-components";
 import { useBudgets } from "../../context";
 import BudgetCard from "../budget-card";
 import SearchBudget from "../search-budget";
+import { v4 as uuidv4 } from "uuid";
 
-const NewCard = ({ handleExpense, handleViewExpense }) => {
+const NewCard = ({
+  handleExpense,
+  handleViewExpense,
+  setBudgetData,
+  setViewBudgetTab,
+}) => {
   const { budgets, getBudgetExpenses, inputText } = useBudgets();
 
   const data = budgets.sort((a, b) => {
@@ -28,13 +34,15 @@ const NewCard = ({ handleExpense, handleViewExpense }) => {
         );
         return (
           <BudgetCard
-            key={budget.id}
+            key={uuidv4()}
             handleExpense={handleExpense}
             handleViewExpense={handleViewExpense}
             amount={amount}
-            name={budget.name}
+            name={budget?.name}
             max={budget.max}
             id={budget.id}
+            setBudgetData={setBudgetData}
+            setViewBudgetTab={setViewBudgetTab}
           />
         );
       })}
