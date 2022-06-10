@@ -8,79 +8,109 @@ import TotalCard from "../total-card";
 import SearchBudget from "../search-budget";
 import NewCard from "../new-card";
 import TotalExpenseReport from "../total-expense-report";
+import ViewExpense from "../view-expense";
+import { useBudgets } from "../../context";
+import ViewBudget from "../view-budget";
+import DeleteModal from "../delete-modal";
 
 const Dashboard = () => {
   const [budgetModal, setBudgetModal] = useState(false);
-  const [expenseModal, setExpenseModal] = useState(false);
-  const [expenseBudgetId, setExpenseBudgetId] = useState();
+  // const [expenseModal, setExpenseModal] = useState(true);
+  // const [expenseBudgetId, setExpenseBudgetId] = useState();
   const [viewExpenses, setViewExpenses] = useState(false);
   const [expensedId, setExpensedId] = useState();
+  const [budgetData, setBudgetData] = useState(null);
+  const [viewBudgetTab, setViewBudgetTab] = useState(false);
+  const [deleteModal, setDeleteModal] = useState(false);
 
-  const handleBudget = () => {
-    setBudgetModal(!budgetModal);
-  };
+  const { budgets, getBudgetExpenses, deleteBudget } = useBudgets();
 
-  const handleExpense = (budgetId) => {
-    setExpenseModal(!expenseModal);
-    setExpenseBudgetId(budgetId);
-  };
+  // const handleExpense = (budgetId) => {
+  //   setExpenseModal(!expenseModal);
+  //   setExpenseBudgetId(budgetId);
+  // };
 
   const handleViewExpense = (id) => {
     setViewExpenses(!viewExpenses);
     setExpensedId(id);
   };
 
+  const handleBudget = () => {
+    setBudgetModal(!budgetModal);
+  };
+
+  const budgetAmount = getBudgetExpenses(budgetData).reduce(
+    (total, expense) => total + expense.amount,
+    0
+  );
+
+  const budgetSpent = budgets.filter((budget) => {
+    return budget.id === budgetData;
+  });
+
+  const budgetLeft = budgetSpent[0]?.max - budgetAmount;
+
   return (
     <>
       <Container
-        budgetModal={budgetModal}
-        expenseModal={expenseModal}
+        // budgetModal={budgetModal}
+        // expenseModal={expenseModal}
         viewExpenses={viewExpenses}
       >
-        {/* <Section> */}
-        <Right>
-          <Up>
-            <TotalCard />
-            <MiscellaneousCard
-              handleViewExpense={handleViewExpense}
-              handleExpense={handleExpense}
-            />
-          </Up>
-          <Down>
-            <TotalExpenseReport />
-          </Down>
-        </Right>
-        <Left>
-          <Search>
+        <Head>
+          <TotalCard click={handleBudget} name="add budget" />
+        </Head>
+        <Main>
+          <BudgetContainer>
             <div>
-              <SearchBudget />
+              <Tab>RUNNING</Tab>
+              <Tab>FINISHED</Tab>
             </div>
             <div>
-              <button onClick={handleBudget}>Add Budget</button>
-              <button onClick={handleExpense}>Add Expense</button>
+              <NewCard
+                // handleExpense={handleExpense}
+                handleViewExpense={handleViewExpense}
+                setBudgetData={setBudgetData}
+                setViewBudgetTab={setViewBudgetTab}
+              />
             </div>
-          </Search>
-          <Grid>
-            <NewCard
-              handleExpense={handleExpense}
-              handleViewExpense={handleViewExpense}
-            />
-          </Grid>
-        </Left>
-
-        {/* </Section> */}
+          </BudgetContainer>
+          <div>
+            {budgetData && viewBudgetTab && (
+              <ViewBudget
+                title="Detail"
+                id={budgetData}
+                budgetId={budgetData}
+                date={new Date()}
+                amount={budgetLeft}
+                des={budgetLeft > 0 ? "Left" : "Over Spent"}
+                setDeleteModal={setDeleteModal}
+                toggle={setViewBudgetTab}
+              />
+            )}
+          </div>
+        </Main>
       </Container>
 
-      <BudgetModal handleBudget={handleBudget} budgetModal={budgetModal} />
-      <ExpenseModal
+      <BudgetModal budgetModal={budgetModal} handleBudget={handleBudget} />
+      {/* <ExpenseModal
         handleExpense={handleExpense}
         expenseModal={expenseModal}
         expenseBudgetId={expenseBudgetId}
-      />
+      /> */}
       <ViewExpenseModal
         viewExpenses={viewExpenses}
         handleViewExpense={handleViewExpense}
         expensedId={expensedId}
+        id={budgetData}
+      />
+      <DeleteModal
+        deleteModal={deleteModal}
+        toggle={setDeleteModal}
+        deleteId={budgetData}
+        toggleTab={setViewBudgetTab}
+        func={deleteBudget}
+        alert="Do you want to delete this budget?"
       />
     </>
   );
@@ -88,28 +118,20 @@ const Dashboard = () => {
 
 export default Dashboard;
 
-const Container = styled.div`
+export const Container = styled.div`
   width: 100%;
   // border: 1px solid black;
   display: flex;
-  // flex-direction: column;
-  // justify-content: space-between;
-  // align-items: center;
+  flex-direction: column;
+  justify-content: start;
+  align-items: center;
   height: 100%;
+  overflow-y: scroll;
   filter: ${(props) =>
     props.budgetModal || props.expenseModal || props.viewExpenses
       ? `blur(1.5px)`
       : null};
   transition: all 0.2s ease-in-out;
-
-  button {
-    margin: 0 20px;
-    padding: 5px 10px;
-    outline: none;
-    cursor: pointer;
-    border-radius: 5px;
-    border: none;
-  }
 `;
 
 const Left = styled.div`
@@ -120,6 +142,7 @@ const Left = styled.div`
   flex: 1;
   max-height: 655px;
   overflow-y: scroll;
+  border: 1px solid green;
 `;
 const Right = styled.div`
   flex: 1;
@@ -131,19 +154,12 @@ const Right = styled.div`
 
 const Grid = styled.div`
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  // justify-content: center;
   gap: 10px;
   flex-direction: column;
   padding-bottom: 20px;
-`;
-
-const Up = styled.div`
-  // padding: 0 20px;
-  margin-bottom: 30px;
   width: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
 `;
 
 const Down = styled.div`
@@ -165,4 +181,57 @@ const Search = styled.div`
   & > div {
     flex: 1;
   }
+`;
+
+const Button = styled.button`
+  margin: 0 20px;
+  height: 30px;
+  padding: 5px 10px;
+  outline: none;
+  cursor: pointer;
+  border-radius: 5px;
+  border: none;
+  background: #d6806e;
+  font-size: 14px;
+`;
+//
+
+export const Head = styled.div`
+  // background: gray;
+  width: 100%;
+  height: 64px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 3px 7px 0 rgb(0 0 0 / 27%);
+  z-index: 1;
+`;
+
+export const Main = styled.div`
+  // background: #d9dbe1;
+  background: #e4e4e4;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  // flex-direction: column;
+  align-items: start;
+  justify-content: space-between;
+  padding: 20px;
+  overflow-y: scroll;
+`;
+export const BudgetContainer = styled.div`
+  width: 650px;
+  background: #ffffff;
+  margin: 0 auto;
+  border-radius: 4px;
+  box-shadow: 0 3px 7px 0 rgb(0 0 0 / 27%);
+
+  div {
+    display: flex;
+  }
+`;
+export const Tab = styled.p`
+  padding: 30px;
+  font-size: 14px;
+  text-transform: uppercase;
 `;
