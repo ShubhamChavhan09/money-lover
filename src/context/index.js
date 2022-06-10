@@ -135,6 +135,23 @@ export const BudgetsProvider = ({ children }) => {
     setInputText(lowercase);
   };
 
+  const updateBudget = async (id, updatedBudget) => {
+    try {
+      await supabase
+        .from("budgets")
+        .update({ name: updatedBudget.names, max: updatedBudget.amounts })
+        .match({ id: id });
+
+      setBudgets((prevBudgets) => {
+        return prevBudgets.map((prevBudget) =>
+          prevBudget.id === id ? updatedBudget : prevBudget
+        );
+      });
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
+
   return (
     <budgetsContext.Provider
       value={{
@@ -147,6 +164,7 @@ export const BudgetsProvider = ({ children }) => {
         deleteExpense,
         searchBudget,
         inputText,
+        updateBudget,
       }}
     >
       {children}

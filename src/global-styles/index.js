@@ -10,12 +10,12 @@ const GlobalStyle = createGlobalStyle`
 }
 
 body{
-    // background: #222222;
-    background: linear-gradient(to right  , #111111 ,#222222 );
+    background: #ffffff;
+    // background: linear-gradient(to right  ,#FDFDFD ,#FFF4FF);
     width: 100vw;
     height: 100vh;
     font-family: 'Inter', sans-serif;
-    color: #FDFDFD; 
+    color: #303030; 
     font-weight: 300;
     font-size: 15px;
     // background-repeat: no-repeat;
