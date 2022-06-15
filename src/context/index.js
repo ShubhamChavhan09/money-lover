@@ -25,10 +25,14 @@ export const BudgetsProvider = ({ children }) => {
     else setBudgets(data);
   };
 
-  const addBudget = async ({ name, max, created }) => {
+  const addBudget = async ({ name, max, created, startDate, endDate }) => {
     try {
       const id = uuidv4();
-      await supabase.from("budgets").insert([{ id, name, max, created }]);
+
+      await supabase
+        .from("budgets")
+        .insert([{ id, name, max, created, startDate, endDate }])
+        .neq("name", name);
 
       setBudgets((prevBudget) => {
         if (prevBudget.find((budget) => budget.name === name)) {
@@ -41,6 +45,8 @@ export const BudgetsProvider = ({ children }) => {
             name,
             max,
             created,
+            startDate,
+            endDate,
           },
         ];
       });
@@ -139,8 +145,8 @@ export const BudgetsProvider = ({ children }) => {
     try {
       await supabase
         .from("budgets")
-        .update({ name: updatedBudget.names, max: updatedBudget.amounts })
-        .match({ id: id });
+        .update({ name: updatedBudget.name, max: updatedBudget.amount })
+        .match({ id });
 
       setBudgets((prevBudgets) => {
         return prevBudgets.map((prevBudget) =>
