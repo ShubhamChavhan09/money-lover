@@ -1,6 +1,7 @@
 import React from "react";
 import { MISCELLANEOUS_BUDGET_ID, useBudgets } from "../../context";
 import BudgetCard from "../budget-card";
+import NewCard from "../new-card";
 
 const MiscellaneousCard = (props) => {
   const { getBudgetExpenses } = useBudgets();
@@ -19,7 +20,7 @@ const MiscellaneousCard = (props) => {
         name="Miscellaneous"
         id={MISCELLANEOUS_BUDGET_ID}
         amount={amount}
-        noDelete
+        noBudget
       />
     </div>
   );

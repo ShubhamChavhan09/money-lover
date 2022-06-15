@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { CgClose } from "react-icons/cg";
 import { useBudgets } from "../../context";
 import { format } from "date-fns";
 import { currencyFormatter } from "../../utils";
+import EditExpenseModal from "../edit-expense-modal";
+import { MISCELLANEOUS_BUDGET_ID } from "../../context";
 
 const ViewExpense = ({
   title,
@@ -13,9 +15,11 @@ const ViewExpense = ({
   date,
   amount,
   des,
-  deleteEl,
   setDeleteModal,
 }) => {
+  const [expenseModal, setExpenseModal] = useState(false);
+  const [selectId, setselectId] = useState("");
+
   const { budgets } = useBudgets();
 
   const budgetName = budgets.filter((budget) => {
@@ -26,26 +30,43 @@ const ViewExpense = ({
     setDeleteModal(true);
   };
 
+  const handleEdit = () => {
+    setExpenseModal(true);
+    setselectId(budgetId);
+  };
+
   return (
-    <Container>
-      <Head>
-        <div>
-          <Close onClick={() => toggle(false)} />
-          <p>{title}</p>
-        </div>
-        <div>
-          <Delete onClick={handleDelete}>DELETE</Delete>
-          <Edit>EDIT</Edit>
-        </div>
-      </Head>
-      <Details>
-        <h3>{budgetName[0].name}</h3>
-        <p>{format(new Date(date), "EEEE, dd/MM/yy")}</p>
-        <hr />
-        <p>{des}</p>
-        <span>{currencyFormatter.format(Math.abs(amount))}</span>
-      </Details>
-    </Container>
+    <>
+      <Container>
+        <Head>
+          <div>
+            <Close onClick={() => toggle(false)} />
+            <p>{title}</p>
+          </div>
+          <div>
+            <Delete onClick={handleDelete}>DELETE</Delete>
+            <Edit onClick={handleEdit}>EDIT</Edit>
+          </div>
+        </Head>
+        <Details>
+          <h3>
+            {budgetName[0] ? budgetName[0]?.name : MISCELLANEOUS_BUDGET_ID}
+          </h3>
+          <p>{format(new Date(date), "EEEE, dd/MM/yy")}</p>
+          <hr />
+          <p>{des}</p>
+          <span>{currencyFormatter.format(Math.abs(amount))}</span>
+        </Details>
+      </Container>
+      <EditExpenseModal
+        expenseModal={expenseModal}
+        setExpenseModal={setExpenseModal}
+        amount={amount}
+        date={date}
+        des={des}
+        name={selectId}
+      />
+    </>
   );
 };
 
@@ -59,9 +80,6 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   box-shadow: 0 3px 7px 0 rgb(0 0 0 / 27%);
-  // position: fixed;
-  right: 20px;
-  // // top: 60px;
 `;
 const Head = styled.div`
   height: 64px;

@@ -4,9 +4,10 @@ import { useBudgets } from "../../context";
 import BudgetCard from "../budget-card";
 import SearchBudget from "../search-budget";
 import { v4 as uuidv4 } from "uuid";
+import MiscellaneousCard from "../miscellaneous-card";
 
 const NewCard = ({
-  handleExpense,
+  // handleExpense,
   handleViewExpense,
   setBudgetData,
   setViewBudgetTab,
@@ -27,6 +28,12 @@ const NewCard = ({
 
   return (
     <Budget>
+      <MiscellaneousCard
+        max={null}
+        handleViewExpense={handleViewExpense}
+        setBudgetData={setBudgetData}
+        setViewBudgetTab={setViewBudgetTab}
+      />
       {filteredData.map((budget) => {
         const amount = getBudgetExpenses(budget.id).reduce(
           (total, expense) => total + expense.amount,
@@ -35,12 +42,11 @@ const NewCard = ({
         return (
           <BudgetCard
             key={uuidv4()}
-            handleExpense={handleExpense}
-            handleViewExpense={handleViewExpense}
-            amount={amount}
             name={budget?.name}
-            max={budget.max}
             id={budget.id}
+            amount={amount}
+            handleViewExpense={handleViewExpense}
+            max={budget.max}
             setBudgetData={setBudgetData}
             setViewBudgetTab={setViewBudgetTab}
           />

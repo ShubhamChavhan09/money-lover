@@ -37,7 +37,6 @@ const Report = () => {
     if (error) console.log("error", error);
     else setLastWeek(data);
   };
-  console.log(lastWeek);
 
   budgets.forEach((element) => {
     const amount = getBudgetExpenses(element.id).reduce(

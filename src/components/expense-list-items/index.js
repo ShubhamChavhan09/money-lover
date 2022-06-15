@@ -15,7 +15,7 @@ const ExpenseListItems = ({ list, setExpenseData, toggle }) => {
   return (
     <>
       <Card onClick={handleClick}>
-        <div>
+        <div className="data">
           <p className="date">{format(new Date(list.date), "dd")}</p>
           <div className="day">
             <p>{format(new Date(list.date), "EEEE, MMMM y")}</p>
@@ -32,7 +32,7 @@ const ExpenseListItems = ({ list, setExpenseData, toggle }) => {
 
 export default ExpenseListItems;
 
-const Card = styled.div`
+export const Card = styled.div`
   width: 100%;
   border-top: 1px solid #e4e4e4;
   border-bottom: 1px solid #e4e4e4;
@@ -44,6 +44,7 @@ const Card = styled.div`
   border: none;
   cursor: pointer;
   transition: all 0.2s linear;
+
   p {
     font-size: 11px;
   }
@@ -69,5 +70,8 @@ const Card = styled.div`
 
   &:hover {
     background: #f0faf1;
+  }
+  div.data {
+    display: flex;
   }
 `;
