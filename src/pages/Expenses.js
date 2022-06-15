@@ -19,8 +19,7 @@ import DeleteModal from "../components/delete-modal";
 
 const Expenses = () => {
   const [expenseModal, setExpenseModal] = useState(false);
-  const [expenseBudgetId, setExpenseBudgetId] = useState();
-  //
+  const [expenseBudgetId, setExpenseBudgetId] = useState("");
   const [expenseData, setExpenseData] = useState(null);
   const [viewExpenseTab, setViewExpenseTab] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
@@ -30,6 +29,8 @@ const Expenses = () => {
     setExpenseModal(!expenseModal);
     setExpenseBudgetId(budgetId);
   };
+
+  console.log({ expenseData });
 
   const misExp = expenses.filter((exp) => {
     return exp.budgetId === MISCELLANEOUS_BUDGET_ID;
@@ -63,6 +64,7 @@ const Expenses = () => {
                 toggle={setViewExpenseTab}
                 des={expenseData.description}
                 setDeleteModal={setDeleteModal}
+                expenseBudgetId={expenseBudgetId}
               />
             )}
           </ExpTab>
@@ -96,6 +98,7 @@ const ExpenseContainer = styled(BudgetContainer)`
 
   & > div {
     background: #ffffff;
+    display: flex;
   }
 `;
 
@@ -159,5 +162,7 @@ const Card = styled(CardCategory)`
 `;
 
 const ExpTab = styled.div`
-  overflow-y: hidden;
+  // position: -webkit-sticky;
+  position: sticky;
+  top: 0;
 `;
