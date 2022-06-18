@@ -5,13 +5,7 @@ import MiscellaneousCard from "../components/miscellaneous-card";
 import { useBudgets, MISCELLANEOUS_BUDGET_ID } from "../context";
 import Lists from "./Lists";
 import ExpenseModal from "../components/expense-modal";
-import {
-  Main,
-  Head,
-  Container,
-  BudgetContainer,
-  Tab,
-} from "../components/dashboard";
+import { Main, Head, Container, BudgetContainer, Tab } from "./Budgets";
 import TotalCard from "../components/total-card";
 import ExpenseList from "../components/expense-list";
 import ViewExpense from "../components/view-expense";
@@ -30,7 +24,7 @@ const Expenses = () => {
     setExpenseBudgetId(budgetId);
   };
 
-  console.log({ expenseData });
+  // console.log({ expenseData });
 
   const misExp = expenses.filter((exp) => {
     return exp.budgetId === MISCELLANEOUS_BUDGET_ID;
@@ -45,8 +39,8 @@ const Expenses = () => {
         <Main>
           <ExpenseContainer>
             <div>
-              <Tab>Last Month</Tab>
-              <Tab>This Month</Tab>
+              <div className="tab">Last Month</div>
+              <div className="tab">This Month</div>
             </div>
             <ExpenseList
               setExpenseData={setExpenseData}

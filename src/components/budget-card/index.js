@@ -1,9 +1,7 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import { currencyFormatter } from "../../utils";
-import { BsTrash } from "react-icons/bs";
-import { useBudgets } from "../../context";
+import { MISCELLANEOUS_BUDGET_ID, useBudgets } from "../../context";
 
 const BudgetCard = ({
   amount,
@@ -12,9 +10,8 @@ const BudgetCard = ({
   id,
   setBudgetData,
   setViewBudgetTab,
+  noBudget,
 }) => {
-  const { deleteBudget } = useBudgets();
-
   const rate = (amount / max) * 100;
 
   function setProgressVariant(amount, max) {
@@ -29,12 +26,12 @@ const BudgetCard = ({
     classNames.push("danger");
   }
 
-  const handleDeleteBudget = (id) => {
-    deleteBudget(id);
-  };
-
   const handleClick = () => {
-    setBudgetData(id);
+    if (id === MISCELLANEOUS_BUDGET_ID) {
+      setBudgetData(MISCELLANEOUS_BUDGET_ID);
+    } else {
+      setBudgetData(id);
+    }
     setViewBudgetTab(true);
   };
 
@@ -47,13 +44,20 @@ const BudgetCard = ({
           </div>
           <Details>
             <div>
-              <p> {currencyFormatter.format(max)}</p>
+              <p>
+                <span className="spend">
+                  {currencyFormatter.format(amount)}
+                </span>
+                {!noBudget && <span> of {currencyFormatter.format(max)}</span>}
+              </p>
             </div>
             <div>
-              <span>
-                {rate > 100 ? "Over Spent  " : "Left "}
-                {currencyFormatter.format(Math.abs(max - amount))}
-              </span>
+              {!noBudget && (
+                <span>
+                  {rate > 100 ? "Over Spent  " : "Left "}
+                  {currencyFormatter.format(Math.abs(max - amount))}
+                </span>
+              )}
             </div>
           </Details>
         </Top>
@@ -80,7 +84,6 @@ const Card = styled.div`
   justify-content: space-between;
   padding: 10px 20px 0 20px;
   transition: all 0.2s linear;
-  // background: rgba(178, 190, 195, 0.2);
   cursor: pointer;
 
   &:hover {
@@ -89,7 +92,6 @@ const Card = styled.div`
 `;
 
 const ProgressBar = styled.div`
-  // color: #e67e22;
   display: flex;
   align-items: start;
   justify-content: center;
@@ -107,7 +109,6 @@ const ProgressBar = styled.div`
       height: 8px;
       border-radius: 5px;
       background-color: #dddddd;
-      // outline: 1px solid #010101;
     }
 
     ::-webkit-progress-value {
@@ -124,44 +125,11 @@ const ProgressBar = styled.div`
   }
 `;
 
-const Data = styled.div`
-  // background: pink;
-  margin: 20px 0 0 0;
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  & > div {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    flex: 1;
-  }
-  & > div:nth-child(2) {
-    border-left: 2px solid #0c0c0c;
-  }
-  &.danger {
-    background-color: rgba(255, 127, 80, 0.5);
-  }
-`;
-
 const Top = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: start;
   flex: 2;
-`;
-
-const DeleteBudget = styled(BsTrash)`
-  font-size: 18px;
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  cursor: pointer;
-
-  &: hover {
-    color: rgba(232, 65, 24, 0.6);
-  }
 `;
 
 const Title = styled.p`
@@ -174,8 +142,9 @@ const Details = styled.div`
   flex-direction: column;
   justify-content: space-between;
   align-items: end;
-  p {
-    font-size: 14px;
+  p,
+  span.spend {
+    font-size: 17px;
     font-weight: 500;
   }
   span {
@@ -183,7 +152,4 @@ const Details = styled.div`
     padding: 2px 0px;
     color: #969696;
   }
-`;
-const Bottom = styled.div`
-  width: 100%;
 `;

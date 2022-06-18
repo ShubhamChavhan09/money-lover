@@ -29,7 +29,7 @@ const ViewExpenseModal = ({ handleViewExpense, viewExpenses, expensedId }) => {
                 <h2>Expenses - {budget?.name} </h2>
                 {expensedId !== MISCELLANEOUS_BUDGET_ID && (
                   <button onClick={() => handleBudgetDelete(expensedId)}>
-                    Delete
+                    Deleteme
                   </button>
                 )}
                 <span className="close" onClick={handleViewExpense}>
@@ -38,23 +38,12 @@ const ViewExpenseModal = ({ handleViewExpense, viewExpenses, expensedId }) => {
               </div>
               <div>
                 {getBudgetExpenses(expensedId).map((expense) => {
-                  let result = formatDistanceToNowStrict(
-                    new Date(expense.date),
-                    {
-                      includeSeconds: true,
-                    }
-                  );
-                  let day = format(
-                    new Date(expense.date),
-                    "d LLL, yyyy 'at' h:mm aaa"
-                  );
-
                   return (
-                    <Expenses key={expense.id}>
+                    <ExpensesEl key={expense.id}>
                       <span>{expense.description}</span>
                       <span>
                         {/* {result} - */}
-                        {day}
+
                         {/* ago */}
                       </span>
 
@@ -65,7 +54,7 @@ const ViewExpenseModal = ({ handleViewExpense, viewExpenses, expensedId }) => {
                           <Close />
                         </span>
                       </span>
-                    </Expenses>
+                    </ExpensesEl>
                   );
                 })}
               </div>
@@ -123,7 +112,7 @@ const Close = styled(CgCloseR)`
   margin-left: 20px;
 `;
 
-const Expenses = styled.div`
+const ExpensesEl = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;

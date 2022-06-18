@@ -1,20 +1,14 @@
-import React from "react";
-import BudgetCard from "../budget-card";
 import { useBudgets } from "../../context";
 import styled from "styled-components";
 import { currencyFormatter } from "../../utils";
+import { motion } from "framer-motion";
 
 const TotalCard = ({ name, click }) => {
-  const { expenses, budgets, handleBudget } = useBudgets();
+  const { expenses } = useBudgets();
 
   // all expense
   const amount = expenses.reduce((total, expense) => total + expense.amount, 0);
 
-  const max = budgets.reduce((total, budget) => total + budget.max, 0);
-
-  // if (amount === 0) return null;
-
-  // return <BudgetCard name="Total" amount={amount} max={max} hidden noDelete />;
   return (
     <Bar>
       <div>
@@ -22,7 +16,13 @@ const TotalCard = ({ name, click }) => {
         <span>{currencyFormatter.format(amount)}</span>
       </div>
       <div>
-        <button onClick={click}>{name}</button>
+        <motion.button
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.9 }}
+          onClick={click}
+        >
+          {name}
+        </motion.button>
       </div>
     </Bar>
   );

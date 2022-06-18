@@ -11,7 +11,6 @@ function App() {
         <GlobalStyle />
         <Navbar />
         <RouterFiles />
-        {/* <Dashboard /> */}
       </Router>
     </Container>
   );

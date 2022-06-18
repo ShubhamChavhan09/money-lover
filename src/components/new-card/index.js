@@ -1,16 +1,17 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { useBudgets } from "../../context";
 import BudgetCard from "../budget-card";
 import SearchBudget from "../search-budget";
 import { v4 as uuidv4 } from "uuid";
 import MiscellaneousCard from "../miscellaneous-card";
+import { motion } from "framer-motion";
 
 const NewCard = ({
-  // handleExpense,
   handleViewExpense,
   setBudgetData,
   setViewBudgetTab,
+  toggleState,
 }) => {
   const { budgets, getBudgetExpenses, inputText } = useBudgets();
 
@@ -26,30 +27,61 @@ const NewCard = ({
     }
   });
 
+  let today = new Date();
+  const runningBudgets = budgets
+    .map((budget) => {
+      return budget;
+    })
+    .filter((item) => {
+      return (
+        new Date(item.startDate) <= today && new Date(item.endDate) >= today
+      );
+    });
+
+  const finishedBudgets = budgets
+    .map((budget) => {
+      return budget;
+    })
+    .filter((item) => {
+      return (
+        new Date(item.startDate) >= today || new Date(item.endDate) <= today
+      );
+    });
+
+  const dataBud = toggleState === 1 ? runningBudgets : finishedBudgets;
+
   return (
     <Budget>
-      <MiscellaneousCard
+      {/* <MiscellaneousCard
         max={null}
         handleViewExpense={handleViewExpense}
         setBudgetData={setBudgetData}
         setViewBudgetTab={setViewBudgetTab}
-      />
-      {filteredData.map((budget) => {
+      /> */}
+      {dataBud.map((budget) => {
         const amount = getBudgetExpenses(budget.id).reduce(
           (total, expense) => total + expense.amount,
           0
         );
         return (
-          <BudgetCard
-            key={uuidv4()}
-            name={budget?.name}
-            id={budget.id}
-            amount={amount}
-            handleViewExpense={handleViewExpense}
-            max={budget.max}
-            setBudgetData={setBudgetData}
-            setViewBudgetTab={setViewBudgetTab}
-          />
+          <>
+            <MiscellaneousCard
+              max={null}
+              handleViewExpense={handleViewExpense}
+              setBudgetData={setBudgetData}
+              setViewBudgetTab={setViewBudgetTab}
+            />
+            <BudgetCard
+              key={uuidv4()}
+              name={budget?.name}
+              id={budget.id}
+              amount={amount}
+              handleViewExpense={handleViewExpense}
+              max={budget.max}
+              setBudgetData={setBudgetData}
+              setViewBudgetTab={setViewBudgetTab}
+            />
+          </>
         );
       })}
     </Budget>

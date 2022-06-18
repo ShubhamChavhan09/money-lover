@@ -1,8 +1,8 @@
-import React from "react";
 import { Overlay, Title } from "../budget-modal";
 import styled from "styled-components";
 import { Delete } from "../view-expense";
-import { useBudgets } from "../../context";
+import Modal from "../modal";
+import { AnimatePresence } from "framer-motion";
 
 const DeleteModal = ({
   deleteModal,
@@ -12,8 +12,6 @@ const DeleteModal = ({
   func,
   alert,
 }) => {
-  const { deleteBudget } = useBudgets();
-
   const handleDelete = (id) => {
     func(id);
     toggle(false);
@@ -21,9 +19,15 @@ const DeleteModal = ({
   };
   return (
     <>
-      {deleteModal ? (
-        <Overlay>
-          <div className="modal">
+      <AnimatePresence
+        initial={false}
+        exitBeforeEnter={true}
+        onExitComplete={() => null}
+      >
+        {deleteModal ? (
+          // <Overlay>
+          //   <div className="modal">
+          <Modal>
             <Heading>
               <p>Confirm Deletion</p>
             </Heading>
@@ -50,9 +54,12 @@ const DeleteModal = ({
                 DELETE
               </Button>
             </Buttons>
-          </div>
-        </Overlay>
-      ) : null}
+          </Modal>
+        ) : //   {/* </div>
+        // </Overlay> */}
+
+        null}
+      </AnimatePresence>
     </>
   );
 };
