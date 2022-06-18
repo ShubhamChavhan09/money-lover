@@ -4,17 +4,56 @@ import { Bar, Line, Pie } from "react-chartjs-2";
 import { CategoryScale } from "chart.js";
 import Chart from "chart.js/auto";
 import { useBudgets, MISCELLANEOUS_BUDGET_ID } from "../../context";
+import { format } from "date-fns";
 Chart.register(CategoryScale);
 
-const TotalExpenseReport = () => {
-  const { budgets, getBudgetExpenses } = useBudgets();
+const TotalExpenseReport = ({ date, id, startDate, endDate }) => {
+  const { budgets, getBudgetExpenses, expenses } = useBudgets();
+
+  const expense = expenses.filter((expense) => {
+    return expense.budgetId === id;
+  });
+  // console.log({ expense });
+
+  const uniqueDate = expense
+    .map((item) => item.date)
+    .filter((value, index, self) => self.indexOf(value) === index);
+
+  //sorted date
+  const sort = uniqueDate.sort(function (a, b) {
+    const date1 = new Date(a);
+    const date2 = new Date(b);
+    return date1 - date2;
+  });
+
+  const sortedDates = sort.map((item) => {
+    return format(new Date(item), "dd MMM");
+  });
+
+  const allExpenses = sort.map((dates) => {
+    return expense.filter((date) => {
+      return date.date === dates;
+    });
+  });
+
+  const totalexpday = allExpenses.map((items) => {
+    return items.map((item) => {
+      return item.amount;
+    });
+  });
+
+  const totalArr = totalexpday.map((item) => {
+    return item.reduce((total, expense) => total + expense, 0);
+  });
+
+  //
+  //
   const budgetsName = budgets.map((budget) => budget.name);
-  const allBudgetsName = budgetsName.concat(MISCELLANEOUS_BUDGET_ID);
 
   const arr = [];
 
   budgets.forEach((element) => {
-    const amount = getBudgetExpenses(element.id).reduce(
+    const amount = getBudgetExpenses(element.budgetId).reduce(
       (total, expense) => total + expense.amount,
       0
     );
@@ -28,12 +67,14 @@ const TotalExpenseReport = () => {
   const expenseArr = arr.concat(mis);
 
   const data = {
-    labels: mis ? allBudgetsName : budgetsName,
+    labels: sortedDates,
+    // format(new Date(startDate), "dd MMMM "),
+    // format(new Date(endDate), "dd MMMM "),
     datasets: [
       {
-        label: "Spending Overview",
-        data: expenseArr,
-
+        label: "Spending",
+        data: totalArr,
+        // expenseArr
         backgroundColor: [
           "rgba(255, 99, 132, 0.2)",
           "rgba(54, 162, 235, 0.2)",
@@ -56,18 +97,22 @@ const TotalExpenseReport = () => {
   };
 
   return (
-    <div style={{ textAlign: "center" }}>
-      <Pie
+    <div style={{ textAlign: "center", width: "580px", height: "320px" }}>
+      <Bar
         data={data}
         height={400}
         width={600}
         options={{
           maintainAspectRatio: false,
-          // scales: {
-          //   y: {
-          //     beginAtZero: true,
-          //   },
-          // },
+          scales: {
+            // x: {
+            //   min: format(new Date(startDate), "dd/MM/yyyy hh:mm:ss"),
+            //   max: format(new Date(endDate), "dd/MM/yyyy hh:mm:ss"),
+            // },
+            y: {
+              beginAtZero: true,
+            },
+          },
         }}
       />
     </div>

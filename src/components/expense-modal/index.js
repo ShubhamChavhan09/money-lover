@@ -1,22 +1,14 @@
 import React, { useState, useRef, useEffect } from "react";
 import styled from "styled-components";
 import { useBudgets, MISCELLANEOUS_BUDGET_ID } from "../../context";
-import { CgClose } from "react-icons/cg";
 import format from "date-fns/format";
-import { groupedOptions } from "../../data/data";
 import Select from "react-select";
-import {
-  Overlay,
-  CloseModal,
-  Button,
-  Title,
-  Box,
-  ButtonContainer,
-  Form,
-} from "../budget-modal";
+import { Overlay, Title, Box, Form, Section } from "../budget-modal";
 import ModalButtons from "../modal-buttons";
+import Modal from "../modal";
+import { AnimatePresence } from "framer-motion";
 
-const ExpenseModal = ({ expenseModal, handleExpense, expenseBudgetId }) => {
+const ExpenseModal = ({ expenseModal, handleExpense }) => {
   const [category, setCategory] = useState("");
   const [icon, setIcon] = useState();
 
@@ -39,12 +31,20 @@ const ExpenseModal = ({ expenseModal, handleExpense, expenseBudgetId }) => {
 
   const handleSubmitExp = (event) => {
     event.preventDefault();
+    const nameBudget = budgets.filter((budget) => {
+      return budget.id === budgetIdRef.current.value;
+    });
+
+    const cat = nameBudget[0]?.name;
+
+    const categoryName = cat ? cat : "Miscellaneous";
+
     addExpense({
       description: descriptionRef.current.value,
       amount: parseFloat(amountRef.current.value),
       budgetId: budgetIdRef.current.value,
       date: dateRef.current.value,
-      category,
+      category: categoryName,
       icon,
     });
     handleExpense();
@@ -72,25 +72,30 @@ const ExpenseModal = ({ expenseModal, handleExpense, expenseBudgetId }) => {
 
   return (
     <>
-      {expenseModal ? (
-        <Overlay width="350px" height="466px">
-          <div className="modal">
-            {/* <CloseModal onClick={() => handleExpense()} /> */}
+      <AnimatePresence
+        initial={false}
+        exitBeforeEnter={true}
+        onExitComplete={() => null}
+      >
+        {expenseModal ? (
+          // <Overlay width="350px" height="466px">
+          //   <div className="modal">
+
+          <Modal width={"350px"} height={"466px"}>
             <Title>
               <p>Add Expense</p>
             </Title>
             <Form section="315px" onSubmit={handleSubmitExp}>
-              <section>
+              <Section>
                 <Box>
                   <div>
                     <p>Budget Category</p>
                   </div>
                   <div>
-                    <select defaultValue={expenseBudgetId} ref={budgetIdRef}>
+                    <select defaultValue={""} ref={budgetIdRef}>
                       <option id={MISCELLANEOUS_BUDGET_ID}>
                         Miscellaneous
                       </option>
-                      ;
                       {budgets.map((budget) => {
                         return (
                           <option key={budget.id} value={budget.id}>
@@ -135,7 +140,7 @@ const ExpenseModal = ({ expenseModal, handleExpense, expenseBudgetId }) => {
                     />
                   </div>
                 </Box>
-              </section>
+              </Section>
               {/* <div>
                   <label>Expense category</label>
 
@@ -160,9 +165,12 @@ const ExpenseModal = ({ expenseModal, handleExpense, expenseBudgetId }) => {
                 </div> */}
               <ModalButtons cancel={handleExpense} />
             </Form>
-          </div>
-        </Overlay>
-      ) : null}
+
+            {/* </div>
+        </Overlay> */}
+          </Modal>
+        ) : null}
+      </AnimatePresence>
     </>
   );
 };

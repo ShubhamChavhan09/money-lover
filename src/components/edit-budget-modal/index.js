@@ -2,8 +2,15 @@ import React, { useRef, useEffect, useState } from "react";
 import styled from "styled-components";
 import { useBudgets } from "../../context";
 import { CgClose } from "react-icons/cg";
-import { Delete } from "../view-expense";
 import ModalButtons from "../modal-buttons";
+import Modal from "../modal";
+import { AnimatePresence } from "framer-motion";
+import { Section } from "../budget-modal";
+import DatePicker from "../date-picker";
+import { TopLeft } from "../view-budget-expense";
+import { Close } from "../view-budget";
+import { addDays } from "date-fns";
+import format from "date-fns/format";
 
 const EditBudgetModal = ({
   budgetModal,
@@ -12,11 +19,32 @@ const EditBudgetModal = ({
   name,
   amount,
   toggleViewBudget,
+  startDate,
+  endDate,
 }) => {
-  const [names, setNames] = useState(name);
-  const [amounts, setAmounts] = useState(amount);
+  const nameRef = useRef();
+  const maxRef = useRef();
   const modalRef = useRef("");
   const { updateBudget } = useBudgets();
+
+  const { budgets } = useBudgets();
+
+  const [showEditDate, setShowEditDate] = useState(false);
+  const [editDateRange, setEditDateRange] = useState([
+    {
+      startDate: new Date(),
+      endDate: addDays(new Date(), 7),
+      key: "selection",
+    },
+  ]);
+
+  const budget = budgets.filter((budget) => {
+    return budget.id === id;
+  });
+
+  const maxAmount = budget[0]?.max;
+
+  const budgetName = budget[0]?.name;
 
   const handleBudget = () => {
     setBudgetModal(!budgetModal);
@@ -25,8 +53,10 @@ const EditBudgetModal = ({
   const handleSubmit = (e) => {
     e.preventDefault();
     updateBudget(id, {
-      names,
-      amounts,
+      name: nameRef.current.value,
+      max: parseFloat(maxRef.current.value),
+      startDate: new Date(editDateRange[0].startDate),
+      endDate: new Date(editDateRange[0].endDate),
     });
     setBudgetModal(!budgetModal);
     toggleViewBudget(false);
@@ -34,25 +64,31 @@ const EditBudgetModal = ({
 
   return (
     <>
-      {budgetModal ? (
-        <Overlay ref={modalRef} width="350px" height="390px">
-          <div className="modal">
-            {/* <CloseModal  /> */}
+      <AnimatePresence
+        initial={false}
+        exitBeforeEnter={true}
+        onExitComplete={() => null}
+      >
+        {budgetModal ? (
+          // <Overlay ref={modalRef} width="350px" height="390px">
+          //   <div className="modal">
+          <Modal width={"350px"} height={"390px"}>
             <Title>
               <p>Edit Budget</p>
             </Title>
             <Form section="240px" onSubmit={handleSubmit}>
-              <section>
+              <Section>
                 <Box>
                   <div>
                     <p>Name</p>
                   </div>
                   <div>
                     <input
+                      ref={nameRef}
                       required
                       type="text"
-                      onChange={(e) => setNames(e.target.value)}
-                      value={names}
+                      // onChange={handleName}
+                      defaultValue={budgetName}
                     />
                   </div>
                 </Box>
@@ -64,8 +100,9 @@ const EditBudgetModal = ({
                     <input
                       type="number"
                       min="0"
-                      onChange={(e) => setAmounts(e.target.value)}
-                      value={amounts}
+                      ref={maxRef}
+                      // onChange={(e) => setAmounts(e.target.value)}
+                      defaultValue={maxAmount}
                     />
                   </div>
                 </Box>
@@ -74,15 +111,53 @@ const EditBudgetModal = ({
                     <p>Date</p>
                   </div>
                   <div>
-                    <input type="date" placeholder="select" />
+                    <input
+                      value={`${format(startDate, "dd/MM/yyyy")} - ${format(
+                        endDate,
+                        "dd/MM/yyyy"
+                      )}`}
+                      style={{ cursor: "pointer" }}
+                      readOnly
+                      placeholder="Select time range"
+                      onClick={() => setShowEditDate((prev) => !prev)}
+                    />
                   </div>
+                  <AnimatePresence
+                    initial={false}
+                    exitBeforeEnter={true}
+                    onExitComplete={() => null}
+                  >
+                    {showEditDate && (
+                      // <Overlay width="350px" height="500px">
+                      // {/* <div className="modal"> */}
+                      <Modal width="350px" height="500px">
+                        <Title>
+                          <TopLeft>
+                            <Close onClick={(e) => setShowEditDate(false)} />
+                            <p>Select time range</p>
+                          </TopLeft>
+                        </Title>
+                        <div>
+                          <DatePicker
+                            dateRange={editDateRange}
+                            setDateRange={setEditDateRange}
+                          />
+                        </div>
+                      </Modal>
+                      // </div>
+                      // </Overlay>
+                    )}
+                  </AnimatePresence>
                 </Box>
-              </section>
+              </Section>
               <ModalButtons cancel={handleBudget} />
             </Form>
-          </div>
-        </Overlay>
-      ) : null}
+          </Modal>
+        ) : //  {/* </div> */}
+        //  {/* </Overlay> */}
+
+        null}
+      </AnimatePresence>
     </>
   );
 };

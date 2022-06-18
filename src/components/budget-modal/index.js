@@ -2,14 +2,27 @@ import React, { useRef, useEffect, useState } from "react";
 import styled from "styled-components";
 import { useBudgets } from "../../context";
 import { CgClose } from "react-icons/cg";
-import { Delete } from "../view-expense";
 import ModalButtons from "../modal-buttons";
+import { Category } from "../../category";
+import DatePicker from "../date-picker";
+import { format } from "date-fns";
+import { TopLeft } from "../view-budget-expense";
+import Modal from "../modal";
+import { Close } from "../view-budget";
+import { AnimatePresence } from "framer-motion";
 
-const BudgetModal = ({ budgetModal, handleBudget }) => {
+const BudgetModal = ({
+  budgetModal,
+  handleBudget,
+  dateRange,
+  setDateRange,
+}) => {
   const nameRef = useRef("");
   const maxRef = useRef("");
   const modalRef = useRef("");
   const { addBudget } = useBudgets();
+
+  const [showDate, setShowDate] = useState(false);
 
   useEffect(() => {
     if (nameRef.current) {
@@ -23,6 +36,8 @@ const BudgetModal = ({ budgetModal, handleBudget }) => {
       name: nameRef.current.value,
       max: parseFloat(maxRef.current.value),
       created: new Date(),
+      startDate: new Date(dateRange[0].startDate),
+      endDate: new Date(dateRange[0].endDate),
     });
     handleBudget();
   };
@@ -35,21 +50,35 @@ const BudgetModal = ({ budgetModal, handleBudget }) => {
 
   return (
     <>
-      {budgetModal ? (
-        <Overlay ref={modalRef} onClick={close} width="350px" height="390px">
-          <div className="modal">
-            {/* <CloseModal  /> */}
+      <AnimatePresence
+        initial={false}
+        exitBeforeEnter={true}
+        onExitComplete={() => null}
+      >
+        {budgetModal ? (
+          // <Overlay ref={modalRef} onClick={close} width="350px" height="390px">
+          // {/* <div className="modal"> */}
+
+          <Modal width={"350px"} height={"390px"}>
             <Title>
               <p>Add Budget</p>
             </Title>
             <Form section="240px" onSubmit={handleSubmit}>
-              <section>
+              <Section>
                 <Box>
                   <div>
-                    <p>Name</p>
+                    <p>Category</p>
                   </div>
                   <div>
-                    <input required type="text" ref={nameRef} />
+                    <select ref={nameRef}>
+                      {Category.map((budget) => {
+                        return (
+                          <option key={budget.id} value={budget.name}>
+                            {budget.name}
+                          </option>
+                        );
+                      })}
+                    </select>
                   </div>
                 </Box>
                 <Box>
@@ -57,7 +86,7 @@ const BudgetModal = ({ budgetModal, handleBudget }) => {
                     <p>Amount</p>
                   </div>
                   <div>
-                    <input type="number" min="0" ref={maxRef} />
+                    <input type="number" min="0" required ref={maxRef} />
                   </div>
                 </Box>
                 <Box>
@@ -65,15 +94,52 @@ const BudgetModal = ({ budgetModal, handleBudget }) => {
                     <p>Date</p>
                   </div>
                   <div>
-                    <input type="date" placeholder="select" />
+                    <input
+                      value={`${format(
+                        dateRange[0].startDate,
+                        "dd/MM/yyyy"
+                      )} - ${format(dateRange[0].endDate, "dd/MM/yyyy")}`}
+                      style={{ cursor: "pointer" }}
+                      readOnly
+                      placeholder="Select time range"
+                      onClick={() => setShowDate((prev) => !prev)}
+                    />
                   </div>
+                  <AnimatePresence
+                    initial={false}
+                    exitBeforeEnter={true}
+                    onExitComplete={() => null}
+                  >
+                    {showDate && (
+                      // <Overlay width="350px" height="500px">
+                      // {/* <div className="modal"> */}
+                      <Modal width="350px" height="500px">
+                        <Title>
+                          <TopLeft>
+                            <Close onClick={(e) => setShowDate(false)} />
+                            <p>Select time range</p>
+                          </TopLeft>
+                        </Title>
+                        <div>
+                          <DatePicker
+                            dateRange={dateRange}
+                            setDateRange={setDateRange}
+                          />
+                        </div>
+                      </Modal>
+                      // </div>
+                      // </Overlay>
+                    )}
+                  </AnimatePresence>
                 </Box>
-              </section>
+              </Section>
               <ModalButtons cancel={handleBudget} />
             </Form>
-          </div>
-        </Overlay>
-      ) : null}
+          </Modal>
+        ) : // {/* </div> */}
+        // {/* </Overlay> */}
+        null}
+      </AnimatePresence>
     </>
   );
 };
@@ -92,11 +158,7 @@ export const Overlay = styled.div`
     background: #ffffff;
     height: ${(props) => props.height};
     width: ${(props) => props.width};
-    // position: relative;
     border-radius: 4px;
-
-    // box-shadow: 35px 35px 70px #a8a8a8, -35px -35px 70px #ffffff;
-    // z-index: 2;
   }
 
   section {
@@ -106,11 +168,18 @@ export const Overlay = styled.div`
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
-    // flex-wrap: wrap;
-    // gap: 10px;
-    //
     height: 100%;
   }
+`;
+
+export const Section = styled.section`
+  padding: 24px 24px 0;
+  font-size: 14px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  height: 100%;
 `;
 
 export const CloseModal = styled(CgClose)`
@@ -158,7 +227,7 @@ export const Title = styled.div`
     padding: 20px 24px;
     height: 64px;
     display: flex;
-    justify-content: start;
+    justify-content: space-between;
     align-items: center;
     border-bottom: 2px solid #e4e4e4;
 

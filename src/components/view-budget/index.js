@@ -1,35 +1,77 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import styled from "styled-components";
 import { CgClose } from "react-icons/cg";
-import { useBudgets } from "../../context";
+import { MISCELLANEOUS_BUDGET_ID, useBudgets } from "../../context";
 import { format } from "date-fns";
 import { currencyFormatter } from "../../utils";
 import EditBudgetModal from "../edit-budget-modal";
+import ViewBudgetExpense from "../view-budget-expense";
+import TotalExpenseReport from "../total-expense-report";
+import { motion, AnimatePresence } from "framer-motion";
 
 const ViewBudget = ({
   title,
   id,
   toggle,
-  budgetId,
   date,
   amount,
   des,
   setDeleteModal,
+  startDate,
+  endDate,
 }) => {
   const [budgetModal, setBudgetModal] = useState(false);
-  const { budgets } = useBudgets();
+  const [showBudgetExpense, setShowBudgetExpense] = useState(false);
+  const { budgets, getBudgetExpenses } = useBudgets();
 
   const budgetName = budgets.filter((budget) => {
-    return budget.id === budgetId;
+    return budget.id === id;
   });
+
+  const amountMiscellaneous = getBudgetExpenses(MISCELLANEOUS_BUDGET_ID).reduce(
+    (total, expense) => total + expense.amount,
+    0
+  );
 
   const handleDelete = () => {
     setDeleteModal(true);
   };
 
+  const handleModal = () => {
+    setShowBudgetExpense((prev) => !prev);
+  };
+
+  const dropIn = {
+    hidden: {
+      x: "100vw",
+      opacity: 0,
+    },
+    visible: {
+      x: "0",
+      opacity: 1,
+      transition: {
+        // delay: 0.2,
+        duration: 0.8,
+        type: "tween",
+      },
+    },
+    exit: {
+      x: "100vw",
+      opacity: 0,
+      transition: {
+        duration: 0.5,
+      },
+    },
+  };
+
   return (
     <>
-      <Container>
+      <Container
+        variants={dropIn}
+        initial="hidden"
+        animate="visible"
+        exit="exit"
+      >
         <Head>
           <div>
             <Close onClick={() => toggle(false)} />
@@ -41,21 +83,43 @@ const ViewBudget = ({
           </div>
         </Head>
         <Details>
-          <h3>{budgetName[0]?.name}</h3>
+          <h3>{budgetName[0] ? budgetName[0]?.name : "Miscellaneous"}</h3>
           <p>{format(new Date(date), "EEEE, dd/MM/yy")}</p>
           <hr />
-          <p>{des}</p>
-          <h3>{currencyFormatter.format(Math.abs(amount))}</h3>
+          <p>{amount ? des : "Total"}</p>
+          <h3>
+            {amount
+              ? currencyFormatter.format(Math.abs(amount))
+              : currencyFormatter.format(amountMiscellaneous)}
+          </h3>
         </Details>
-        <View>VIEW TRANSACTION</View>
+        <Chart>
+          <TotalExpenseReport
+            date={date}
+            id={id}
+            startDate={startDate}
+            endDate={endDate}
+          />
+        </Chart>
+        <View>
+          <p onClick={handleModal}>VIEW TRANSACTION</p>
+        </View>
       </Container>
       <EditBudgetModal
         budgetModal={budgetModal}
         setBudgetModal={setBudgetModal}
         id={id}
-        name={budgetName[0]?.name}
+        name={budgetName[0] ? budgetName[0]?.name : "Miscellaneous"}
         amount={amount}
         toggleViewBudget={toggle}
+        startDate={startDate}
+        endDate={endDate}
+      />
+      <ViewBudgetExpense
+        showBudgetExpense={showBudgetExpense}
+        close={setShowBudgetExpense}
+        id={id}
+        name={budgetName[0] ? budgetName[0]?.name : "Miscellaneous"}
       />
     </>
   );
@@ -63,17 +127,14 @@ const ViewBudget = ({
 
 export default ViewBudget;
 
-const Container = styled.div`
+const Container = styled(motion.div)`
   background: #ffffff;
   width: 600px;
-  height: 500px;
+  height: 620px;
   border-radius: 4px;
   display: flex;
   flex-direction: column;
   box-shadow: 0 3px 7px 0 rgb(0 0 0 / 27%);
-  // position: fixed;
-  right: 20px;
-  // // top: 60px;
 `;
 const Head = styled.div`
   height: 64px;
@@ -93,7 +154,7 @@ const Head = styled.div`
   }
 `;
 
-const Close = styled(CgClose)`
+export const Close = styled(CgClose)`
   font-size: 20px;
   margin-right: 18px;
   cursor: pointer;
@@ -129,6 +190,7 @@ const Details = styled.div`
   flex-direction: column;
   padding: 0 60px;
   border-bottom: 1px solid #e4e4e4;
+  margin-bottom: 20px;
 
   h3 {
     font-size: 24px;
@@ -146,6 +208,16 @@ const Details = styled.div`
 
 const View = styled(Head)`
   justify-content: center;
-  font-size: 14px;
+  margin-top: 20px;
   height: 48px;
+  border-top: 1px solid #e4e4e4;
+
+  p {
+    cursor: pointer;
+    font-size: 14px;
+  }
+`;
+
+const Chart = styled.div`
+  text-align: center;
 `;

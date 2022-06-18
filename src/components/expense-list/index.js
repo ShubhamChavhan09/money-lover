@@ -1,44 +1,53 @@
-import React from "react";
 import styled from "styled-components";
 import { useBudgets } from "../../context";
 import ExpenseListItems from "../expense-list-items";
 import { currencyFormatter } from "../../utils";
+import { MISCELLANEOUS_BUDGET_ID } from "../../context";
 
 const ExpenseList = ({ setExpenseData, toggle }) => {
-  // const [expenseData, setExpenseData] = useState(null);
-
   const { budgets, expenses, getBudgetExpenses } = useBudgets();
+
+  const dataExp = expenses.filter((expense) => {
+    return expense.budgetId === MISCELLANEOUS_BUDGET_ID;
+  });
+  const expenseLength = dataExp.length;
+  const misTotal = getBudgetExpenses(MISCELLANEOUS_BUDGET_ID).reduce(
+    (total, expense) => total + expense.amount,
+    0
+  );
 
   return (
     <>
       <Exp>
         {budgets.map((budget) => {
-          const lists = expenses.filter((expense) => {
+          const data = expenses.filter((expense) => {
             return expense.budgetId === budget.id;
           });
-          const len = lists.length;
+          const expenseLength = data.length;
           const total = getBudgetExpenses(budget.id).reduce(
             (total, expense) => total + expense.amount,
             0
           );
           return (
             <List key={budget.id}>
-              {len > 0 && (
-                <CardCategory>
-                  <Left>
-                    <p>{budget.name}</p>
-                    <span>{len} Transactions</span>
-                  </Left>
-                  <Right>
-                    <p>{currencyFormatter.format(total)}</p>
-                  </Right>
-                </CardCategory>
+              {expenseLength > 0 && (
+                <>
+                  <CardCategory>
+                    <Left>
+                      <p>{budget?.name}</p>
+                      <span>{expenseLength} Transactions</span>
+                    </Left>
+                    <Right>
+                      <p>{currencyFormatter.format(total)}</p>
+                    </Right>
+                  </CardCategory>
+                </>
               )}
-
-              {lists.map((list) => {
+              {data.map((list) => {
                 return (
                   <ExpenseListItems
                     key={list.id}
+                    id={list.budgetId}
                     list={list}
                     setExpenseData={setExpenseData}
                     toggle={toggle}
@@ -48,8 +57,34 @@ const ExpenseList = ({ setExpenseData, toggle }) => {
             </List>
           );
         })}
+        {/*  */}
+        <List>
+          <>
+            {expenseLength > 0 && (
+              <CardCategory>
+                <Left>
+                  <p>Miscellaneous</p>
+                  <span>{expenseLength} Transactions</span>
+                </Left>
+                <Right>
+                  <p>{currencyFormatter.format(misTotal)}</p>
+                </Right>
+              </CardCategory>
+            )}
+          </>
+          {dataExp.map((list) => {
+            return (
+              <ExpenseListItems
+                key={list.id}
+                id={list.budgetId}
+                list={list}
+                setExpenseData={setExpenseData}
+                toggle={toggle}
+              />
+            );
+          })}
+        </List>
       </Exp>
-      <div></div>
     </>
   );
 };
@@ -65,6 +100,7 @@ export const CardCategory = styled.div`
   justify-content: space-between;
   align-items: center;
   padding: 0 20px;
+  background: #ffffff;
 `;
 
 export const Card = styled(CardCategory)`
