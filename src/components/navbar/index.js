@@ -1,14 +1,30 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+import { MdAccountBalanceWallet, MdSave, MdLibraryBooks } from "react-icons/md";
 
 const Navbar = () => {
   return (
     <Bar>
       <Nav>
-        <NavLink to="">Home</NavLink>
-        <NavLink to="expenses">Expenses</NavLink>
-        <NavLink to="report">Report</NavLink>
+        <NavLink to="">
+          <Icon>
+            <MdSave />
+          </Icon>
+          Budgets
+        </NavLink>
+        <NavLink to="expenses">
+          <Icon>
+            <MdAccountBalanceWallet />
+          </Icon>
+          Expenses
+        </NavLink>
+        <NavLink to="report">
+          <Icon>
+            <MdLibraryBooks />
+          </Icon>
+          Report
+        </NavLink>
       </Nav>
     </Bar>
   );
@@ -17,17 +33,14 @@ const Navbar = () => {
 export default Navbar;
 
 const Bar = styled.div`
-  // background: rgba(0, 0, 0, 0.3);
   height: 100vh;
   align-items: center;
   color: #fff;
   margin-bottom: 20px;
-  // box-shadow: #000000 0px 0px 2px;
   box-shadow: 0 3px 7px 0 rgb(0 0 0 / 27%);
   z-index: 2;
 
   h1 {
-    // background: rgba(211, 84, 0, 0.7);
     background: #d6806e;
     padding: 15px 20px;
     margin-left: 250px;
@@ -42,7 +55,7 @@ const Nav = styled.nav`
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-around;
+  justify-content: start;
   height: 100%;
 
   Link.activeBtn {
@@ -52,11 +65,15 @@ const Nav = styled.nav`
 
 const NavLink = styled(Link)`
   text-decoration: none;
-  margin: 0 20px;
+  margin: 80px 20px 0 20px;
   color: #bdbdbd;
   transition: all 0.5s ease;
 
   &:hover {
     color: #d6806e;
   }
+`;
+const Icon = styled.div`
+  font-size: 25px;
+  text-align: center;
 `;
