@@ -5,8 +5,9 @@ import { MdAccountBalanceWallet, MdSave, MdLibraryBooks } from "react-icons/md";
 
 const Navbar = () => {
   return (
-    <Bar>
+    <>
       <Nav>
+        <h2>Shubham</h2>
         <NavLink to="">
           <Icon>
             <MdSave />
@@ -26,54 +27,46 @@ const Navbar = () => {
           Report
         </NavLink>
       </Nav>
-    </Bar>
+    </>
   );
 };
 
 export default Navbar;
 
-const Bar = styled.div`
-  height: 100vh;
+const Nav = styled.nav`
+  height: 60px;
+  width: 100%;
+  font-size: 18px;
+  display: flex;
   align-items: center;
-  color: #fff;
-  margin-bottom: 20px;
+  justify-content: end;
   box-shadow: 0 3px 7px 0 rgb(0 0 0 / 27%);
-  z-index: 2;
+  padding: 0 40px;
+  border-radius: 10px;
 
-  h1 {
+  h2 {
     background: #d6806e;
     padding: 15px 20px;
-    margin-left: 250px;
+    margin-right: auto;
     color: #010101;
     font-weight: 500;
   }
 `;
 
-const Nav = styled.nav`
-  font-size: 16px;
-  font-weight: 300;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: start;
-  height: 100%;
-
-  Link.activeBtn {
-    color: red;
-  }
-`;
-
 const NavLink = styled(Link)`
   text-decoration: none;
-  margin: 80px 20px 0 20px;
   color: #bdbdbd;
   transition: all 0.5s ease;
+  display: flex;
+  margin: 0 20px;
 
   &:hover {
     color: #d6806e;
   }
 `;
 const Icon = styled.div`
-  font-size: 25px;
-  text-align: center;
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
