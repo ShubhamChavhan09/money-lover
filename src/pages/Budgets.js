@@ -18,10 +18,11 @@ const Dashboard = () => {
   const [budgetModal, setBudgetModal] = useState(false);
   const [viewExpenses, setViewExpenses] = useState(false);
   const [expensedId, setExpensedId] = useState();
-  const [budgetData, setBudgetData] = useState("");
+  const [budgetName, setBudgetName] = useState("");
   const [viewBudgetTab, setViewBudgetTab] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
   const [toggleState, setToggleState] = useState(1);
+  const [selectedBudgetId, setSelectedBudgetId] = useState("");
 
   const dropIn = {
     visible: {
@@ -34,6 +35,7 @@ const Dashboard = () => {
 
   const { budgets, getBudgetExpenses, deleteBudget } = useBudgets();
 
+  //date range for a budget
   const [dateRange, setDateRange] = useState([
     {
       startDate: new Date(),
@@ -42,22 +44,21 @@ const Dashboard = () => {
     },
   ]);
 
-  const handleViewExpense = (id) => {
-    setViewExpenses(!viewExpenses);
-    setExpensedId(id);
+  //open and close budget modal to add data
+  const openBudgetModal = () => {
+    setBudgetModal(true);
+  };
+  const closeBudgetModal = () => {
+    setBudgetModal(false);
   };
 
-  const handleBudget = () => {
-    setBudgetModal(!budgetModal);
-  };
-
-  const budgetAmount = getBudgetExpenses(budgetData).reduce(
+  const budgetAmount = getBudgetExpenses(budgetName).reduce(
     (total, expense) => total + expense.amount,
     0
   );
 
   const budgetSpent = budgets.filter((budget) => {
-    return budget.id === budgetData;
+    return budget.name === budgetName;
   });
 
   const budgetLeft = budgetSpent[0]?.max - budgetAmount;
@@ -70,46 +71,49 @@ const Dashboard = () => {
     <>
       <Container viewExpenses={viewExpenses}>
         <Head>
-          <TotalCard click={handleBudget} name="add budget" />
+          <TotalCard open={openBudgetModal} name="add budget" />
         </Head>
         <Main>
-          <BudgetContainer>
-            <div className="heading">
-              <div
-                className={toggleState === 1 ? "tab active-tab" : "tab"}
-                onClick={() => toggleTab(1)}
-              >
-                RUNNING
+          <LayoutGroup>
+            <BudgetContainer>
+              <div className="heading">
+                <div
+                  className={toggleState === 1 ? "tab active-tab" : "tab"}
+                  onClick={() => toggleTab(1)}
+                >
+                  RUNNING
+                </div>
+                <div
+                  className={toggleState === 2 ? "tab active-tab" : "tab"}
+                  onClick={() => toggleTab(2)}
+                >
+                  FINISHED
+                </div>
               </div>
-              <div
-                className={toggleState === 2 ? "tab active-tab" : "tab"}
-                onClick={() => toggleTab(2)}
-              >
-                FINISHED
+              <div>
+                <NewCard
+                  setBudgetName={setBudgetName}
+                  setSelectedBudgetId={setSelectedBudgetId}
+                  setViewBudgetTab={setViewBudgetTab}
+                  toggleState={toggleState}
+                />
               </div>
-            </div>
-            <div>
-              <NewCard
-                handleViewExpense={handleViewExpense}
-                setBudgetData={setBudgetData}
-                setViewBudgetTab={setViewBudgetTab}
-                toggleState={toggleState}
-              />
-            </div>
-          </BudgetContainer>
+            </BudgetContainer>
+          </LayoutGroup>
           <div>
             <AnimatePresence
               initial={false}
               exitBeforeEnter={true}
               onExitComplete={() => null}
             >
-              {budgetData && viewBudgetTab && (
+              {budgetName && viewBudgetTab && (
                 <ViewBudget
                   title="Detail"
-                  id={budgetData}
+                  budgetName={budgetName}
+                  selectedBudgetId={selectedBudgetId}
                   date={new Date()}
-                  amount={budgetLeft}
-                  des={budgetLeft > 0 ? "Left" : "Over Spent"}
+                  budgetLeft={budgetLeft}
+                  des={budgetLeft >= 0 ? "Left" : "Over Spent"}
                   setDeleteModal={setDeleteModal}
                   toggle={setViewBudgetTab}
                   startDate={dateRange[0].startDate}
@@ -123,14 +127,14 @@ const Dashboard = () => {
 
       <BudgetModal
         budgetModal={budgetModal}
-        handleBudget={handleBudget}
+        close={closeBudgetModal}
         dateRange={dateRange}
         setDateRange={setDateRange}
       />
       <DeleteModal
         deleteModal={deleteModal}
         toggle={setDeleteModal}
-        deleteId={budgetData}
+        deleteId={selectedBudgetId}
         toggleTab={setViewBudgetTab}
         func={deleteBudget}
         alert="Do you want to delete this budget?"
@@ -154,7 +158,7 @@ export const Container = styled.div`
     props.budgetModal || props.expenseModal || props.viewExpenses
       ? `blur(1.5px)`
       : null};
-  transition: all 0.2s ease-in-out;
+  // transition: all 0.5s linear;
 `;
 
 export const Head = styled.div`
@@ -198,6 +202,8 @@ export const BudgetContainer = styled(motion.div)`
   }
 
   div.active-tab {
-    border-bottom: 2px solid green;
+    border-top: 1px solid green;
+    border-right: 1px solid green;
+    background: #e4e4e4;
   }
 `;
