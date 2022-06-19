@@ -7,11 +7,11 @@ import { useBudgets, MISCELLANEOUS_BUDGET_ID } from "../../context";
 import { format } from "date-fns";
 Chart.register(CategoryScale);
 
-const TotalExpenseReport = ({ date, id, startDate, endDate }) => {
+const TotalExpenseReport = ({ date, id, startDate, endDate, name }) => {
   const { budgets, getBudgetExpenses, expenses } = useBudgets();
 
   const expense = expenses.filter((expense) => {
-    return expense.budgetId === id;
+    return expense.name === name;
   });
   // console.log({ expense });
 
@@ -46,10 +46,6 @@ const TotalExpenseReport = ({ date, id, startDate, endDate }) => {
     return item.reduce((total, expense) => total + expense, 0);
   });
 
-  //
-  //
-  const budgetsName = budgets.map((budget) => budget.name);
-
   const arr = [];
 
   budgets.forEach((element) => {
@@ -60,18 +56,13 @@ const TotalExpenseReport = ({ date, id, startDate, endDate }) => {
     arr.push(amount);
   });
 
-  const mis = getBudgetExpenses(MISCELLANEOUS_BUDGET_ID).reduce(
-    (total, expense) => total + expense.amount,
-    0
-  );
-  const expenseArr = arr.concat(mis);
-
   const data = {
     labels: sortedDates,
     // format(new Date(startDate), "dd MMMM "),
     // format(new Date(endDate), "dd MMMM "),
     datasets: [
       {
+        maxBarThickness: 40,
         label: "Spending",
         data: totalArr,
         // expenseArr
