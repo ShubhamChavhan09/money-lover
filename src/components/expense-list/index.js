@@ -2,39 +2,37 @@ import styled from "styled-components";
 import { useBudgets } from "../../context";
 import ExpenseListItems from "../expense-list-items";
 import { currencyFormatter } from "../../utils";
-import { MISCELLANEOUS_BUDGET_ID } from "../../context";
+import { v4 as uuidv4 } from "uuid";
 
-const ExpenseList = ({ setExpenseData, toggle }) => {
-  const { budgets, expenses, getBudgetExpenses } = useBudgets();
+const ExpenseList = ({ setExpenseData, toggle, monthData }) => {
+  const { expenses, getBudgetExpenses } = useBudgets();
 
-  const dataExp = expenses.filter((expense) => {
-    return expense.budgetId === MISCELLANEOUS_BUDGET_ID;
-  });
-  const expenseLength = dataExp.length;
-  const misTotal = getBudgetExpenses(MISCELLANEOUS_BUDGET_ID).reduce(
-    (total, expense) => total + expense.amount,
-    0
-  );
+  const uniqueExpenses = monthData
+    .map((item) => item.name)
+    .filter((value, index, self) => self.indexOf(value) === index);
 
   return (
     <>
       <Exp>
-        {budgets.map((budget) => {
-          const data = expenses.filter((expense) => {
-            return expense.budgetId === budget.id;
+        {uniqueExpenses.map((expense) => {
+          const data = expenses.filter((item) => {
+            return item.name === expense;
           });
+
           const expenseLength = data.length;
-          const total = getBudgetExpenses(budget.id).reduce(
+
+          const total = getBudgetExpenses(expense).reduce(
             (total, expense) => total + expense.amount,
             0
           );
+
           return (
-            <List key={budget.id}>
+            <List key={uuidv4()}>
               {expenseLength > 0 && (
                 <>
                   <CardCategory>
                     <Left>
-                      <p>{budget?.name}</p>
+                      <p>{expense}</p>
                       <span>{expenseLength} Transactions</span>
                     </Left>
                     <Right>
@@ -47,8 +45,7 @@ const ExpenseList = ({ setExpenseData, toggle }) => {
                 return (
                   <ExpenseListItems
                     key={list.id}
-                    id={list.budgetId}
-                    list={list}
+                    selectedExpense={list}
                     setExpenseData={setExpenseData}
                     toggle={toggle}
                   />
@@ -57,33 +54,6 @@ const ExpenseList = ({ setExpenseData, toggle }) => {
             </List>
           );
         })}
-        {/*  */}
-        <List>
-          <>
-            {expenseLength > 0 && (
-              <CardCategory>
-                <Left>
-                  <p>Miscellaneous</p>
-                  <span>{expenseLength} Transactions</span>
-                </Left>
-                <Right>
-                  <p>{currencyFormatter.format(misTotal)}</p>
-                </Right>
-              </CardCategory>
-            )}
-          </>
-          {dataExp.map((list) => {
-            return (
-              <ExpenseListItems
-                key={list.id}
-                id={list.budgetId}
-                list={list}
-                setExpenseData={setExpenseData}
-                toggle={toggle}
-              />
-            );
-          })}
-        </List>
       </Exp>
     </>
   );

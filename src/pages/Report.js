@@ -10,63 +10,84 @@ import { setWeek } from "date-fns";
 Chart.register(CategoryScale);
 
 const Report = () => {
-  const [lastWeek, setLastWeek] = useState([]);
-  const { budgets, getBudgetExpenses } = useBudgets();
-  const budgetsName = budgets.map((budget) => budget.name);
-  const allBudgetsName = budgetsName.concat("Miscellaneous");
+  const { budgets, getBudgetExpenses, expenses } = useBudgets();
   const arr = [];
+  const [toggleState, setToggleState] = useState(1);
+  const [monthData, setMonthData] = useState([]);
 
-  //
-  const date1 = new Date();
-  const date2 = new Date();
-  date2.setDate(date2.getDate() - 7);
+  const date = new Date();
 
-  const dateString1 = format(date1, "yyyy-MM-dd");
-  const dateString2 = format(date2, "yyyy-MM-dd");
+  const currentMonth = {
+    first: new Date(date.getFullYear(), date.getMonth(), 1),
+    last: new Date(date.getFullYear(), date.getMonth() + 1, 0),
+  };
+
+  const lastMonth = {
+    first: new Date(date.getFullYear(), date.getMonth() - 1, 1),
+    last: new Date(date.getFullYear(), date.getMonth(), 0),
+  };
+
+  const monthDetail = toggleState === 1 ? currentMonth : lastMonth;
+
+  const dateString1 = format(monthDetail.first, "yyyy-MM-dd");
+  const dateString2 = format(monthDetail.last, "yyyy-MM-dd");
 
   useEffect(() => {
-    week();
-  }, []);
+    month();
+  }, [toggleState]);
 
-  const week = async () => {
+  const month = async () => {
     const { data, error } = await supabase
       .from("expenses")
       .select()
-      .lte("date", dateString1)
-      .gte("date", dateString2);
+      .lte("date", dateString2)
+      .gte("date", dateString1);
     if (error) console.log("error", error);
-    else setLastWeek(data);
+    else setMonthData(data);
+    // console.log(data);
   };
 
-  budgets.forEach((element) => {
-    const amount = getBudgetExpenses(element.id).reduce(
-      (total, expense) => total + expense.amount,
-      0
-    );
-    arr.push(amount);
+  const toggleTab = (index) => {
+    setToggleState(index);
+  };
+
+  const uniqueDates = monthData
+    .map((item) => item.date)
+    .filter((value, index, self) => self.indexOf(value) === index);
+
+  //sorted date
+  const sort = uniqueDates.sort(function (a, b) {
+    const date1 = new Date(a);
+    const date2 = new Date(b);
+    return date1 - date2;
   });
 
-  const mis = getBudgetExpenses(MISCELLANEOUS_BUDGET_ID).reduce(
-    (total, expense) => total + expense.amount,
-    0
-  );
-  const expenseArr = arr.concat(mis);
-
-  const weekArr = lastWeek.map((data) => {
-    return data.amount;
+  const sortedDates = sort.map((item) => {
+    return format(new Date(item), "dd MMM");
   });
 
-  const dayArr = lastWeek.map((data) => {
-    return new Date(data.date).toLocaleString("en-us", { weekday: "long" });
-    // return data.date;
+  const allExpenses = sort.map((dates) => {
+    return monthData.filter((date) => {
+      return date.date === dates;
+    });
+  });
+
+  const totalexpday = allExpenses.map((items) => {
+    return items.map((item) => {
+      return item.amount;
+    });
+  });
+
+  const totalArr = totalexpday.map((item) => {
+    return item.reduce((total, expense) => total + expense, 0);
   });
 
   const data = {
-    labels: dayArr,
+    labels: sortedDates, //dates
     datasets: [
       {
         label: "Total Expense",
-        data: weekArr,
+        data: totalArr, // amount
         backgroundColor: [
           "rgba(255, 99, 132, 0.2)",
           "rgba(54, 162, 235, 0.2)",
@@ -94,14 +115,20 @@ const Report = () => {
 
   return (
     <Data>
-      <Line
-        data={data}
-        height={400}
-        width={600}
-        options={{
-          maintainAspectRatio: false,
-        }}
-      />
+      <div>
+        <button onClick={() => toggleTab(1)}>This Month</button>
+        <button onClick={() => toggleTab(2)}>Last Month</button>
+      </div>
+      <div>
+        <Bar
+          data={data}
+          height={400}
+          width={600}
+          options={{
+            maintainAspectRatio: false,
+          }}
+        />
+      </div>
     </Data>
   );
 };
@@ -109,7 +136,12 @@ const Report = () => {
 export default Report;
 
 const Data = styled.div`
-  // width: 700px;
+  // width: 900px;
+  // height: 400px;
   // background: #333;
   display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
 `;

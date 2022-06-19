@@ -1,14 +1,10 @@
 import styled from "styled-components";
 import format from "date-fns/format";
 import { currencyFormatter } from "../../utils";
-import { useBudgets } from "../../context";
-import ViewExpense from "../view-expense";
 
-const ExpenseListItems = ({ list, setExpenseData, toggle }) => {
-  const { setExpenseDetail } = useBudgets();
-
+const ExpenseListItems = ({ selectedExpense, setExpenseData, toggle }) => {
   const handleClick = () => {
-    setExpenseData(list);
+    setExpenseData(selectedExpense);
     toggle(true);
   };
 
@@ -16,14 +12,18 @@ const ExpenseListItems = ({ list, setExpenseData, toggle }) => {
     <>
       <Card onClick={handleClick}>
         <div className="data">
-          <p className="date">{format(new Date(list.date), "dd")}</p>
+          <p className="date">
+            {format(new Date(selectedExpense?.date), "dd")}
+          </p>
           <div className="day">
-            <p>{format(new Date(list.date), "EEEE, MMMM y")}</p>
-            <span>{list.description}</span>
+            <p>{format(new Date(selectedExpense.date), "EEEE, MMMM y")}</p>
+            <span>{selectedExpense.description}</span>
           </div>
         </div>
         <div>
-          <p className="amount">{currencyFormatter.format(list.amount)}</p>
+          <p className="amount">
+            {currencyFormatter.format(selectedExpense.amount)}
+          </p>
         </div>
       </Card>
     </>

@@ -7,24 +7,9 @@ import { currencyFormatter } from "../../utils";
 import EditExpenseModal from "../edit-expense-modal";
 import { MISCELLANEOUS_BUDGET_ID } from "../../context";
 
-const ViewExpense = ({
-  title,
-  id,
-  toggle,
-  budgetId,
-  date,
-  amount,
-  des,
-  setDeleteModal,
-}) => {
+const ViewExpense = ({ title, toggle, setDeleteModal, data }) => {
   const [expenseModal, setExpenseModal] = useState(false);
   const [selectId, setselectId] = useState("");
-
-  const { budgets } = useBudgets();
-
-  const budgetName = budgets.filter((budget) => {
-    return budget.id === budgetId;
-  });
 
   const handleDelete = () => {
     setDeleteModal(true);
@@ -32,7 +17,7 @@ const ViewExpense = ({
 
   const handleEdit = () => {
     setExpenseModal(true);
-    setselectId(budgetId);
+    setselectId(data.id);
   };
 
   return (
@@ -49,22 +34,17 @@ const ViewExpense = ({
           </div>
         </Head>
         <Details>
-          <h3>
-            {budgetName[0] ? budgetName[0]?.name : MISCELLANEOUS_BUDGET_ID}
-          </h3>
-          <p>{format(new Date(date), "EEEE, dd/MM/yy")}</p>
+          <h3>{data.name}</h3>
+          <p>{format(new Date(data.date), "EEEE, dd/MM/yy")}</p>
           <hr />
-          <p>{des}</p>
-          <span>{currencyFormatter.format(Math.abs(amount))}</span>
+          <p>{data.description}</p>
+          <span>{currencyFormatter.format(Math.abs(data.amount))}</span>
         </Details>
       </Container>
       <EditExpenseModal
         expenseModal={expenseModal}
         setExpenseModal={setExpenseModal}
-        amount={amount}
-        date={date}
-        des={des}
-        name={selectId}
+        data={data}
       />
     </>
   );

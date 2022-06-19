@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { currencyFormatter } from "../../utils";
 import { motion } from "framer-motion";
 
-const TotalCard = ({ name, click }) => {
+const TotalCard = ({ name, open }) => {
   const { expenses } = useBudgets();
 
   // all expense
@@ -19,7 +19,7 @@ const TotalCard = ({ name, click }) => {
         <motion.button
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
-          onClick={click}
+          onClick={open}
         >
           {name}
         </motion.button>

@@ -19,7 +19,7 @@ const ViewBudgetExpense = ({ showBudgetExpense, close, id, name }) => {
   };
 
   const expense = expenses.filter((expense) => {
-    return expense.budgetId === id;
+    return expense.name === name;
   });
 
   const dates = expense.map((items) => {

@@ -35,7 +35,14 @@ export const BudgetsProvider = ({ children }) => {
         .neq("name", name);
 
       setBudgets((prevBudget) => {
-        if (prevBudget.find((budget) => budget.name === name)) {
+        if (
+          prevBudget.find(
+            (budget) =>
+              budget.name === name &&
+              budget.startDate === startDate &&
+              budget.endDate === endDate
+          )
+        ) {
           return prevBudget;
         }
         return [
@@ -69,20 +76,19 @@ export const BudgetsProvider = ({ children }) => {
     else setExpenses(data);
   };
 
-  const addExpense = async ({
-    description,
-    amount,
-    budgetId,
-    date,
-    category,
-    icon,
-  }) => {
+  const addExpense = async ({ name, amount, description, date }) => {
     try {
       const id = uuidv4();
 
-      await supabase
-        .from("expenses")
-        .insert([{ id, description, amount, budgetId, date, category, icon }]);
+      await supabase.from("expenses").insert([
+        {
+          id,
+          description,
+          amount,
+          date,
+          name,
+        },
+      ]);
       setExpenses((prevExpense) => {
         return [
           ...prevExpense,
@@ -90,10 +96,8 @@ export const BudgetsProvider = ({ children }) => {
             id,
             description,
             amount,
-            budgetId,
             date,
-            category,
-            icon,
+            name,
           },
         ];
       });
@@ -103,7 +107,7 @@ export const BudgetsProvider = ({ children }) => {
   };
 
   const getBudgetExpenses = (budgetId) => {
-    return expenses.filter((expense) => expense.budgetId === budgetId);
+    return expenses.filter((expense) => expense.name === budgetId);
   };
 
   const deleteBudget = async (id) => {
@@ -145,7 +149,12 @@ export const BudgetsProvider = ({ children }) => {
     try {
       await supabase
         .from("budgets")
-        .update({ name: updatedBudget.name, max: updatedBudget.amount })
+        .update({
+          name: updatedBudget.name,
+          max: updatedBudget.max,
+          startDate: updatedBudget.startDate,
+          endDate: updatedBudget.endDate,
+        })
         .match({ id });
 
       setBudgets((prevBudgets) => {

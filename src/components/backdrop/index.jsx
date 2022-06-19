@@ -25,6 +25,6 @@ const Container = styled(motion.div)`
   background: rgba(0, 0, 0, 0.6);
   display: flex;
   // justify-content: center;
-  // align-items: center;
+  // align-items: start;
   z-index: 10;
 `;

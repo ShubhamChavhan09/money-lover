@@ -8,24 +8,24 @@ import MiscellaneousCard from "../miscellaneous-card";
 import { motion } from "framer-motion";
 
 const NewCard = ({
-  handleViewExpense,
-  setBudgetData,
   setViewBudgetTab,
   toggleState,
+  setBudgetName,
+  setSelectedBudgetId,
 }) => {
-  const { budgets, getBudgetExpenses, inputText } = useBudgets();
+  const { budgets, getBudgetExpenses, inputText, expenses } = useBudgets();
 
-  const data = budgets.sort((a, b) => {
-    return new Date(b.created) - new Date(a.created);
-  });
+  // const data = budgets.sort((a, b) => {
+  //   return new Date(b.created) - new Date(a.created);
+  // });
 
-  const filteredData = data.filter((budget) => {
-    if (inputText === "") {
-      return budget;
-    } else {
-      return budget.name.toLowerCase().includes(inputText);
-    }
-  });
+  // const filteredData = data.filter((budget) => {
+  //   if (inputText === "") {
+  //     return budget;
+  //   } else {
+  //     return budget.name.toLowerCase().includes(inputText);
+  //   }
+  // });
 
   let today = new Date();
   const runningBudgets = budgets
@@ -52,36 +52,21 @@ const NewCard = ({
 
   return (
     <Budget>
-      {/* <MiscellaneousCard
-        max={null}
-        handleViewExpense={handleViewExpense}
-        setBudgetData={setBudgetData}
-        setViewBudgetTab={setViewBudgetTab}
-      /> */}
       {dataBud.map((budget) => {
-        const amount = getBudgetExpenses(budget.id).reduce(
+        const amount = getBudgetExpenses(budget.name).reduce(
           (total, expense) => total + expense.amount,
           0
         );
         return (
-          <>
-            <MiscellaneousCard
-              max={null}
-              handleViewExpense={handleViewExpense}
-              setBudgetData={setBudgetData}
-              setViewBudgetTab={setViewBudgetTab}
-            />
+          <div key={budget.id}>
             <BudgetCard
-              key={uuidv4()}
-              name={budget?.name}
-              id={budget.id}
               amount={amount}
-              handleViewExpense={handleViewExpense}
-              max={budget.max}
-              setBudgetData={setBudgetData}
+              budget={budget}
+              setBudgetName={setBudgetName}
               setViewBudgetTab={setViewBudgetTab}
+              setSelectedBudgetId={setSelectedBudgetId}
             />
-          </>
+          </div>
         );
       })}
     </Budget>

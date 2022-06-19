@@ -11,10 +11,10 @@ import { motion, AnimatePresence } from "framer-motion";
 
 const ViewBudget = ({
   title,
-  id,
+  budgetName,
   toggle,
   date,
-  amount,
+  budgetLeft,
   des,
   setDeleteModal,
   startDate,
@@ -22,10 +22,10 @@ const ViewBudget = ({
 }) => {
   const [budgetModal, setBudgetModal] = useState(false);
   const [showBudgetExpense, setShowBudgetExpense] = useState(false);
-  const { budgets, getBudgetExpenses } = useBudgets();
+  const { budgets, getBudgetExpenses, nameFromBudget } = useBudgets();
 
-  const budgetName = budgets.filter((budget) => {
-    return budget.id === id;
+  const selectedBudget = budgets.filter((budget) => {
+    return budget.name === budgetName;
   });
 
   const amountMiscellaneous = getBudgetExpenses(MISCELLANEOUS_BUDGET_ID).reduce(
@@ -38,7 +38,7 @@ const ViewBudget = ({
   };
 
   const handleModal = () => {
-    setShowBudgetExpense((prev) => !prev);
+    setShowBudgetExpense(true);
   };
 
   const dropIn = {
@@ -78,25 +78,21 @@ const ViewBudget = ({
             <p>{title}</p>
           </div>
           <div>
-            <Delete onClick={() => handleDelete(id)}>DELETE</Delete>
+            <Delete onClick={handleDelete}>DELETE</Delete>
             <Edit onClick={() => setBudgetModal(true)}>EDIT</Edit>
           </div>
         </Head>
         <Details>
-          <h3>{budgetName[0] ? budgetName[0]?.name : "Miscellaneous"}</h3>
+          <h3>{budgetName}</h3>
           <p>{format(new Date(date), "EEEE, dd/MM/yy")}</p>
           <hr />
-          <p>{amount ? des : "Total"}</p>
-          <h3>
-            {amount
-              ? currencyFormatter.format(Math.abs(amount))
-              : currencyFormatter.format(amountMiscellaneous)}
-          </h3>
+          <p>{des}</p>
+          <h3>{currencyFormatter.format(Math.abs(budgetLeft))}</h3>
         </Details>
         <Chart>
           <TotalExpenseReport
             date={date}
-            id={id}
+            name={budgetName}
             startDate={startDate}
             endDate={endDate}
           />
@@ -108,9 +104,7 @@ const ViewBudget = ({
       <EditBudgetModal
         budgetModal={budgetModal}
         setBudgetModal={setBudgetModal}
-        id={id}
-        name={budgetName[0] ? budgetName[0]?.name : "Miscellaneous"}
-        amount={amount}
+        name={budgetName}
         toggleViewBudget={toggle}
         startDate={startDate}
         endDate={endDate}
@@ -118,8 +112,8 @@ const ViewBudget = ({
       <ViewBudgetExpense
         showBudgetExpense={showBudgetExpense}
         close={setShowBudgetExpense}
-        id={id}
-        name={budgetName[0] ? budgetName[0]?.name : "Miscellaneous"}
+        name={budgetName}
+        // name={budgetName[0] ? budgetName[0]?.name : "Miscellaneous"}
       />
     </>
   );

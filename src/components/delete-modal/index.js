@@ -7,13 +7,13 @@ import { AnimatePresence } from "framer-motion";
 const DeleteModal = ({
   deleteModal,
   toggle,
-  deleteId,
   toggleTab,
+  deleteId,
   func,
   alert,
 }) => {
-  const handleDelete = (id) => {
-    func(id);
+  const handleDelete = () => {
+    func(deleteId);
     toggle(false);
     toggleTab(false);
   };
