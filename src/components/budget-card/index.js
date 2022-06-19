@@ -2,45 +2,51 @@ import React, { useEffect } from "react";
 import styled from "styled-components";
 import { currencyFormatter } from "../../utils";
 import { MISCELLANEOUS_BUDGET_ID, useBudgets } from "../../context";
+import { Link } from "react-router-dom";
 
 const BudgetCard = ({
   amount,
-  name,
-  max,
-  id,
-  setBudgetData,
+  // name,
+  // max,
+  // budgetId,
+  budget,
+  setBudgetName,
   setViewBudgetTab,
   noBudget,
+  setSelectedBudgetId,
 }) => {
-  const rate = (amount / max) * 100;
+  const maxAmount = budget.max;
 
-  function setProgressVariant(amount, max) {
-    const ratio = amount / max;
+  const rate = (amount / maxAmount) * 100;
+
+  function setProgressVariant(amount, maxAmount) {
+    const ratio = amount / maxAmount;
     if (ratio < 0.6) return "rgba(76, 209, 55,0.75)";
     if (ratio < 0.8) return "rgba(255, 211, 42,0.75)";
     return "rgba(232, 65, 24,0.7)";
   }
 
   const classNames = [];
-  if (amount > max) {
+  if (amount > maxAmount) {
     classNames.push("danger");
   }
 
   const handleClick = () => {
-    if (id === MISCELLANEOUS_BUDGET_ID) {
-      setBudgetData(MISCELLANEOUS_BUDGET_ID);
-    } else {
-      setBudgetData(id);
-    }
+    setBudgetName(budget.name);
+    setSelectedBudgetId(budget.id);
     setViewBudgetTab(true);
   };
 
+  // console.log({ budgetId });
   return (
     <>
-      <Card onClick={handleClick}>
+      <Card
+        // to={budget.id}
+        onClick={handleClick}
+      >
         <Top>
           <div>
-            <Title>{name}</Title>
+            <Title>{budget.name}</Title>
           </div>
           <Details>
             <div>
@@ -48,22 +54,22 @@ const BudgetCard = ({
                 <span className="spend">
                   {currencyFormatter.format(amount)}
                 </span>
-                {!noBudget && <span> of {currencyFormatter.format(max)}</span>}
+                {/* {!noBudget && <span> {currencyFormatter.format(max)}</span>} */}
               </p>
             </div>
             <div>
               {!noBudget && (
                 <span>
                   {rate > 100 ? "Over Spent  " : "Left "}
-                  {currencyFormatter.format(Math.abs(max - amount))}
+                  {currencyFormatter.format(Math.abs(maxAmount - amount))}
                 </span>
               )}
             </div>
           </Details>
         </Top>
 
-        {(max || max === `0`) && (
-          <ProgressBar variant={setProgressVariant(amount, max)}>
+        {(maxAmount || maxAmount === `0`) && (
+          <ProgressBar variant={setProgressVariant(amount, maxAmount)}>
             <progress value={rate} max="100" />
           </ProgressBar>
         )}

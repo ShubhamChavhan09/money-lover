@@ -11,13 +11,12 @@ import { TopLeft } from "../view-budget-expense";
 import { Close } from "../view-budget";
 import { addDays } from "date-fns";
 import format from "date-fns/format";
+import { Category } from "../../category";
 
 const EditBudgetModal = ({
   budgetModal,
   setBudgetModal,
-  id,
   name,
-  amount,
   toggleViewBudget,
   startDate,
   endDate,
@@ -39,12 +38,12 @@ const EditBudgetModal = ({
   ]);
 
   const budget = budgets.filter((budget) => {
-    return budget.id === id;
+    return budget.name === name;
   });
 
   const maxAmount = budget[0]?.max;
 
-  const budgetName = budget[0]?.name;
+  const id = budget[0]?.id;
 
   const handleBudget = () => {
     setBudgetModal(!budgetModal);
@@ -80,16 +79,18 @@ const EditBudgetModal = ({
               <Section>
                 <Box>
                   <div>
-                    <p>Name</p>
+                    <p>Category</p>
                   </div>
                   <div>
-                    <input
-                      ref={nameRef}
-                      required
-                      type="text"
-                      // onChange={handleName}
-                      defaultValue={budgetName}
-                    />
+                    <select ref={nameRef} defaultValue={name}>
+                      {Category.map((budget) => {
+                        return (
+                          <option key={budget.id} value={budget.name}>
+                            {budget.name}
+                          </option>
+                        );
+                      })}
+                    </select>
                   </div>
                 </Box>
                 <Box>
@@ -165,7 +166,7 @@ const EditBudgetModal = ({
 export default EditBudgetModal;
 export const Overlay = styled.div`
   position: fixed;
-  z-index: 10;
+  // z-index: 10;
   display: flex;
   inset: 0;
   background: rgba(0, 0, 0, 0.5);
