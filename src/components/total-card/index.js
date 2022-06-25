@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { currencyFormatter } from "../../utils";
 import { motion } from "framer-motion";
 
-const TotalCard = ({ name, open }) => {
+const TotalCard = ({ name, open, noButton }) => {
   const { expenses } = useBudgets();
 
   // all expense
@@ -16,13 +16,15 @@ const TotalCard = ({ name, open }) => {
         <span>{currencyFormatter.format(amount)}</span>
       </div>
       <div>
-        <motion.button
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.9 }}
-          onClick={open}
-        >
-          {name}
-        </motion.button>
+        {!noButton ? (
+          <motion.button
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+            onClick={open}
+          >
+            {name}
+          </motion.button>
+        ) : null}
       </div>
     </Bar>
   );
@@ -31,11 +33,14 @@ const TotalCard = ({ name, open }) => {
 export default TotalCard;
 
 const Bar = styled.div`
-  width: 100%;
+  width: min(850px, 100%);
+  height: 3.5rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 0 16px;
+  background: #ffffff;
+  box-shadow: 0 3px 7px 0 rgb(0 0 0 / 27%);
 
   button {
     background: #1aa333;
@@ -45,14 +50,14 @@ const Bar = styled.div`
     border: none;
     outline: none;
     color: #fdfdfd;
-    font-size: 14px;
+    font-size: 0.9rem;
     text-transform: uppercase;
   }
   p {
     font-size: 12px;
   }
   span {
-    font-size: 14px;
+    font-size: 0.9rem;
     font-weight: 500;
   }
 `;
