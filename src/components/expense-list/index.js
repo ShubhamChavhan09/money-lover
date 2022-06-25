@@ -44,7 +44,7 @@ const ExpenseList = ({ setExpenseData, toggle, monthData }) => {
               {data.map((list) => {
                 return (
                   <ExpenseListItems
-                    key={list.id}
+                    key={uuidv4()}
                     selectedExpense={list}
                     setExpenseData={setExpenseData}
                     toggle={toggle}
@@ -71,6 +71,8 @@ export const CardCategory = styled.div`
   align-items: center;
   padding: 0 20px;
   background: #ffffff;
+  position: sticky;
+  top: 0;
 `;
 
 export const Card = styled(CardCategory)`
@@ -96,7 +98,7 @@ export const Card = styled(CardCategory)`
     justify-content: center;
   }
   p.amount {
-    font-size: 14px;
+    font-size: 0.9rem;
     font-weight: 300;
   }
 `;
@@ -106,11 +108,11 @@ const Left = styled.div`
   flex-direction: column;
 
   p {
-    font-size: 14px;
+    font-size: clamp(0.8rem, 2vw, 0.9rem);
     font-weight: 500;
   }
   span {
-    font-size: 14px;
+    font-size: clamp(0.8rem, 2vw, 0.9rem);
     padding: 2px 0px;
     color: #969696;
   }
