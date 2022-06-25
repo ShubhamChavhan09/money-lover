@@ -16,7 +16,7 @@ const ExpenseListItems = ({ selectedExpense, setExpenseData, toggle }) => {
             {format(new Date(selectedExpense?.date), "dd")}
           </p>
           <div className="day">
-            <p>{format(new Date(selectedExpense.date), "EEEE, MMMM y")}</p>
+            <p>{format(new Date(selectedExpense?.date), "EEEE, MMMM y")}</p>
             <span>{selectedExpense.description}</span>
           </div>
         </div>
@@ -50,6 +50,7 @@ export const Card = styled.div`
   }
   p.date {
     font-size: 32px;
+    font-size: clamp(1.6rem, 5vw, 2rem);
     margin-right: 15px;
   }
   span {
@@ -64,7 +65,7 @@ export const Card = styled.div`
     justify-content: center;
   }
   p.amount {
-    font-size: 14px;
+    font-size: 0.9rem;
     font-weight: 300;
   }
 
