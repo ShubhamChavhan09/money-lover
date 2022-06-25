@@ -49,9 +49,8 @@ const Box = styled(motion.div)`
   margin: auto;
   background: #ffffff;
   height: ${(props) => props.height};
-  width: ${(props) => props.width};
+  width: min(${(props) => props.width}, 100%);
   //   width: 350px;
   //   height: 390px;
   border-radius: 4px;
-  //   position: absolute;
 `;
