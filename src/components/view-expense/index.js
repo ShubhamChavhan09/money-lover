@@ -7,9 +7,8 @@ import { currencyFormatter } from "../../utils";
 import EditExpenseModal from "../edit-expense-modal";
 import { MISCELLANEOUS_BUDGET_ID } from "../../context";
 
-const ViewExpense = ({ title, toggle, setDeleteModal, data }) => {
+const ViewExpense = ({ title, toggle, setDeleteModal, data, setSelectId }) => {
   const [expenseModal, setExpenseModal] = useState(false);
-  const [selectId, setselectId] = useState("");
 
   const handleDelete = () => {
     setDeleteModal(true);
@@ -17,7 +16,7 @@ const ViewExpense = ({ title, toggle, setDeleteModal, data }) => {
 
   const handleEdit = () => {
     setExpenseModal(true);
-    setselectId(data.id);
+    setSelectId(data.id);
   };
 
   return (
@@ -45,6 +44,7 @@ const ViewExpense = ({ title, toggle, setDeleteModal, data }) => {
         expenseModal={expenseModal}
         setExpenseModal={setExpenseModal}
         data={data}
+        toggleViewExpense={toggle}
       />
     </>
   );
@@ -54,16 +54,17 @@ export default ViewExpense;
 
 const Container = styled.div`
   background: #ffffff;
-  width: 600px;
+  width: min(100%, 600px);
   height: 274px;
   border-radius: 4px;
   display: flex;
   flex-direction: column;
   box-shadow: 0 3px 7px 0 rgb(0 0 0 / 27%);
+  margin: 0 auto;
 `;
 const Head = styled.div`
   height: 64px;
-  padding: 0 24px;
+  padding: 0 1rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -74,13 +75,14 @@ const Head = styled.div`
     align-items: center;
   }
   p {
-    font-size: 20px;
+    font-size: clamp(0.9rem, 1.7vw, 1.7vw);
+
     font-weight: 500;
   }
 `;
 
 const Close = styled(CgClose)`
-  font-size: 20px;
+  font-size: 1.25rem;
   margin-right: 18px;
   cursor: pointer;
   color: #969696;
@@ -94,8 +96,8 @@ export const Delete = styled.button`
   outline: none;
   color: #f45a5a;
   background: transparent;
-  font-size: 14px;
-  width: 100px;
+  font-size: clamp(0.7rem, 2vw, 0.85rem);
+  width: min(4rem, 5rem);
   height: 36px;
   cursor: pointer;
   border-radius: 4px;
@@ -121,7 +123,7 @@ const Details = styled.div`
     margin: 10px 0;
   }
   p {
-    font-size: 12px;
+    font-size: 0.75rem;
     color: #969696;
   }
   hr {
@@ -135,6 +137,6 @@ const Details = styled.div`
 
 const View = styled(Head)`
   justify-content: center;
-  font-size: 14px;
+  font-size: 0.9rem;
   height: 48px;
 `;
