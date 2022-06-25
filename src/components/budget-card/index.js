@@ -1,14 +1,8 @@
-import React, { useEffect } from "react";
 import styled from "styled-components";
 import { currencyFormatter } from "../../utils";
-import { MISCELLANEOUS_BUDGET_ID, useBudgets } from "../../context";
-import { Link } from "react-router-dom";
 
 const BudgetCard = ({
   amount,
-  // name,
-  // max,
-  // budgetId,
   budget,
   setBudgetName,
   setViewBudgetTab,
@@ -37,13 +31,9 @@ const BudgetCard = ({
     setViewBudgetTab(true);
   };
 
-  // console.log({ budgetId });
   return (
     <>
-      <Card
-        // to={budget.id}
-        onClick={handleClick}
-      >
+      <Card onClick={handleClick}>
         <Top>
           <div>
             <Title>{budget.name}</Title>
@@ -54,13 +44,12 @@ const BudgetCard = ({
                 <span className="spend">
                   {currencyFormatter.format(amount)}
                 </span>
-                {/* {!noBudget && <span> {currencyFormatter.format(max)}</span>} */}
               </p>
             </div>
             <div>
               {!noBudget && (
                 <span>
-                  {rate > 100 ? "Over Spent  " : "Left "}
+                  {rate > 100 ? "Overspent " : "Left "}
                   {currencyFormatter.format(Math.abs(maxAmount - amount))}
                 </span>
               )}
@@ -139,7 +128,7 @@ const Top = styled.div`
 `;
 
 const Title = styled.p`
-  font-size: 14px;
+  font-size: 0.9rem;
   font-weight: 500;
 `;
 
@@ -154,7 +143,7 @@ const Details = styled.div`
     font-weight: 500;
   }
   span {
-    font-size: 12px;
+    font-size: 0.75rem;
     padding: 2px 0px;
     color: #969696;
   }
