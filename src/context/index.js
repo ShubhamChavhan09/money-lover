@@ -31,20 +31,20 @@ export const BudgetsProvider = ({ children }) => {
 
       await supabase
         .from("budgets")
-        .insert([{ id, name, max, created, startDate, endDate }])
-        .neq("name", name);
+        .insert([{ id, name, max, created, startDate, endDate }]);
+      // .neq("name", name);
 
       setBudgets((prevBudget) => {
-        if (
-          prevBudget.find(
-            (budget) =>
-              budget.name === name &&
-              budget.startDate === startDate &&
-              budget.endDate === endDate
-          )
-        ) {
-          return prevBudget;
-        }
+        // if (
+        //   prevBudget.find(
+        //     (budget) =>
+        //       budget.name === name &&
+        //       budget.startDate === startDate &&
+        //       budget.endDate === endDate
+        //   )
+        // ) {
+        //   return prevBudget;
+        // }
         return [
           ...prevBudget,
           {
@@ -149,7 +149,7 @@ export const BudgetsProvider = ({ children }) => {
     try {
       await supabase
         .from("budgets")
-        .update({
+        .upsert({
           name: updatedBudget.name,
           max: updatedBudget.max,
           startDate: updatedBudget.startDate,
@@ -160,6 +160,28 @@ export const BudgetsProvider = ({ children }) => {
       setBudgets((prevBudgets) => {
         return prevBudgets.map((prevBudget) =>
           prevBudget.id === id ? updatedBudget : prevBudget
+        );
+      });
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
+
+  const updateExpense = async (id, updatedExpense) => {
+    try {
+      await supabase
+        .from("expenses")
+        .upsert({
+          name: updatedExpense.name,
+          amount: updatedExpense.amount,
+          date: updatedExpense.date,
+          description: updatedExpense.description,
+        })
+        .match({ id });
+
+      setExpenses((prevExpenses) => {
+        return prevExpenses.map((prevExpense) =>
+          prevExpense.id === id ? updatedExpense : prevExpense
         );
       });
     } catch (error) {
@@ -180,6 +202,7 @@ export const BudgetsProvider = ({ children }) => {
         searchBudget,
         inputText,
         updateBudget,
+        updateExpense,
       }}
     >
       {children}
