@@ -3,11 +3,11 @@ import styled from "styled-components";
 import { Bar, Line, Pie } from "react-chartjs-2";
 import { CategoryScale } from "chart.js";
 import Chart from "chart.js/auto";
-import { useBudgets, MISCELLANEOUS_BUDGET_ID } from "../../context";
+import { useBudgets } from "../../context";
 import { format } from "date-fns";
 Chart.register(CategoryScale);
 
-const TotalExpenseReport = ({ date, id, startDate, endDate, name }) => {
+const TotalExpenseReport = ({ name }) => {
   const { budgets, getBudgetExpenses, expenses } = useBudgets();
 
   const expense = expenses.filter((expense) => {
@@ -88,11 +88,13 @@ const TotalExpenseReport = ({ date, id, startDate, endDate, name }) => {
   };
 
   return (
-    <div style={{ textAlign: "center", width: "580px", height: "320px" }}>
+    <ReportData
+    // style={{ textAlign: "center", width: "580px", height: "320px" }}
+    >
       <Bar
         data={data}
-        height={400}
-        width={600}
+        // height={200}
+        // width={300}
         options={{
           maintainAspectRatio: false,
           scales: {
@@ -106,8 +108,13 @@ const TotalExpenseReport = ({ date, id, startDate, endDate, name }) => {
           },
         }}
       />
-    </div>
+    </ReportData>
   );
 };
 
 export default TotalExpenseReport;
+
+const ReportData = styled.div`
+  width: min(100%, 600px);
+  height: 300px;
+`;
