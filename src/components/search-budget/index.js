@@ -27,5 +27,5 @@ const Search = styled.input`
   outline: none;
   border: none;
   box-shadow: 1px 1px 8px;
-  font-size: 14px;
+  font-size: 0.9rem;
 `;
