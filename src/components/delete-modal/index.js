@@ -25,8 +25,6 @@ const DeleteModal = ({
         onExitComplete={() => null}
       >
         {deleteModal ? (
-          // <Overlay>
-          //   <div className="modal">
           <Modal>
             <Heading>
               <p>Confirm Deletion</p>
@@ -55,10 +53,7 @@ const DeleteModal = ({
               </Button>
             </Buttons>
           </Modal>
-        ) : //   {/* </div>
-        // </Overlay> */}
-
-        null}
+        ) : null}
       </AnimatePresence>
     </>
   );
@@ -66,13 +61,13 @@ const DeleteModal = ({
 
 export default DeleteModal;
 const Heading = styled(Title)`
-  width: 496px;
+  width: min(90vw, 496px);
   height: 64px;
 `;
 const Section = styled.div`
   height: 62px;
   padding: 17px 24px 24px;
-  font-size: 14px;
+  font-size: 0.9rem;
 `;
 
 const Buttons = styled.div`
