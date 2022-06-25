@@ -8,7 +8,7 @@ const Navbar = () => {
     <>
       {/* Nav 1 */}
       <Nav>
-        {/* <h2>Shubham</h2> */}
+        <h2>Budget</h2>
         <ul>
           <li>
             <NavLinks to="">
@@ -66,6 +66,7 @@ export default Navbar;
 
 const Nav = styled.nav`
   background: #ffffff;
+  // background: #4b4b4b;
   height: 100vh;
   width: 15%;
   font-size: 16px;
@@ -74,35 +75,38 @@ const Nav = styled.nav`
   align-items: center;
   justify-content: start;
   box-shadow: 0 3px 7px 0 rgb(0 0 0 / 27%);
-  padding: 50px 40px;
+  padding: 4rem 2rem;
   border-radius: 10px;
+  background: linear-gradient(145deg, #e6e6e6, #ffffff);
+  box-shadow: 27px 27px 54px #666666, -27px -27px 54px #ffffff;
   //
   @media (max-width: 768px) {
     display: none;
   }
 
   h2 {
-    background: #d6806e;
-    padding: 15px 20px;
-    margin-right: auto;
+    margin-bottom: 4rem;
     color: #010101;
     font-weight: 500;
+    font-size: clamp(1.5rem, 2.5vw, 1.5rem);
   }
   ul {
     list-style-type: none;
   }
   li {
-    margin: 30px 0;
+    // margin: 10px 0;
   }
 `;
 
 const NavLinks = styled(Link)`
   text-decoration: none;
   color: #bdbdbd;
+  // color: #000000;
   transition: all 0.5s ease;
   display: flex;
-  padding: 20px;s
+  padding: 20px;
   border-radius: 4px;
+  font-size: clamp(1rem, 1vw, 0.9rem);
 
   &:hover {
     background: #ecf0f1;
@@ -127,7 +131,7 @@ const BottomNav = styled.div`
   position: fixed;
   bottom: 0;
   height: 3.5rem;
-  background: #ffffff;
+  background: #7e959b;
   box-shadow: 0 3px 7px 0 rgb(0 0 0 / 27%);
   z-index: 2;
 
@@ -143,4 +147,9 @@ const BottomLink = styled(Link)`
   display: flex;
   color: #bdbdbd;
   text-decoration: none;
+`;
+const Bar = styled.div`
+  height: 100vh;
+  background: salmmon;
+  width: 20px;
 `;
