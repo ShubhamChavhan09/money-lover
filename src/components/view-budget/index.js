@@ -8,6 +8,7 @@ import EditBudgetModal from "../edit-budget-modal";
 import ViewBudgetExpense from "../view-budget-expense";
 import TotalExpenseReport from "../total-expense-report";
 import { motion, AnimatePresence } from "framer-motion";
+import { IoArrowBack } from "react-icons/io5";
 
 const ViewBudget = ({
   title,
@@ -139,7 +140,7 @@ const Head = styled.div`
   }
 `;
 
-export const Close = styled(CgClose)`
+export const Close = styled(IoArrowBack)`
   font-size: 1.25rem;
   margin-right: 18px;
   cursor: pointer;
