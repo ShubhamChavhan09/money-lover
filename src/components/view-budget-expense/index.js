@@ -10,7 +10,7 @@ import { AnimatePresence } from "framer-motion";
 import { currencyFormatter } from "../../utils";
 
 const ViewBudgetExpense = ({ showBudgetExpense, close, id, name }) => {
-  const { expenses, budgets } = useBudgets();
+  const { expenses } = useBudgets();
   const [expenseData, setExpenseData] = useState("");
   const [viewExpenseModal, setViewExpenseModal] = useState(false);
 
@@ -57,8 +57,6 @@ const ViewBudgetExpense = ({ showBudgetExpense, close, id, name }) => {
         onExitComplete={() => null}
       >
         {showBudgetExpense && (
-          // <Overlay width="496px" height="600px">
-          //   <div className="modal" style={{ overflowY: "scroll" }}>
           <Modal width={"496px"} height={"600px"}>
             <Title>
               <TopLeft>
@@ -74,14 +72,12 @@ const ViewBudgetExpense = ({ showBudgetExpense, close, id, name }) => {
                 <ExpenseListItems
                   key={list.id}
                   id={list.budgetId}
-                  list={list}
+                  selectedExpense={list}
                   handleClick={handleClick}
                 />
               );
             })}
           </Modal>
-          // {/* </div>
-          // </Overlay> */}
         )}
       </AnimatePresence>
       <AnimatePresence
@@ -90,8 +86,6 @@ const ViewBudgetExpense = ({ showBudgetExpense, close, id, name }) => {
         onExitComplete={() => null}
       >
         {viewExpenseModal && (
-          // <Overlay>
-          //   <div className="modal">
           <Modal>
             <ViewExpense
               id={expenseData.id}
@@ -105,8 +99,6 @@ const ViewBudgetExpense = ({ showBudgetExpense, close, id, name }) => {
               // expenseBudgetId={expenseBudgetId}
             />
           </Modal>
-          //   </div>
-          // </Overlay>
         )}
       </AnimatePresence>
     </>
@@ -140,13 +132,13 @@ const Card = styled.div`
     margin-right: 20px;
   }
   span {
-    font-size: 12px;
+    font-size: 0.75rem;
   }
   span.day {
     font-weight: 500;
   }
   p.amount {
-    font-size: 14px;
+    font-size: 0.9rem;
     font-weight: 300;
   }
 `;
@@ -170,11 +162,11 @@ const Lists = styled.div`
     color: #969696;
   }
   p {
-    font-size: 14px;
+    font-size: 0.9rem;
     font-weight: 500;
   }
   span {
-    font-size: 12px;
+    font-size: 0.75rem;
   }
 `;
 
