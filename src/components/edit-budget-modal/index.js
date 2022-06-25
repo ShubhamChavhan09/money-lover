@@ -69,8 +69,6 @@ const EditBudgetModal = ({
         onExitComplete={() => null}
       >
         {budgetModal ? (
-          // <Overlay ref={modalRef} width="350px" height="390px">
-          //   <div className="modal">
           <Modal width={"350px"} height={"390px"}>
             <Title>
               <p>Edit Budget</p>
@@ -102,7 +100,6 @@ const EditBudgetModal = ({
                       type="number"
                       min="0"
                       ref={maxRef}
-                      // onChange={(e) => setAmounts(e.target.value)}
                       defaultValue={maxAmount}
                     />
                   </div>
@@ -129,8 +126,6 @@ const EditBudgetModal = ({
                     onExitComplete={() => null}
                   >
                     {showEditDate && (
-                      // <Overlay width="350px" height="500px">
-                      // {/* <div className="modal"> */}
                       <Modal width="350px" height="500px">
                         <Title>
                           <TopLeft>
@@ -145,8 +140,6 @@ const EditBudgetModal = ({
                           />
                         </div>
                       </Modal>
-                      // </div>
-                      // </Overlay>
                     )}
                   </AnimatePresence>
                 </Box>
@@ -154,10 +147,7 @@ const EditBudgetModal = ({
               <ModalButtons cancel={handleBudget} />
             </Form>
           </Modal>
-        ) : //  {/* </div> */}
-        //  {/* </Overlay> */}
-
-        null}
+        ) : null}
       </AnimatePresence>
     </>
   );
@@ -186,7 +176,7 @@ export const Overlay = styled.div`
 
   section {
     padding: 24px 24px 0;
-    font-size: 14px;
+    font-size: 0.9rem;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -214,7 +204,7 @@ export const Form = styled.form`
     height: 32px;
     width: 100%;
     // margin: 10px 0;
-    font-size: 14px;
+    font-size: 0.9rem;
     // background: rgba(30, 39, 46, 0.2);
     border: none;
     outline: none;
@@ -234,7 +224,7 @@ export const Box = styled.div`
     flex: 1;
   }
   p {
-    font-size: 12px;
+    font-size: 0.75rem;
   }
 `;
 
@@ -248,7 +238,7 @@ export const Title = styled.div`
     border-bottom: 2px solid #e4e4e4;
 
     p {
-      font-size: 20px;
+      font-size: 1.25rem;
       font-weight: 500;
     }
   }
