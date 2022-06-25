@@ -35,7 +35,7 @@ export const ButtonContainer = styled.div`
 export const Button = styled.button`
   border: none;
   outline: none;
-  font-size: 14px;
+  font-size: 0.9rem;
   width: 100px;
   height: 36px;
   cursor: pointer;
