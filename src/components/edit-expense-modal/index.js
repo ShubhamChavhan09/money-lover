@@ -1,33 +1,41 @@
-import React, { useState, useRef, useEffect } from "react";
+import { useRef } from "react";
 import styled from "styled-components";
 import { useBudgets } from "../../context";
-import format from "date-fns/format";
+
 import Select from "react-select";
 import { Overlay, Title, Box, Form } from "../budget-modal";
 import ModalButtons from "../modal-buttons";
 import { Category } from "../../category";
 
-const EditExpenseModal = ({ expenseModal, setExpenseModal, data }) => {
+const EditExpenseModal = ({
+  expenseModal,
+  setExpenseModal,
+  data,
+  toggleViewExpense,
+}) => {
   const descriptionRef = useRef();
   const amountRef = useRef();
   const dateRef = useRef();
   const nameRef = useRef();
 
-  const { addExpense } = useBudgets();
+  const { updateExpense } = useBudgets();
 
   const closeEditExpense = () => {
     setExpenseModal(false);
   };
 
+  const id = data?.id;
+
   const handleSubmitExp = (event) => {
     event.preventDefault();
-    addExpense({
-      description: descriptionRef.current.value,
+    updateExpense(id, {
+      name: nameRef.current.value,
       amount: parseFloat(amountRef.current.value),
       date: dateRef.current.value,
-      name: nameRef.current.value,
+      description: descriptionRef.current.value,
     });
     closeEditExpense();
+    toggleViewExpense(false);
   };
 
   const customStyles = {
@@ -62,11 +70,7 @@ const EditExpenseModal = ({ expenseModal, setExpenseModal, data }) => {
                     <p>Budget Category</p>
                   </div>
                   <div>
-                    <select
-                      ref={nameRef}
-                      defaultValue={data.name}
-                      // onChange={(e) => setBudgetCat(e.target.value)}
-                    >
+                    <select ref={nameRef} defaultValue={data.name}>
                       {Category.map((budget) => {
                         return (
                           <option key={budget.id} value={budget.name}>
@@ -88,7 +92,6 @@ const EditExpenseModal = ({ expenseModal, setExpenseModal, data }) => {
                       required
                       min="0"
                       defaultValue={data.amount}
-                      // onChange={(e) => setAmountVal(e.target.value)}
                     />
                   </div>
                 </Box>
@@ -101,8 +104,6 @@ const EditExpenseModal = ({ expenseModal, setExpenseModal, data }) => {
                       ref={dateRef}
                       style={{ width: "160px" }}
                       type="date"
-                      // type="datetime-local"
-                      // onChange={(e) => setNewDate(e.target.value)}
                       defaultValue={data.date}
                     />
                   </div>
@@ -117,7 +118,6 @@ const EditExpenseModal = ({ expenseModal, setExpenseModal, data }) => {
                       type="text"
                       placeholder="Note"
                       defaultValue={data.description}
-                      // onChange={(e) => setNotes(e.target.value)}
                     />
                   </div>
                 </Box>
@@ -135,5 +135,5 @@ export default EditExpenseModal;
 
 const SelectCategories = styled(Select)`
   // width: 80%;
-  font-size: 14px;
+  font-size: 0.9rem;
 `;
