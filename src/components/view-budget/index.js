@@ -22,16 +22,6 @@ const ViewBudget = ({
 }) => {
   const [budgetModal, setBudgetModal] = useState(false);
   const [showBudgetExpense, setShowBudgetExpense] = useState(false);
-  const { budgets, getBudgetExpenses, nameFromBudget } = useBudgets();
-
-  const selectedBudget = budgets.filter((budget) => {
-    return budget.name === budgetName;
-  });
-
-  const amountMiscellaneous = getBudgetExpenses(MISCELLANEOUS_BUDGET_ID).reduce(
-    (total, expense) => total + expense.amount,
-    0
-  );
 
   const handleDelete = () => {
     setDeleteModal(true);
@@ -43,23 +33,23 @@ const ViewBudget = ({
 
   const dropIn = {
     hidden: {
-      x: "100vw",
+      // x: "100vw",
       opacity: 0,
     },
     visible: {
-      x: "0",
+      // x: "0",
       opacity: 1,
       transition: {
         // delay: 0.2,
-        duration: 0.8,
+        duration: 0.3,
         type: "tween",
       },
     },
     exit: {
-      x: "100vw",
+      // x: "100vw",
       opacity: 0,
       transition: {
-        duration: 0.5,
+        duration: 0.1,
       },
     },
   };
@@ -123,16 +113,17 @@ export default ViewBudget;
 
 const Container = styled(motion.div)`
   background: #ffffff;
-  width: 600px;
-  height: 620px;
+  width: min(92vw, 600px);
+  height: 600px;
   border-radius: 4px;
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   box-shadow: 0 3px 7px 0 rgb(0 0 0 / 27%);
 `;
 const Head = styled.div`
   height: 64px;
-  padding: 0 24px;
+  padding: 1rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -143,13 +134,13 @@ const Head = styled.div`
     align-items: center;
   }
   p {
-    font-size: 20px;
+    font-size: 1.25rem;
     font-weight: 500;
   }
 `;
 
 export const Close = styled(CgClose)`
-  font-size: 20px;
+  font-size: 1.25rem;
   margin-right: 18px;
   cursor: pointer;
   color: #969696;
@@ -163,8 +154,8 @@ export const Delete = styled.button`
   outline: none;
   color: #f45a5a;
   background: transparent;
-  font-size: 14px;
-  width: 100px;
+  font-size: clamp(0.7rem, 2vw, 0.85rem);
+  width: min(4rem, 5rem);
   height: 36px;
   cursor: pointer;
   border-radius: 4px;
@@ -191,7 +182,7 @@ const Details = styled.div`
     margin: 10px 0;
   }
   p {
-    font-size: 12px;
+    font-size: 0.75rem;
     color: #969696;
   }
   hr {
@@ -205,13 +196,16 @@ const View = styled(Head)`
   margin-top: 20px;
   height: 48px;
   border-top: 1px solid #e4e4e4;
+  // align-self: baseline;
 
   p {
     cursor: pointer;
-    font-size: 14px;
+    font-size: 0.9rem;
   }
 `;
 
 const Chart = styled.div`
+  // padding: 1rem;
   text-align: center;
+  width: 100%;
 `;
