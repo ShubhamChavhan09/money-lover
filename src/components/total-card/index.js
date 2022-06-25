@@ -40,6 +40,8 @@ const Bar = styled.div`
   align-items: center;
   padding: 0 16px;
   background: #ffffff;
+  // background: #4b4b4b;
+  color: #000000;
   box-shadow: 0 3px 7px 0 rgb(0 0 0 / 27%);
 
   button {
