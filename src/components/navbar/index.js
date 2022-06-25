@@ -6,27 +6,58 @@ import { MdAccountBalanceWallet, MdSave, MdLibraryBooks } from "react-icons/md";
 const Navbar = () => {
   return (
     <>
+      {/* Nav 1 */}
       <Nav>
-        <h2>Shubham</h2>
-        <NavLink to="">
+        {/* <h2>Shubham</h2> */}
+        <ul>
+          <li>
+            <NavLinks to="">
+              <Icon>
+                <MdSave />
+              </Icon>
+              Budgets
+            </NavLinks>
+          </li>
+          <li>
+            <NavLinks to="expenses">
+              <Icon>
+                <MdAccountBalanceWallet />
+              </Icon>
+              Expenses
+            </NavLinks>
+          </li>
+          <li>
+            <NavLinks to="report">
+              <Icon>
+                <MdLibraryBooks />
+              </Icon>
+              Report
+            </NavLinks>
+          </li>
+        </ul>
+      </Nav>
+
+      {/* Nav 2 */}
+      <BottomNav>
+        <BottomLink to="">
           <Icon>
             <MdSave />
           </Icon>
           Budgets
-        </NavLink>
-        <NavLink to="expenses">
+        </BottomLink>
+        <BottomLink to="expenses">
           <Icon>
             <MdAccountBalanceWallet />
           </Icon>
           Expenses
-        </NavLink>
-        <NavLink to="report">
+        </BottomLink>
+        <BottomLink to="report">
           <Icon>
             <MdLibraryBooks />
           </Icon>
           Report
-        </NavLink>
-      </Nav>
+        </BottomLink>
+      </BottomNav>
     </>
   );
 };
@@ -34,15 +65,21 @@ const Navbar = () => {
 export default Navbar;
 
 const Nav = styled.nav`
-  height: 60px;
-  width: 100%;
-  font-size: 18px;
+  background: #ffffff;
+  height: 100vh;
+  width: 15%;
+  font-size: 16px;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: end;
+  justify-content: start;
   box-shadow: 0 3px 7px 0 rgb(0 0 0 / 27%);
-  padding: 0 40px;
+  padding: 50px 40px;
   border-radius: 10px;
+  //
+  @media (max-width: 768px) {
+    display: none;
+  }
 
   h2 {
     background: #d6806e;
@@ -51,22 +88,59 @@ const Nav = styled.nav`
     color: #010101;
     font-weight: 500;
   }
+  ul {
+    list-style-type: none;
+  }
+  li {
+    margin: 30px 0;
+  }
 `;
 
-const NavLink = styled(Link)`
+const NavLinks = styled(Link)`
   text-decoration: none;
   color: #bdbdbd;
   transition: all 0.5s ease;
   display: flex;
-  margin: 0 20px;
+  padding: 20px;s
+  border-radius: 4px;
 
   &:hover {
-    color: #d6806e;
+    background: #ecf0f1;
+  }
+  &.active {
+    background: red;
   }
 `;
 const Icon = styled.div`
-  font-size: 20px;
+  font-size: 1.25rem;
   display: flex;
   align-items: center;
   justify-content: center;
+`;
+
+const BottomNav = styled.div`
+  display: none;
+  width: 100%;
+  position: fixed;
+  justify-content: space-around;
+  align-items: center;
+  position: fixed;
+  bottom: 0;
+  height: 3.5rem;
+  background: #ffffff;
+  box-shadow: 0 3px 7px 0 rgb(0 0 0 / 27%);
+  z-index: 2;
+
+  ul {
+    list-style-type: none;
+  }
+
+  @media (max-width: 768px) {
+    display: flex;
+  }
+`;
+const BottomLink = styled(Link)`
+  display: flex;
+  color: #bdbdbd;
+  text-decoration: none;
 `;
