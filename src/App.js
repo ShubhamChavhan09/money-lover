@@ -20,7 +20,14 @@ export default App;
 
 const Container = styled.div`
   display: flex;
-  width: 100%;
+  max-width: 1600px;
   align-items: start;
   height: 100vh;
+  overflow: hidden;
+  padding-bottom: 10px;
+  margin: 0 auto;
+
+  @media (max-width: 768px) {
+    padding-bottom: 3.8rem;
+  }
 `;
