@@ -54,8 +54,8 @@ const EditBudgetModal = ({
     updateBudget(id, {
       name: nameRef.current.value,
       max: parseFloat(maxRef.current.value),
-      startDate: new Date(editDateRange[0].startDate),
-      endDate: new Date(editDateRange[0].endDate),
+      startDate: addDays(new Date(editDateRange[0].startDate), 1),
+      endDate: addDays(new Date(editDateRange[0].endDate), 1),
     });
     setBudgetModal(!budgetModal);
     toggleViewBudget(false);
