@@ -2,9 +2,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { useBudgets } from "../../context";
 import BudgetCard from "../budget-card";
-import SearchBudget from "../search-budget";
 import { v4 as uuidv4 } from "uuid";
-import MiscellaneousCard from "../miscellaneous-card";
 import { motion } from "framer-motion";
 
 const NewCard = ({
@@ -13,7 +11,7 @@ const NewCard = ({
   setBudgetName,
   setSelectedBudgetId,
 }) => {
-  const { budgets, getBudgetExpenses, inputText, expenses } = useBudgets();
+  const { budgets, getBudgetExpenses } = useBudgets();
 
   // const data = budgets.sort((a, b) => {
   //   return new Date(b.created) - new Date(a.created);
