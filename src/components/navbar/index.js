@@ -131,7 +131,7 @@ const BottomNav = styled.div`
   position: fixed;
   bottom: 0;
   height: 3.5rem;
-  background: #7e959b;
+  background: #ffffff;
   box-shadow: 0 3px 7px 0 rgb(0 0 0 / 27%);
   z-index: 2;
 
