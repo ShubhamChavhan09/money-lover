@@ -5,9 +5,9 @@ import { useBudgets } from "../../context";
 import { format } from "date-fns";
 import { currencyFormatter } from "../../utils";
 import EditExpenseModal from "../edit-expense-modal";
-import { MISCELLANEOUS_BUDGET_ID } from "../../context";
+import { IoArrowBack } from "react-icons/io5";
 
-const ViewExpense = ({ title, toggle, setDeleteModal, data, setSelectId }) => {
+const ViewExpense = ({ title, toggle, setDeleteModal, data }) => {
   const [expenseModal, setExpenseModal] = useState(false);
 
   const handleDelete = () => {
@@ -16,7 +16,6 @@ const ViewExpense = ({ title, toggle, setDeleteModal, data, setSelectId }) => {
 
   const handleEdit = () => {
     setExpenseModal(true);
-    setSelectId(data.id);
   };
 
   return (
@@ -81,7 +80,7 @@ const Head = styled.div`
   }
 `;
 
-const Close = styled(CgClose)`
+const Close = styled(IoArrowBack)`
   font-size: 1.25rem;
   margin-right: 18px;
   cursor: pointer;
