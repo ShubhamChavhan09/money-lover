@@ -17,7 +17,6 @@ import {
 const Dashboard = () => {
   const [budgetModal, setBudgetModal] = useState(false);
   const [viewExpenses, setViewExpenses] = useState(false);
-  const [expensedId, setExpensedId] = useState();
   const [budgetName, setBudgetName] = useState("");
   const [viewBudgetTab, setViewBudgetTab] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
@@ -69,12 +68,12 @@ const Dashboard = () => {
 
   return (
     <>
-      <Container viewExpenses={viewExpenses}>
+      <Container>
         <Head>
           <TotalCard open={openBudgetModal} name="add budget" />
         </Head>
         <Main>
-          <LayoutGroup>
+          {!viewBudgetTab ? (
             <BudgetContainer>
               <div className="heading">
                 <div
@@ -99,7 +98,8 @@ const Dashboard = () => {
                 />
               </div>
             </BudgetContainer>
-          </LayoutGroup>
+          ) : null}
+
           <div>
             <AnimatePresence
               initial={false}
@@ -162,48 +162,46 @@ export const Container = styled.div`
 `;
 
 export const Head = styled.div`
-  // background: gray;
   width: 100%;
-  height: 64px;
+  // height: 64px;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
-  box-shadow: 0 3px 7px 0 rgb(0 0 0 / 27%);
   z-index: 2;
 `;
 
 export const Main = styled.div`
-  // background: #d9dbe1;
-  background: #e4e4e4;
   width: 100%;
   height: 100%;
   display: flex;
-  // flex-direction: column;
   align-items: start;
-  justify-content: space-between;
+  justify-content: center;
   padding: 20px;
-  overflow-y: scroll;
 `;
-export const BudgetContainer = styled(motion.div)`
-  width: 650px;
+export const BudgetContainer = styled.div`
+  width: min(650px, 100%);
   background: #ffffff;
-  margin: 0 auto;
+  // margin: 0 auto;
   border-radius: 4px;
   box-shadow: 0 3px 7px 0 rgb(0 0 0 / 27%);
+  background: linear-gradient(145deg, #f5f6fa, #ffffff);
+  box-shadow: 27px 27px 54px #666666, -27px -27px 54px #ffffff;
 
   div.heading {
     display: flex;
   }
   div.tab {
-    padding: 30px;
-    font-size: 14px;
+    padding: clamp(1.3rem, 5vw, 1.5rem);
+    font-size: clamp(0.6rem, 1vw, 0.9rem);
     text-transform: uppercase;
     cursor: pointer;
   }
 
   div.active-tab {
-    border-top: 1px solid green;
-    border-right: 1px solid green;
+    // border-top: 1px solid green;
+    // border-right: 1px solid green;
+    // outline: 1px solid green;
     background: #e4e4e4;
+    box-shadow: 0 0 6px #1aa333;
   }
 `;
