@@ -10,8 +10,7 @@ const GlobalStyle = createGlobalStyle`
 }
 
 body{
-    background: #ffffff;
-    // background: linear-gradient(to right  ,#FDFDFD ,#FFF4FF);
+    background: #e4e4e4;
     width: 100vw;
     height: 100vh;
     font-family: 'Inter', sans-serif;
