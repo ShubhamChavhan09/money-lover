@@ -56,7 +56,7 @@ const NewCard = ({
           0
         );
         return (
-          <div key={budget.id}>
+          <div key={uuidv4()}>
             <BudgetCard
               amount={amount}
               budget={budget}

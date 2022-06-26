@@ -113,7 +113,7 @@ const Dashboard = () => {
                   selectedBudgetId={selectedBudgetId}
                   date={new Date()}
                   budgetLeft={budgetLeft}
-                  des={budgetLeft >= 0 ? "Left" : "Over Spent"}
+                  des={budgetLeft >= 0 ? "Left" : "Overspent"}
                   setDeleteModal={setDeleteModal}
                   toggle={setViewBudgetTab}
                   startDate={dateRange[0].startDate}
