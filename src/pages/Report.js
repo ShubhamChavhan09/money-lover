@@ -7,11 +7,11 @@ import { useBudgets, MISCELLANEOUS_BUDGET_ID } from "../context";
 import format from "date-fns/format";
 import { supabase } from "../supabaseClient";
 import { setWeek } from "date-fns";
+import TotalCard from "../components/total-card";
+import { Head } from "./Budgets";
 Chart.register(CategoryScale);
 
 const Report = () => {
-  const { budgets, getBudgetExpenses, expenses } = useBudgets();
-  const arr = [];
   const [toggleState, setToggleState] = useState(1);
   const [monthData, setMonthData] = useState([]);
 
@@ -63,7 +63,7 @@ const Report = () => {
   });
 
   const sortedDates = sort.map((item) => {
-    return format(new Date(item), "dd MMM");
+    return format(new Date(item), "d MMM");
   });
 
   const allExpenses = sort.map((dates) => {
@@ -115,11 +115,14 @@ const Report = () => {
 
   return (
     <Data>
+      <Head>
+        <TotalCard noButton />
+      </Head>
       <div>
         <button onClick={() => toggleTab(1)}>This Month</button>
         <button onClick={() => toggleTab(2)}>Last Month</button>
       </div>
-      <div>
+      <ChartData>
         <Bar
           data={data}
           height={400}
@@ -128,7 +131,7 @@ const Report = () => {
             maintainAspectRatio: false,
           }}
         />
-      </div>
+      </ChartData>
     </Data>
   );
 };
@@ -136,12 +139,16 @@ const Report = () => {
 export default Report;
 
 const Data = styled.div`
-  // width: 900px;
-  // height: 400px;
-  // background: #333;
+  width: 100%;
   display: flex;
   justify-content: center;
   flex-direction: column;
   align-items: center;
-  padding: 20px;
+`;
+const ChartData = styled.div`
+  width: min(100vw, 500px);
+  padding: 20px 10px;
+  margin: 0 auto;
+  background: linear-gradient(145deg, #f5f6fa, #ffffff);
+  box-shadow: 27px 27px 54px #666666, -27px -27px 54px #ffffff;
 `;
