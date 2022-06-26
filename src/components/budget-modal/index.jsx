@@ -10,6 +10,7 @@ import { TopLeft } from "../view-budget-expense";
 import Modal from "../modal";
 import { Close } from "../view-budget";
 import { AnimatePresence } from "framer-motion";
+import { addDays } from "date-fns";
 
 const BudgetModal = ({ budgetModal, close, dateRange, setDateRange }) => {
   const nameRef = useRef("");
@@ -30,8 +31,8 @@ const BudgetModal = ({ budgetModal, close, dateRange, setDateRange }) => {
       name: nameRef.current.value,
       max: parseFloat(maxRef.current.value),
       created: new Date(),
-      startDate: new Date(dateRange[0].startDate),
-      endDate: new Date(dateRange[0].endDate),
+      startDate: addDays(new Date(dateRange[0].startDate), 1),
+      endDate: addDays(new Date(dateRange[0].endDate), 1),
     });
     close();
   };
