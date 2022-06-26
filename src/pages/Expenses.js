@@ -12,13 +12,13 @@ import format from "date-fns/format";
 
 const Expenses = () => {
   const [expenseModal, setExpenseModal] = useState(false);
-  const [expenseBudgetId, setExpenseBudgetId] = useState("");
   const [expenseData, setExpenseData] = useState("");
   const [viewExpenseTab, setViewExpenseTab] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
-  const { expenses, deleteExpense } = useBudgets();
   const [toggleState, setToggleState] = useState(1);
   const [monthData, setMonthData] = useState([]);
+
+  const { deleteExpense } = useBudgets();
 
   const handleExpense = () => {
     setExpenseModal(true);
@@ -57,10 +57,7 @@ const Expenses = () => {
       .gte("date", dateString1);
     if (error) console.log("error", error);
     else setMonthData(data);
-    // console.log(data);
   };
-
-  console.log({ monthData });
 
   const toggleTab = (index) => {
     setToggleState(index);
@@ -73,55 +70,53 @@ const Expenses = () => {
           <TotalCard name="add expenses" open={handleExpense} />
         </Head>
         <Main>
-          <BudgetContainer>
-            <div className="heading">
-              <div
-                className={toggleState === 1 ? "tab active-tab" : "tab"}
-                onClick={() => toggleTab(1)}
-              >
-                This Month
+          {!viewExpenseTab ? (
+            <BudgetContainer>
+              <div className="heading">
+                <div
+                  className={toggleState === 1 ? "tab active-tab" : "tab"}
+                  onClick={() => toggleTab(1)}
+                >
+                  This Month
+                </div>
+                <div
+                  className={toggleState === 2 ? "tab active-tab" : "tab"}
+                  onClick={() => toggleTab(2)}
+                >
+                  Last Month
+                </div>
+                {/* <div
+                  className={toggleState === 3 ? "tab active-tab" : "tab"}
+                  onClick={() => toggleTab(3)}
+                >
+                  upcoming
+                </div> */}
               </div>
-              <div
-                className={toggleState === 2 ? "tab active-tab" : "tab"}
-                onClick={() => toggleTab(2)}
-              >
-                Last Month
-              </div>
-              <div
-                className={toggleState === 3 ? "tab active-tab" : "tab"}
-                onClick={() => toggleTab(3)}
-              >
-                upcoming
-              </div>
-            </div>
-            <ExpenseList
-              monthData={monthData}
-              setExpenseData={setExpenseData}
-              toggle={setViewExpenseTab}
-            />
-          </BudgetContainer>
-          <ExpTab>
-            {expenseData && viewExpenseTab && (
-              <ViewExpense
-                data={expenseData}
-                title="Transaction details"
+              <ExpenseList
+                monthData={monthData}
+                setExpenseData={setExpenseData}
                 toggle={setViewExpenseTab}
-                setDeleteModal={setDeleteModal}
               />
-            )}
-          </ExpTab>
+            </BudgetContainer>
+          ) : null}
+          {/* <ExpTab> */}
+          {expenseData && viewExpenseTab && (
+            <ViewExpense
+              data={expenseData}
+              title="Transaction details"
+              toggle={setViewExpenseTab}
+              setDeleteModal={setDeleteModal}
+            />
+          )}
+          {/* </ExpTab> */}
         </Main>
       </Container>
-      <ExpenseModal
-        close={closeExpenseModal}
-        expenseModal={expenseModal}
-        expenseBudgetId={expenseBudgetId}
-      />
+      <ExpenseModal close={closeExpenseModal} expenseModal={expenseModal} />
       {expenseData && (
         <DeleteModal
           deleteModal={deleteModal}
           toggle={setDeleteModal}
-          deleteId={expenseData?.id}
+          deleteId={expenseData.id}
           toggleTab={setViewExpenseTab}
           func={deleteExpense}
           alert="Delete this transaction?"
@@ -160,11 +155,11 @@ const Left = styled.div`
   flex-direction: column;
 
   p {
-    font-size: 14px;
+    font-size: 0.9rem;
     font-weight: 500;
   }
   span {
-    font-size: 14px;
+    font-size: 0.9rem;
     padding: 2px 0px;
     color: #969696;
   }
@@ -198,13 +193,13 @@ const Card = styled(CardCategory)`
     justify-content: center;
   }
   p.amount {
-    font-size: 14px;
+    font-size: 0.9rem;
     font-weight: 300;
   }
 `;
 
-const ExpTab = styled.div`
-  // position: -webkit-sticky;
-  position: sticky;
-  top: 0;
-`;
+// const ExpTab = styled.div`
+//   // position: -webkit-sticky;
+//   position: sticky;
+//   top: 0;
+// `;
