@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Overlay, Title } from "../budget-modal";
+import { Title } from "../budget-modal";
 import { Close } from "../view-budget";
 import { useBudgets } from "../../context";
 import styled from "styled-components";
@@ -9,7 +9,7 @@ import Modal from "../modal";
 import { AnimatePresence } from "framer-motion";
 import { currencyFormatter } from "../../utils";
 
-const ViewBudgetExpense = ({ showBudgetExpense, close, id, name }) => {
+const ViewBudgetExpense = ({ showBudgetExpense, close, name }) => {
   const { expenses } = useBudgets();
   const [expenseData, setExpenseData] = useState("");
   const [viewExpenseModal, setViewExpenseModal] = useState(false);
