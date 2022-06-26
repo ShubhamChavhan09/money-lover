@@ -149,7 +149,7 @@ export const BudgetsProvider = ({ children }) => {
     try {
       await supabase
         .from("budgets")
-        .upsert({
+        .update({
           name: updatedBudget.name,
           max: updatedBudget.max,
           startDate: updatedBudget.startDate,
@@ -171,7 +171,7 @@ export const BudgetsProvider = ({ children }) => {
     try {
       await supabase
         .from("expenses")
-        .upsert({
+        .update({
           name: updatedExpense.name,
           amount: updatedExpense.amount,
           date: updatedExpense.date,
