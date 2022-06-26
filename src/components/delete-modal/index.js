@@ -1,4 +1,4 @@
-import { Overlay, Title } from "../budget-modal";
+import { Title } from "../budget-modal";
 import styled from "styled-components";
 import { Delete } from "../view-expense";
 import Modal from "../modal";
@@ -17,6 +17,7 @@ const DeleteModal = ({
     toggle(false);
     toggleTab(false);
   };
+
   return (
     <>
       <AnimatePresence
