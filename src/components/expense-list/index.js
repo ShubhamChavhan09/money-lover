@@ -5,24 +5,28 @@ import { currencyFormatter } from "../../utils";
 import { v4 as uuidv4 } from "uuid";
 
 const ExpenseList = ({ setExpenseData, toggle, monthData }) => {
-  const { expenses, getBudgetExpenses } = useBudgets();
-
-  const uniqueExpenses = monthData
+  const uniqueExpenseName = monthData
     .map((item) => item.name)
     .filter((value, index, self) => self.indexOf(value) === index);
+
+  const allExpenses = monthData.map((items) => items);
 
   return (
     <>
       <Exp>
-        {uniqueExpenses.map((expense) => {
-          const data = expenses.filter((item) => {
+        {uniqueExpenseName.map((expense) => {
+          const data = allExpenses.filter((item) => {
             return item.name === expense;
+          });
+
+          const sort = data.sort(function (a, b) {
+            return new Date(b.date) - new Date(a.date);
           });
 
           const expenseLength = data.length;
 
-          const total = getBudgetExpenses(expense).reduce(
-            (total, expense) => total + expense.amount,
+          const total = data.reduce(
+            (item, expense) => item + expense.amount,
             0
           );
 
