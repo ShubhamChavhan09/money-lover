@@ -6,17 +6,15 @@ import Select from "react-select";
 import { Overlay, Title, Box, Form } from "../budget-modal";
 import ModalButtons from "../modal-buttons";
 import { Category } from "../../category";
+import { useNavigate } from "react-router-dom";
 
-const EditExpenseModal = ({
-  expenseModal,
-  setExpenseModal,
-  data,
-  toggleViewExpense,
-}) => {
+const EditExpenseModal = ({ expenseModal, setExpenseModal, data }) => {
   const descriptionRef = useRef();
   const amountRef = useRef();
   const dateRef = useRef();
   const nameRef = useRef();
+
+  let navigate = useNavigate();
 
   const { updateExpense } = useBudgets();
 
@@ -35,7 +33,7 @@ const EditExpenseModal = ({
       description: descriptionRef.current.value,
     });
     closeEditExpense();
-    toggleViewExpense(false);
+    navigate("/expenses");
   };
 
   const customStyles = {
