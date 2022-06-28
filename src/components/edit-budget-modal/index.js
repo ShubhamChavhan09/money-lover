@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from "react";
+import React, { useRef, useState } from "react";
 import styled from "styled-components";
 import { useBudgets } from "../../context";
 import { CgClose } from "react-icons/cg";
@@ -9,7 +9,7 @@ import { Section } from "../budget-modal";
 import DatePicker from "../date-picker";
 import { TopLeft } from "../view-budget-expense";
 import { Close } from "../view-budget";
-import { addDays } from "date-fns";
+import { addDays, parseISO } from "date-fns";
 import format from "date-fns/format";
 import { Category } from "../../category";
 import { useNavigate } from "react-router-dom";
@@ -31,6 +31,10 @@ const EditBudgetModal = ({
   const { budgets } = useBudgets();
 
   let navigate = useNavigate();
+
+  const start = startDate && parseISO(startDate);
+  const end = endDate && parseISO(endDate);
+  // const end = endDate && format(endDate, "dd/MM/yyyy");
 
   const [showEditDate, setShowEditDate] = useState(false);
   const [editDateRange, setEditDateRange] = useState([
@@ -60,6 +64,7 @@ const EditBudgetModal = ({
       endDate: addDays(new Date(editDateRange[0].endDate), 1),
     });
     setBudgetModal(false);
+    // navigate("/", { replace: true });
   };
 
   return (
@@ -111,10 +116,10 @@ const EditBudgetModal = ({
                   </div>
                   <div>
                     <input
-                      // value={`${format(startDate, "dd/MM/yyyy")} - ${format(
-                      //   endDate,
-                      //   "dd/MM/yyyy"
-                      // )}`}
+                      value={`${format(start, "dd/MM/yyyy")} - ${format(
+                        end,
+                        "dd/MM/yyyy"
+                      )}`}
                       style={{ cursor: "pointer" }}
                       readOnly
                       placeholder="Select time range"
@@ -127,7 +132,7 @@ const EditBudgetModal = ({
                     onExitComplete={() => null}
                   >
                     {showEditDate && (
-                      <Modal width="350px" height="500px">
+                      <Modal width="350px" height="530px">
                         <Title>
                           <TopLeft>
                             <Close onClick={(e) => setShowEditDate(false)} />
