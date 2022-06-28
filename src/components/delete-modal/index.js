@@ -1,21 +1,24 @@
-import { Title } from "../budget-modal";
+import { Title } from "../edit-budget-modal";
 import styled from "styled-components";
 import { Delete } from "../view-expense";
 import Modal from "../modal";
 import { AnimatePresence } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 
 const DeleteModal = ({
   deleteModal,
   toggle,
-  toggleTab,
   deleteId,
   func,
   alert,
+  redirect,
 }) => {
+  let navigate = useNavigate();
+
   const handleDelete = () => {
     func(deleteId);
     toggle(false);
-    toggleTab(false);
+    navigate(redirect);
   };
 
   return (
