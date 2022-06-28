@@ -74,7 +74,6 @@ const Nav = styled.nav`
   flex-direction: column;
   align-items: center;
   justify-content: start;
-  box-shadow: 0 3px 7px 0 rgb(0 0 0 / 27%);
   padding: 4rem 2rem;
   border-radius: 10px;
   background: linear-gradient(145deg, #e6e6e6, #ffffff);
@@ -100,16 +99,18 @@ const Nav = styled.nav`
 
 const NavLinks = styled(Link)`
   text-decoration: none;
-  color: #bdbdbd;
+  color: #999;
   // color: #000000;
   transition: all 0.5s ease;
   display: flex;
   padding: 20px;
   border-radius: 4px;
   font-size: clamp(1rem, 1vw, 0.9rem);
+  box-shadow: 0 3px 7px 0 rgb(0 0 0 / 27%);
 
   &:hover {
-    background: #ecf0f1;
+    background: #ffffff;
+    color: #000000;
   }
   &.active {
     background: red;
