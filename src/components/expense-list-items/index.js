@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import format from "date-fns/format";
 import { currencyFormatter } from "../../utils";
+import { Link } from "react-router-dom";
 
 const ExpenseListItems = ({ selectedExpense, setExpenseData, toggle }) => {
   const handleClick = () => {
@@ -10,7 +11,7 @@ const ExpenseListItems = ({ selectedExpense, setExpenseData, toggle }) => {
 
   return (
     <>
-      <Card onClick={handleClick}>
+      <Card to={selectedExpense.id}>
         <div className="data">
           <p className="date">
             {format(new Date(selectedExpense?.date), "dd")}
@@ -32,7 +33,7 @@ const ExpenseListItems = ({ selectedExpense, setExpenseData, toggle }) => {
 
 export default ExpenseListItems;
 
-export const Card = styled.div`
+export const Card = styled(Link)`
   width: 100%;
   border-top: 1px solid #e4e4e4;
   border-bottom: 1px solid #e4e4e4;
@@ -44,6 +45,8 @@ export const Card = styled.div`
   border: none;
   cursor: pointer;
   transition: all 0.2s linear;
+  text-decoration: none;
+  color: #000000;
 
   p {
     font-size: 11px;
