@@ -1,19 +1,46 @@
-import { useBudgets } from "../../context";
 import styled from "styled-components";
 import { currencyFormatter } from "../../utils";
 import { motion } from "framer-motion";
+import { supabase } from "../../supabaseClient";
+import format from "date-fns/format";
+import { useEffect, useState } from "react";
 
 const TotalCard = ({ name, open, noButton }) => {
-  const { expenses } = useBudgets();
+  const [currMonth, setCurrMonth] = useState([]);
 
-  // all expense
-  const amount = expenses.reduce((total, expense) => total + expense.amount, 0);
+  const date = new Date();
+
+  const first = new Date(date.getFullYear(), date.getMonth(), 1);
+  const last = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+
+  const dateString1 = format(first, "yyyy-MM-dd");
+  const dateString2 = format(last, "yyyy-MM-dd");
+
+  useEffect(() => {
+    month();
+  }, []);
+
+  const month = async () => {
+    const { data, error } = await supabase
+      .from("expenses")
+      .select()
+      .lte("date", dateString2)
+      .gte("date", dateString1);
+    if (error) console.log("error", error);
+    else setCurrMonth(data);
+  };
+
+  // all expense for current month
+  const amount = currMonth.reduce(
+    (total, expense) => total + expense.amount,
+    0
+  );
 
   return (
     <Bar>
       <div>
-        <p>Total</p>
         <span>{currencyFormatter.format(amount)}</span>
+        <p>Total spent this month</p>
       </div>
       <div>
         {!noButton ? (
