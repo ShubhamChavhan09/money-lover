@@ -12,12 +12,14 @@ import { Close } from "../view-budget";
 import { addDays } from "date-fns";
 import format from "date-fns/format";
 import { Category } from "../../category";
+import { useNavigate } from "react-router-dom";
 
 const EditBudgetModal = ({
+  id,
   budgetModal,
   setBudgetModal,
   name,
-  toggleViewBudget,
+  // toggleViewBudget,
   startDate,
   endDate,
 }) => {
@@ -27,6 +29,8 @@ const EditBudgetModal = ({
   const { updateBudget } = useBudgets();
 
   const { budgets } = useBudgets();
+
+  let navigate = useNavigate();
 
   const [showEditDate, setShowEditDate] = useState(false);
   const [editDateRange, setEditDateRange] = useState([
@@ -43,8 +47,6 @@ const EditBudgetModal = ({
 
   const maxAmount = budget[0]?.max;
 
-  const id = budget[0]?.id;
-
   const handleBudget = () => {
     setBudgetModal(!budgetModal);
   };
@@ -57,8 +59,7 @@ const EditBudgetModal = ({
       startDate: addDays(new Date(editDateRange[0].startDate), 1),
       endDate: addDays(new Date(editDateRange[0].endDate), 1),
     });
-    setBudgetModal(!budgetModal);
-    toggleViewBudget(false);
+    setBudgetModal(false);
   };
 
   return (
@@ -110,14 +111,14 @@ const EditBudgetModal = ({
                   </div>
                   <div>
                     <input
-                      value={`${format(startDate, "dd/MM/yyyy")} - ${format(
-                        endDate,
-                        "dd/MM/yyyy"
-                      )}`}
+                      // value={`${format(startDate, "dd/MM/yyyy")} - ${format(
+                      //   endDate,
+                      //   "dd/MM/yyyy"
+                      // )}`}
                       style={{ cursor: "pointer" }}
                       readOnly
                       placeholder="Select time range"
-                      onClick={() => setShowEditDate((prev) => !prev)}
+                      onClick={() => setShowEditDate(true)}
                     />
                   </div>
                   <AnimatePresence
