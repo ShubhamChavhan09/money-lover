@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { currencyFormatter } from "../../utils";
 
@@ -33,7 +34,10 @@ const BudgetCard = ({
 
   return (
     <>
-      <Card onClick={handleClick}>
+      <Card
+        to={budget.id}
+        // onClick={handleClick}
+      >
         <Top>
           <div>
             <Title>{budget.name}</Title>
@@ -42,7 +46,7 @@ const BudgetCard = ({
             <div>
               <p>
                 <span className="spend">
-                  {currencyFormatter.format(amount)}
+                  {currencyFormatter.format(maxAmount)}
                 </span>
               </p>
             </div>
@@ -69,7 +73,7 @@ const BudgetCard = ({
 
 export default BudgetCard;
 
-const Card = styled.div`
+const Card = styled(Link)`
   border-top: 1px solid #e4e4e4;
   border-bottom: 1px solid #e4e4e4;
   height: 80px;
@@ -80,6 +84,8 @@ const Card = styled.div`
   padding: 10px 20px 0 20px;
   transition: all 0.2s linear;
   cursor: pointer;
+  text-decoration: none;
+  color: #000000;
 
   &:hover {
     background: #f0faf1;
