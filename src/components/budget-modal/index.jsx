@@ -16,6 +16,7 @@ const BudgetModal = ({ budgetModal, close, dateRange, setDateRange }) => {
   const nameRef = useRef("");
   const maxRef = useRef("");
   const { addBudget } = useBudgets();
+  const [selected, setSelected] = useState(null);
 
   const [showDate, setShowDate] = useState(false);
 
@@ -62,7 +63,8 @@ const BudgetModal = ({ budgetModal, close, dateRange, setDateRange }) => {
                     <p>Category</p>
                   </div>
                   <div>
-                    <select ref={nameRef}>
+                    <select ref={nameRef} required>
+                      <option value={null}></option>
                       {Category.map((budget) => {
                         return (
                           <option key={budget.id} value={budget.name}>
@@ -83,7 +85,7 @@ const BudgetModal = ({ budgetModal, close, dateRange, setDateRange }) => {
                 </Box>
                 <Box>
                   <div>
-                    <p>Date</p>
+                    <p>Date Range</p>
                   </div>
                   <div>
                     <input
@@ -103,7 +105,7 @@ const BudgetModal = ({ budgetModal, close, dateRange, setDateRange }) => {
                     onExitComplete={() => null}
                   >
                     {showDate && (
-                      <Modal width="350px" height="500px">
+                      <Modal width="350px" height="530px">
                         <Title>
                           <TopLeft>
                             <Close onClick={(e) => setShowDate(false)} />
