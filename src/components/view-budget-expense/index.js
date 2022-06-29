@@ -9,40 +9,29 @@ import Modal from "../modal";
 import { AnimatePresence } from "framer-motion";
 import { currencyFormatter } from "../../utils";
 
-const ViewBudgetExpense = ({ showBudgetExpense, close, name }) => {
+const ViewBudgetExpense = ({ showBudgetExpense, close, name, data, total }) => {
   const { expenses } = useBudgets();
   const [expenseData, setExpenseData] = useState("");
   const [viewExpenseModal, setViewExpenseModal] = useState(false);
 
   const handleClose = () => {
-    close((currClose) => !currClose);
+    close(false);
   };
 
   const expense = expenses.filter((expense) => {
     return expense.name === name;
   });
 
-  const dates = expense.map((items) => {
+  const dates = data.map((items) => {
     return items.date;
   });
 
   //sorted date
-  const sort = dates.sort(function (a, b) {
-    const date1 = new Date(a);
-    const date2 = new Date(b);
+  const sortData = data.sort(function (a, b) {
+    const date1 = new Date(a.date);
+    const date2 = new Date(b.date);
     return date2 - date1;
   });
-
-  const allExpenses = dates.map((items) => {
-    return expense.filter((date) => {
-      return date.date === items;
-    });
-  });
-
-  const totalAmount = expense.reduce(
-    (total, expense) => total + expense.amount,
-    0
-  );
 
   const handleClick = (list) => {
     setExpenseData(list);
@@ -61,13 +50,13 @@ const ViewBudgetExpense = ({ showBudgetExpense, close, name }) => {
             <Title>
               <TopLeft>
                 <Close onClick={handleClose} />
-                <p>{name}</p>
+                <p>{data[0]?.name}</p>
               </TopLeft>
               <div>
-                <p>{currencyFormatter.format(totalAmount)}</p>
+                <p>{currencyFormatter.format(total)}</p>
               </div>
             </Title>
-            {expense.map((list) => {
+            {sortData.map((list) => {
               return (
                 <ExpenseListItems
                   key={list.id}
