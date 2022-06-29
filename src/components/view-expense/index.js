@@ -6,8 +6,28 @@ import { format } from "date-fns";
 import { currencyFormatter } from "../../utils";
 import EditExpenseModal from "../edit-expense-modal";
 import { IoArrowBack } from "react-icons/io5";
+import { useNavigate, useParams } from "react-router-dom";
+import DeleteModal from "../delete-modal";
 
-const ViewExpense = ({ title, toggle, setDeleteModal, data }) => {
+const ViewExpense = ({ toggle, data }) => {
+  let { expenseId } = useParams();
+  let navigate = useNavigate();
+
+  const [deleteModal, setDeleteModal] = useState(false);
+
+  const { expenses, deleteExpense } = useBudgets();
+
+  const singleExpense = expenses.filter((expense) => {
+    return expense.id === expenseId;
+  });
+
+  const expName = singleExpense[0]?.name;
+  const expDate = singleExpense[0]?.date;
+  const expAmount = singleExpense[0]?.amount;
+  const expDescription = singleExpense[0]?.description;
+
+  //
+
   const [expenseModal, setExpenseModal] = useState(false);
 
   const handleDelete = () => {
@@ -23,8 +43,8 @@ const ViewExpense = ({ title, toggle, setDeleteModal, data }) => {
       <Container>
         <Head>
           <div>
-            <Close onClick={() => toggle(false)} />
-            <p>{title}</p>
+            <Close onClick={() => navigate("/expenses")} />
+            <p>Transaction details</p>
           </div>
           <div>
             <Delete onClick={handleDelete}>DELETE</Delete>
@@ -32,19 +52,29 @@ const ViewExpense = ({ title, toggle, setDeleteModal, data }) => {
           </div>
         </Head>
         <Details>
-          <h3>{data.name}</h3>
-          <p>{format(new Date(data.date), "EEEE, dd/MM/yy")}</p>
+          <h3>{expName}</h3>
+          <p>{expDate && format(new Date(expDate), "EEEE, dd/MM/yy")}</p>
           <hr />
-          <p>{data.description}</p>
-          <span>{currencyFormatter.format(Math.abs(data.amount))}</span>
+          <p>{expDescription}</p>
+          <span>{currencyFormatter.format(Math.abs(expAmount))}</span>
         </Details>
       </Container>
       <EditExpenseModal
         expenseModal={expenseModal}
         setExpenseModal={setExpenseModal}
-        data={data}
+        data={singleExpense[0]}
         toggleViewExpense={toggle}
       />
+      {deleteModal && (
+        <DeleteModal
+          deleteModal={deleteModal}
+          toggle={setDeleteModal}
+          deleteId={expenseId}
+          func={deleteExpense}
+          alert="Delete this transaction?"
+          redirect={"/expenses"}
+        />
+      )}
     </>
   );
 };
@@ -58,8 +88,10 @@ const Container = styled.div`
   border-radius: 4px;
   display: flex;
   flex-direction: column;
-  box-shadow: 0 3px 7px 0 rgb(0 0 0 / 27%);
-  margin: 0 auto;
+  // box-shadow: 0 3px 7px 0 rgb(0 0 0 / 27%);
+  background: linear-gradient(145deg, #f5f6fa, #ffffff);
+  box-shadow: 27px 27px 54px #666666, -27px -27px 54px #ffffff;
+  margin: auto;
 `;
 const Head = styled.div`
   height: 64px;
