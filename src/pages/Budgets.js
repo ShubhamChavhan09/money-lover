@@ -4,8 +4,6 @@ import BudgetModal from "../components/budget-modal";
 import TotalCard from "../components/total-card";
 import NewCard from "../components/new-card";
 import { useBudgets } from "../context";
-import ViewBudget from "../components/view-budget";
-import DeleteModal from "../components/delete-modal";
 import { addDays } from "date-fns";
 import {
   motion,
@@ -19,7 +17,7 @@ const Dashboard = () => {
   const [viewExpenses, setViewExpenses] = useState(false);
   const [budgetName, setBudgetName] = useState("");
   const [viewBudgetTab, setViewBudgetTab] = useState(false);
-  const [deleteModal, setDeleteModal] = useState(false);
+
   const [toggleState, setToggleState] = useState(1);
   const [selectedBudgetId, setSelectedBudgetId] = useState("");
 
@@ -106,7 +104,7 @@ const Dashboard = () => {
               exitBeforeEnter={true}
               onExitComplete={() => null}
             >
-              {budgetName && viewBudgetTab && (
+              {/* {budgetName && viewBudgetTab && (
                 <ViewBudget
                   title="Detail"
                   budgetName={budgetName}
@@ -119,7 +117,7 @@ const Dashboard = () => {
                   startDate={dateRange[0].startDate}
                   endDate={dateRange[0].endDate}
                 />
-              )}
+              )} */}
             </AnimatePresence>
           </div>
         </Main>
@@ -130,14 +128,6 @@ const Dashboard = () => {
         close={closeBudgetModal}
         dateRange={dateRange}
         setDateRange={setDateRange}
-      />
-      <DeleteModal
-        deleteModal={deleteModal}
-        toggle={setDeleteModal}
-        deleteId={selectedBudgetId}
-        toggleTab={setViewBudgetTab}
-        func={deleteBudget}
-        alert="Do you want to delete this budget?"
       />
     </>
   );
