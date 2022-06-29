@@ -7,15 +7,10 @@ import { useBudgets } from "../../context";
 import { format } from "date-fns";
 Chart.register(CategoryScale);
 
-const TotalExpenseReport = ({ name }) => {
-  const { budgets, getBudgetExpenses, expenses } = useBudgets();
+const TotalExpenseReport = ({ chartData }) => {
+  const { budgets, getBudgetExpenses } = useBudgets();
 
-  const expense = expenses.filter((expense) => {
-    return expense.name === name;
-  });
-  // console.log({ expense });
-
-  const uniqueDate = expense
+  const uniqueDate = chartData
     .map((item) => item.date)
     .filter((value, index, self) => self.indexOf(value) === index);
 
@@ -27,11 +22,11 @@ const TotalExpenseReport = ({ name }) => {
   });
 
   const sortedDates = sort.map((item) => {
-    return format(new Date(item), "dd MMM");
+    return format(new Date(item), "d MMM");
   });
 
   const allExpenses = sort.map((dates) => {
-    return expense.filter((date) => {
+    return chartData.filter((date) => {
       return date.date === dates;
     });
   });
@@ -58,11 +53,9 @@ const TotalExpenseReport = ({ name }) => {
 
   const data = {
     labels: sortedDates,
-    // format(new Date(startDate), "dd MMMM "),
-    // format(new Date(endDate), "dd MMMM "),
     datasets: [
       {
-        maxBarThickness: 40,
+        maxBarThickness: 70,
         label: "Spending",
         data: totalArr,
         // expenseArr
