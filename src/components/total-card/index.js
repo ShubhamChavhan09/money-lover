@@ -18,6 +18,9 @@ const TotalCard = ({ name, open, noButton }) => {
 
   useEffect(() => {
     month();
+    return () => {
+      setCurrMonth({});
+    };
   }, []);
 
   const month = async () => {
