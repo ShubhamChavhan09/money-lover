@@ -4,8 +4,6 @@ import { supabase } from "../supabaseClient";
 
 const budgetsContext = createContext();
 
-export const MISCELLANEOUS_BUDGET_ID = "Miscellaneous";
-
 export const BudgetsProvider = ({ children }) => {
   const [budgets, setBudgets] = useState([]);
   const [expenses, setExpenses] = useState([]);
@@ -114,12 +112,12 @@ export const BudgetsProvider = ({ children }) => {
     try {
       await supabase.from("budgets").delete().match({ id });
 
-      setExpenses((prevExpense) => {
-        return prevExpense.map((expense) => {
-          if (expense.budgetId !== id) return expense;
-          return { ...expense, budgetId: MISCELLANEOUS_BUDGET_ID };
-        });
-      });
+      // setExpenses((prevExpense) => {
+      //   return prevExpense.map((expense) => {
+      //     if (expense.budgetId !== id) return expense;
+      //     return { ...expense, budgetId: MISCELLANEOUS_BUDGET_ID };
+      //   });
+      // });
 
       setBudgets((prevBudgets) => {
         return prevBudgets.filter((prevBudget) => prevBudget.id !== id);
