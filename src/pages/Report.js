@@ -3,10 +3,8 @@ import styled from "styled-components";
 import { Bar, Line, Pie } from "react-chartjs-2";
 import { CategoryScale } from "chart.js";
 import Chart from "chart.js/auto";
-import { useBudgets, MISCELLANEOUS_BUDGET_ID } from "../context";
 import format from "date-fns/format";
 import { supabase } from "../supabaseClient";
-import { setWeek } from "date-fns";
 import TotalCard from "../components/total-card";
 import { Head } from "./Budgets";
 Chart.register(CategoryScale);
@@ -44,9 +42,9 @@ const Report = () => {
       .gte("date", dateString1);
     if (error) console.log("error", error);
     else setMonthData(data);
-    // console.log(data);
   };
 
+  console.log({ monthData });
   const toggleTab = (index) => {
     setToggleState(index);
   };
@@ -87,6 +85,7 @@ const Report = () => {
     datasets: [
       {
         label: "Total Expense",
+        maxBarThickness: 90,
         data: totalArr, // amount
         backgroundColor: [
           "rgba(255, 99, 132, 0.2)",
@@ -118,10 +117,10 @@ const Report = () => {
       <Head>
         <TotalCard noButton />
       </Head>
-      <div>
+      <Buttons>
         <button onClick={() => toggleTab(1)}>This Month</button>
         <button onClick={() => toggleTab(2)}>Last Month</button>
-      </div>
+      </Buttons>
       <ChartData>
         <Bar
           data={data}
@@ -146,9 +145,13 @@ const Data = styled.div`
   align-items: center;
 `;
 const ChartData = styled.div`
-  width: min(100vw, 500px);
+  width: min(100vw, 680px);
   padding: 20px 10px;
   margin: 0 auto;
   background: linear-gradient(145deg, #f5f6fa, #ffffff);
   box-shadow: 27px 27px 54px #666666, -27px -27px 54px #ffffff;
+`;
+
+const Buttons = styled.div`
+  margin: 20px 0;
 `;
