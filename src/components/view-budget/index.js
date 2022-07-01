@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
-import { CgClose } from "react-icons/cg";
 import { useBudgets } from "../../context";
 import { format } from "date-fns";
 import { currencyFormatter } from "../../utils";
@@ -9,88 +8,58 @@ import ViewBudgetExpense from "../view-budget-expense";
 import TotalExpenseReport from "../total-expense-report";
 import { motion, AnimatePresence } from "framer-motion";
 import { IoArrowBack } from "react-icons/io5";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 import DeleteModal from "../delete-modal";
 import { supabase } from "../../supabaseClient";
 
-const ViewBudget = (
-  {
-    // title,
-    // budgetName,
-    // toggle,
-    // date,
-    // budgetLeft,
-    // des,
-    // setDeleteModal,
-    // startDate,
-    // endDate,
-  }
-) => {
+const ViewBudget = () => {
   let { budgetId } = useParams();
   let navigate = useNavigate();
 
-  const { budgets, expenses, getBudgetExpenses, deleteBudget } = useBudgets();
+  const { budgets, deleteBudget, budgetRange, newBudget } = useBudgets();
+
   const [deleteModal, setDeleteModal] = useState(false);
   const [budgetRangeData, setBudgetRangeData] = useState([]);
+  const [budgetModal, setBudgetModal] = useState(false);
+  const [showBudgetExpense, setShowBudgetExpense] = useState(false);
 
-  const singleBudget = budgets.filter((budget) => {
+  const data = budgets?.filter((budget) => {
     return budget.id === budgetId;
   });
 
-  const budgetName = singleBudget[0]?.name;
-  const budgetMax = singleBudget[0]?.max;
-  const budgetDate = singleBudget[0]?.created;
-  const budgetStart = singleBudget[0]?.startDate;
-  const budgetEnd = singleBudget[0]?.endDate;
+  const budgetName = data[0]?.name;
+  const budgetMax = data[0]?.max;
+  const budgetDate = data[0]?.created;
+  const budgetStart = data[0]?.startDate;
+  const budgetEnd = data[0]?.endDate;
 
-  const daysLeft = new Date(budgetEnd).getDate() - new Date().getDate();
-
-  const daysData = () => {
-    if (daysLeft >= 0) {
-      return `${daysLeft} days left`;
-    } else {
-      return "Finished";
-    }
-  };
-
-  console.log({ daysLeft });
-  //
   const dateString2 = budgetEnd && format(new Date(budgetEnd), "yyyy-MM-dd");
   const dateString1 =
     budgetStart && format(new Date(budgetStart), "yyyy-MM-dd");
 
   useEffect(() => {
     month();
-  }, []);
+  }, [deleteModal, budgetModal, showBudgetExpense]);
 
   const month = async () => {
     const { data, error } = await supabase
       .from("expenses")
       .select()
       .lte("date", dateString2)
-      .gte("date", dateString1);
+      .gte("date", dateString1)
+      .match({ name: budgetName });
     if (error) console.log("error", error);
     else setBudgetRangeData(data);
   };
 
-  const budgetData = budgetRangeData.filter((item) => {
-    return item.name === budgetName;
-  });
-
-  // //
-
-  const totalBudgetExpenseAmount = budgetData.reduce(
+  const totalBudgetExpenseAmount = budgetRangeData.reduce(
     (total, expense) => total + expense.amount,
     0
   );
-  console.log({ budgetData });
 
   const budgetAmountLeft = budgetMax - totalBudgetExpenseAmount;
 
   //
-
-  const [budgetModal, setBudgetModal] = useState(false);
-  const [showBudgetExpense, setShowBudgetExpense] = useState(false);
 
   const handleDelete = () => {
     setDeleteModal(true);
@@ -143,14 +112,14 @@ const ViewBudget = (
         </Head>
         <Details>
           <h3>{budgetName}</h3>
-          {/* <p>{budgetDate && format(new Date(budgetDate), "EEEE, dd/MM/yy")}</p> */}
-          <p>{daysData()}</p>
+          <p>{budgetDate && format(new Date(budgetDate), "EEEE, dd/MM/yy")}</p>
+          {/* <p>{daysData()}</p> */}
           <hr />
           <p>{budgetAmountLeft >= 0 ? "Left" : "Overspent"}</p>
           <h3>{currencyFormatter.format(Math.abs(budgetAmountLeft))}</h3>
         </Details>
         <Chart>
-          <TotalExpenseReport chartData={budgetData} />
+          <TotalExpenseReport chartData={budgetRangeData} />
         </Chart>
         <View>
           <p onClick={handleModal}>VIEW TRANSACTION</p>
@@ -160,16 +129,18 @@ const ViewBudget = (
       <EditBudgetModal
         budgetModal={budgetModal}
         setBudgetModal={setBudgetModal}
-        name={budgetName}
+        id={budgetId}
         startDate={budgetStart}
         endDate={budgetEnd}
-        id={budgetId}
+        name={budgetName}
+        max={budgetMax}
       />
       <ViewBudgetExpense
         showBudgetExpense={showBudgetExpense}
         close={setShowBudgetExpense}
-        data={budgetData}
+        data={budgetRangeData}
         total={totalBudgetExpenseAmount}
+        name={budgetName}
       />
       <DeleteModal
         deleteModal={deleteModal}
