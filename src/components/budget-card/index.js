@@ -1,18 +1,47 @@
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { currencyFormatter } from "../../utils";
+import { supabase } from "../../supabaseClient";
+import { useEffect } from "react";
+import { useState } from "react";
 
-const BudgetCard = ({
-  amount,
-  budget,
-  setBudgetName,
-  setViewBudgetTab,
-  noBudget,
-  setSelectedBudgetId,
-}) => {
-  const maxAmount = budget.max;
+const BudgetCard = ({ budget, noBudget }) => {
+  const [allData, setAllData] = useState([]);
 
-  const rate = (amount / maxAmount) * 100;
+  const budgetName = budget?.name;
+  const budgetId = budget?.id;
+  const maxAmount = budget?.max;
+  const startDate = budget?.startDate;
+  const endDate = budget?.endDate;
+
+  useEffect(() => {
+    singleBudget();
+    return () => {
+      setAllData({});
+    };
+  }, []);
+
+  const singleBudget = async () => {
+    const { data, error } = await supabase
+      .from("expenses")
+      .select()
+      .lte("date", endDate)
+      .gte("date", startDate)
+      .match({ name: budgetName });
+    if (error) console.log("error", error);
+    else setAllData(data);
+  };
+
+  //
+
+  const totalAmount = allData.reduce(
+    (total, expense) => total + expense.amount,
+    0
+  );
+
+  console.log({ amount: totalAmount });
+
+  const rate = (totalAmount / maxAmount) * 100;
 
   function setProgressVariant(amount, maxAmount) {
     const ratio = amount / maxAmount;
@@ -22,25 +51,16 @@ const BudgetCard = ({
   }
 
   const classNames = [];
-  if (amount > maxAmount) {
+  if (totalAmount > maxAmount) {
     classNames.push("danger");
   }
 
-  const handleClick = () => {
-    setBudgetName(budget.name);
-    setSelectedBudgetId(budget.id);
-    setViewBudgetTab(true);
-  };
-
   return (
     <>
-      <Card
-        to={budget.id}
-        // onClick={handleClick}
-      >
+      <Card to={`/${budgetId}`}>
         <Top>
           <div>
-            <Title>{budget.name}</Title>
+            <Title>{budgetName}</Title>
           </div>
           <Details>
             <div>
@@ -54,7 +74,7 @@ const BudgetCard = ({
               {!noBudget && (
                 <span>
                   {rate > 100 ? "Overspent " : "Left "}
-                  {currencyFormatter.format(Math.abs(maxAmount - amount))}
+                  {currencyFormatter.format(Math.abs(maxAmount - totalAmount))}
                 </span>
               )}
             </div>
@@ -62,7 +82,7 @@ const BudgetCard = ({
         </Top>
 
         {(maxAmount || maxAmount === `0`) && (
-          <ProgressBar variant={setProgressVariant(amount, maxAmount)}>
+          <ProgressBar variant={setProgressVariant(totalAmount, maxAmount)}>
             <progress value={rate} max="100" />
           </ProgressBar>
         )}
