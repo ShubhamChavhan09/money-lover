@@ -50,7 +50,7 @@ const ViewBudgetExpense = ({ showBudgetExpense, close, name, data, total }) => {
             <Title>
               <TopLeft>
                 <Close onClick={handleClose} />
-                <p>{data[0]?.name}</p>
+                <p>{name}</p>
               </TopLeft>
               <div>
                 <p>{currencyFormatter.format(total)}</p>
@@ -84,8 +84,6 @@ const ViewBudgetExpense = ({ showBudgetExpense, close, name, data, total }) => {
               title="Transaction details"
               toggle={setViewExpenseModal}
               des={expenseData.description}
-              // setDeleteModal={setDeleteModal}
-              // expenseBudgetId={expenseBudgetId}
             />
           </Modal>
         )}
