@@ -16,7 +16,6 @@ const BudgetModal = ({ budgetModal, close, dateRange, setDateRange }) => {
   const nameRef = useRef("");
   const maxRef = useRef("");
   const { addBudget } = useBudgets();
-  const [selected, setSelected] = useState(null);
 
   const [showDate, setShowDate] = useState(false);
 
@@ -96,7 +95,7 @@ const BudgetModal = ({ budgetModal, close, dateRange, setDateRange }) => {
                       style={{ cursor: "pointer" }}
                       readOnly
                       placeholder="Select time range"
-                      onClick={() => setShowDate((prev) => !prev)}
+                      onClick={() => setShowDate(true)}
                     />
                   </div>
                   <AnimatePresence
