@@ -51,7 +51,7 @@ const Dashboard = () => {
     setToggleState(index);
   };
 
-  //
+  // can add supabase
 
   const runningBudgets = budgets
     .map((budget) => {
@@ -59,7 +59,11 @@ const Dashboard = () => {
     })
     .filter((item) => {
       const today = new Date();
-      return today > new Date(item.startDate) && today < new Date(item.endDate);
+      return (
+        (today >= new Date(item.startDate) ||
+          today <= new Date(item.startDate)) &&
+        today <= new Date(item.endDate)
+      );
     });
 
   const finishedBudgets = budgets
@@ -68,9 +72,7 @@ const Dashboard = () => {
     })
     .filter((item) => {
       const today = new Date();
-      return (
-        new Date(item.startDate) <= today && new Date(item.endDate) <= today
-      );
+      return new Date(item.startDate) < today && new Date(item.endDate) < today;
     });
 
   const dataBud = toggleState === 1 ? runningBudgets : finishedBudgets;
