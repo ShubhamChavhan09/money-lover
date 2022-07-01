@@ -3,12 +3,7 @@ import format from "date-fns/format";
 import { currencyFormatter } from "../../utils";
 import { Link } from "react-router-dom";
 
-const ExpenseListItems = ({ selectedExpense, setExpenseData, toggle }) => {
-  const handleClick = () => {
-    setExpenseData(selectedExpense);
-    toggle(true);
-  };
-
+const ExpenseListItems = ({ selectedExpense }) => {
   return (
     <>
       <Card to={selectedExpense.id}>
