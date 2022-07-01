@@ -39,8 +39,6 @@ const BudgetCard = ({ budget, noBudget }) => {
     0
   );
 
-  console.log({ amount: totalAmount });
-
   const rate = (totalAmount / maxAmount) * 100;
 
   function setProgressVariant(amount, maxAmount) {
