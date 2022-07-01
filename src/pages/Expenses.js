@@ -1,34 +1,22 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { useBudgets } from "../context";
 import ExpenseModal from "../components/expense-modal";
 import { Main, Head, Container, BudgetContainer } from "./Budgets";
 import TotalCard from "../components/total-card";
 import ExpenseList from "../components/expense-list";
-import ViewExpense from "../components/view-expense";
-import DeleteModal from "../components/delete-modal";
 import { supabase } from "../supabaseClient";
 import format from "date-fns/format";
 
 const Expenses = () => {
+  // State
+
   const [expenseModal, setExpenseModal] = useState(false);
-  const [expenseData, setExpenseData] = useState("");
-  const [viewExpenseTab, setViewExpenseTab] = useState(false);
-  const [deleteModal, setDeleteModal] = useState(false);
   const [toggleState, setToggleState] = useState(1);
-  const [monthData, setMonthData] = useState([]);
+  const [expenseStatus, setExpenseStatus] = useState([]);
 
-  const { deleteExpense } = useBudgets();
+  // functions
 
-  const handleExpense = () => {
-    setExpenseModal(true);
-  };
-
-  const closeExpenseModal = () => {
-    setExpenseModal(false);
-  };
-
-  const date = new Date();
+  let date = new Date();
 
   const currentMonth = {
     first: new Date(date.getFullYear(), date.getMonth(), 1),
@@ -40,14 +28,14 @@ const Expenses = () => {
     last: new Date(date.getFullYear(), date.getMonth(), 0),
   };
 
-  const monthDetail = toggleState === 1 ? currentMonth : lastMonth;
+  const monthStatus = toggleState === 1 ? currentMonth : lastMonth;
 
-  const dateString1 = format(monthDetail.first, "yyyy-MM-dd");
-  const dateString2 = format(monthDetail.last, "yyyy-MM-dd");
+  const dateString1 = format(monthStatus.first, "yyyy-MM-dd");
+  const dateString2 = format(monthStatus.last, "yyyy-MM-dd");
 
   useEffect(() => {
     month();
-  }, [toggleState]);
+  }, [toggleState, expenseModal]);
 
   const month = async () => {
     const { data, error } = await supabase
@@ -56,7 +44,15 @@ const Expenses = () => {
       .lte("date", dateString2)
       .gte("date", dateString1);
     if (error) console.log("error", error);
-    else setMonthData(data);
+    else setExpenseStatus(data);
+  };
+
+  const openExpenseModal = () => {
+    setExpenseModal(true);
+  };
+
+  const closeExpenseModal = () => {
+    setExpenseModal(false);
   };
 
   const toggleTab = (index) => {
@@ -67,61 +63,35 @@ const Expenses = () => {
     <>
       <Container>
         <Head>
-          <TotalCard name="add expenses" open={handleExpense} />
+          <TotalCard name="add expenses" open={openExpenseModal} />
         </Head>
         <Main>
-          {!viewExpenseTab ? (
-            <BudgetContainer>
-              <div className="heading">
-                <div
-                  className={toggleState === 1 ? "tab active-tab" : "tab"}
-                  onClick={() => toggleTab(1)}
-                >
-                  This Month
-                </div>
-                <div
-                  className={toggleState === 2 ? "tab active-tab" : "tab"}
-                  onClick={() => toggleTab(2)}
-                >
-                  Last Month
-                </div>
-                {/* <div
+          <BudgetContainer>
+            <div className="heading">
+              <div
+                className={toggleState === 1 ? "tab active-tab" : "tab"}
+                onClick={() => toggleTab(1)}
+              >
+                This Month
+              </div>
+              <div
+                className={toggleState === 2 ? "tab active-tab" : "tab"}
+                onClick={() => toggleTab(2)}
+              >
+                Last Month
+              </div>
+              {/* <div
                   className={toggleState === 3 ? "tab active-tab" : "tab"}
                   onClick={() => toggleTab(3)}
                 >
                   upcoming
                 </div> */}
-              </div>
-              <ExpenseList
-                monthData={monthData}
-                setExpenseData={setExpenseData}
-                toggle={setViewExpenseTab}
-              />
-            </BudgetContainer>
-          ) : null}
-          {/* <ExpTab> */}
-          {expenseData && viewExpenseTab && (
-            <ViewExpense
-              data={expenseData}
-              title="Transaction details"
-              toggle={setViewExpenseTab}
-              setDeleteModal={setDeleteModal}
-            />
-          )}
-          {/* </ExpTab> */}
+            </div>
+            <ExpenseList monthData={expenseStatus} />
+          </BudgetContainer>
         </Main>
       </Container>
       <ExpenseModal close={closeExpenseModal} expenseModal={expenseModal} />
-      {expenseData && (
-        <DeleteModal
-          deleteModal={deleteModal}
-          toggle={setDeleteModal}
-          deleteId={expenseData.id}
-          toggleTab={setViewExpenseTab}
-          func={deleteExpense}
-          alert="Delete this transaction?"
-        />
-      )}
     </>
   );
 };
