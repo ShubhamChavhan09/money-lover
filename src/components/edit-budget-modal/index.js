@@ -15,26 +15,23 @@ import { Category } from "../../category";
 import { useNavigate } from "react-router-dom";
 
 const EditBudgetModal = ({
-  id,
-  budgetModal,
   setBudgetModal,
-  name,
-  // toggleViewBudget,
+  budgetModal,
+  id,
   startDate,
   endDate,
+  name,
+  max,
 }) => {
   const nameRef = useRef();
   const maxRef = useRef();
-  const modalRef = useRef("");
+  // const modalRef = useRef("");
   const { updateBudget } = useBudgets();
-
-  const { budgets } = useBudgets();
 
   let navigate = useNavigate();
 
   const start = startDate && parseISO(startDate);
   const end = endDate && parseISO(endDate);
-  // const end = endDate && format(endDate, "dd/MM/yyyy");
 
   const [showEditDate, setShowEditDate] = useState(false);
   const [editDateRange, setEditDateRange] = useState([
@@ -44,12 +41,6 @@ const EditBudgetModal = ({
       key: "selection",
     },
   ]);
-
-  const budget = budgets.filter((budget) => {
-    return budget.name === name;
-  });
-
-  const maxAmount = budget[0]?.max;
 
   const handleBudget = () => {
     setBudgetModal(!budgetModal);
@@ -63,8 +54,9 @@ const EditBudgetModal = ({
       startDate: addDays(new Date(editDateRange[0].startDate), 1),
       endDate: addDays(new Date(editDateRange[0].endDate), 1),
     });
+
     setBudgetModal(false);
-    // navigate("/", { replace: true });
+    navigate("/");
   };
 
   return (
@@ -106,7 +98,7 @@ const EditBudgetModal = ({
                       type="number"
                       min="0"
                       ref={maxRef}
-                      defaultValue={maxAmount}
+                      defaultValue={max}
                     />
                   </div>
                 </Box>
@@ -116,10 +108,9 @@ const EditBudgetModal = ({
                   </div>
                   <div>
                     <input
-                      value={`${format(start, "dd/MM/yyyy")} - ${format(
-                        end,
-                        "dd/MM/yyyy"
-                      )}`}
+                      value={`${start && format(start, "dd/MM/yyyy")} - ${
+                        end && format(end, "dd/MM/yyyy")
+                      }`}
                       style={{ cursor: "pointer" }}
                       readOnly
                       placeholder="Select time range"
@@ -135,7 +126,7 @@ const EditBudgetModal = ({
                       <Modal width="350px" height="530px">
                         <Title>
                           <TopLeft>
-                            <Close onClick={(e) => setShowEditDate(false)} />
+                            <Close onClick={() => setShowEditDate(false)} />
                             <p>Select time range</p>
                           </TopLeft>
                         </Title>
