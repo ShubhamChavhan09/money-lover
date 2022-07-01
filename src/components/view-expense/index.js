@@ -1,6 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { CgClose } from "react-icons/cg";
 import { useBudgets } from "../../context";
 import { format } from "date-fns";
 import { currencyFormatter } from "../../utils";
@@ -8,27 +7,38 @@ import EditExpenseModal from "../edit-expense-modal";
 import { IoArrowBack } from "react-icons/io5";
 import { useNavigate, useParams } from "react-router-dom";
 import DeleteModal from "../delete-modal";
+import { supabase } from "../../supabaseClient";
 
-const ViewExpense = ({ toggle, data }) => {
+const ViewExpense = ({ toggle }) => {
   let { expenseId } = useParams();
-  let navigate = useNavigate();
-
-  const [deleteModal, setDeleteModal] = useState(false);
 
   const { expenses, deleteExpense } = useBudgets();
 
-  const singleExpense = expenses.filter((expense) => {
-    return expense.id === expenseId;
-  });
+  const [expenseData, setExpenseData] = useState([]);
+  const [deleteModal, setDeleteModal] = useState(false);
+  const [expenseModal, setExpenseModal] = useState(false);
 
-  const expName = singleExpense[0]?.name;
-  const expDate = singleExpense[0]?.date;
-  const expAmount = singleExpense[0]?.amount;
-  const expDescription = singleExpense[0]?.description;
+  let navigate = useNavigate();
+
+  useEffect(() => {
+    expense();
+  }, [deleteModal, expenseModal]);
+
+  const expense = async () => {
+    const { data, error } = await supabase
+      .from("expenses")
+      .select()
+      .match({ id: expenseId });
+    if (error) console.log("error", error);
+    else setExpenseData(data);
+  };
+
+  const expName = expenseData[0]?.name;
+  const expDate = expenseData[0]?.date;
+  const expAmount = expenseData[0]?.amount;
+  const expDescription = expenseData[0]?.description;
 
   //
-
-  const [expenseModal, setExpenseModal] = useState(false);
 
   const handleDelete = () => {
     setDeleteModal(true);
@@ -62,7 +72,7 @@ const ViewExpense = ({ toggle, data }) => {
       <EditExpenseModal
         expenseModal={expenseModal}
         setExpenseModal={setExpenseModal}
-        data={singleExpense[0]}
+        data={expenseData[0]}
         toggleViewExpense={toggle}
       />
       {deleteModal && (
