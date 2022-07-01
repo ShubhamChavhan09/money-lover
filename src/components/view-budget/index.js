@@ -111,7 +111,9 @@ const ViewBudget = () => {
           </div>
         </Head>
         <Details>
-          <h3>{budgetName}</h3>
+          <h3>
+            {budgetName} : {currencyFormatter.format(budgetMax)}
+          </h3>
           <p>{budgetDate && format(new Date(budgetDate), "EEEE, dd/MM/yy")}</p>
           {/* <p>{daysData()}</p> */}
           <hr />
