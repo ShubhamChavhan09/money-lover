@@ -1,10 +1,9 @@
 import styled from "styled-components";
-import { useBudgets } from "../../context";
 import ExpenseListItems from "../expense-list-items";
 import { currencyFormatter } from "../../utils";
 import { v4 as uuidv4 } from "uuid";
 
-const ExpenseList = ({ setExpenseData, toggle, monthData }) => {
+const ExpenseList = ({ monthData }) => {
   const uniqueExpenseName = monthData
     .map((item) => item.name)
     .filter((value, index, self) => self.indexOf(value) === index);
@@ -19,7 +18,7 @@ const ExpenseList = ({ setExpenseData, toggle, monthData }) => {
             return item.name === expense;
           });
 
-          const sort = data.sort(function (a, b) {
+          data.sort(function (a, b) {
             return new Date(b.date) - new Date(a.date);
           });
 
@@ -47,12 +46,7 @@ const ExpenseList = ({ setExpenseData, toggle, monthData }) => {
               )}
               {data.map((list) => {
                 return (
-                  <ExpenseListItems
-                    key={uuidv4()}
-                    selectedExpense={list}
-                    setExpenseData={setExpenseData}
-                    toggle={toggle}
-                  />
+                  <ExpenseListItems key={uuidv4()} selectedExpense={list} />
                 );
               })}
             </List>
