@@ -14,12 +14,10 @@ import {
 
 const Dashboard = () => {
   const [budgetModal, setBudgetModal] = useState(false);
-  const [viewExpenses, setViewExpenses] = useState(false);
-  const [budgetName, setBudgetName] = useState("");
-  const [viewBudgetTab, setViewBudgetTab] = useState(false);
 
   const [toggleState, setToggleState] = useState(1);
-  const [selectedBudgetId, setSelectedBudgetId] = useState("");
+
+  const { budgets } = useBudgets();
 
   const dropIn = {
     visible: {
@@ -30,7 +28,7 @@ const Dashboard = () => {
     },
   };
 
-  const { budgets, getBudgetExpenses, deleteBudget } = useBudgets();
+  // const { budgets, getBudgetExpenses } = useBudgets();
 
   //date range for a budget
   const [dateRange, setDateRange] = useState([
@@ -49,20 +47,33 @@ const Dashboard = () => {
     setBudgetModal(false);
   };
 
-  const budgetAmount = getBudgetExpenses(budgetName).reduce(
-    (total, expense) => total + expense.amount,
-    0
-  );
-
-  const budgetSpent = budgets.filter((budget) => {
-    return budget.name === budgetName;
-  });
-
-  const budgetLeft = budgetSpent[0]?.max - budgetAmount;
-
   const toggleTab = (index) => {
     setToggleState(index);
   };
+
+  //
+
+  const runningBudgets = budgets
+    .map((budget) => {
+      return budget;
+    })
+    .filter((item) => {
+      const today = new Date();
+      return today > new Date(item.startDate) && today < new Date(item.endDate);
+    });
+
+  const finishedBudgets = budgets
+    .map((budget) => {
+      return budget;
+    })
+    .filter((item) => {
+      const today = new Date();
+      return (
+        new Date(item.startDate) <= today && new Date(item.endDate) <= today
+      );
+    });
+
+  const dataBud = toggleState === 1 ? runningBudgets : finishedBudgets;
 
   return (
     <>
@@ -71,58 +82,35 @@ const Dashboard = () => {
           <TotalCard open={openBudgetModal} name="add budget" />
         </Head>
         <Main>
-          {!viewBudgetTab ? (
-            <BudgetContainer>
-              <div className="heading">
-                <div
-                  className={toggleState === 1 ? "tab active-tab" : "tab"}
-                  onClick={() => toggleTab(1)}
-                >
-                  RUNNING
-                </div>
-                <div
-                  className={toggleState === 2 ? "tab active-tab" : "tab"}
-                  onClick={() => toggleTab(2)}
-                >
-                  FINISHED
-                </div>
+          <BudgetContainer>
+            <div className="heading">
+              <div
+                className={toggleState === 1 ? "tab active-tab" : "tab"}
+                onClick={() => toggleTab(1)}
+              >
+                RUNNING
               </div>
-              <div>
-                <NewCard
-                  setBudgetName={setBudgetName}
-                  setSelectedBudgetId={setSelectedBudgetId}
-                  setViewBudgetTab={setViewBudgetTab}
-                  toggleState={toggleState}
-                />
+              <div
+                className={toggleState === 2 ? "tab active-tab" : "tab"}
+                onClick={() => toggleTab(2)}
+              >
+                FINISHED
               </div>
-            </BudgetContainer>
-          ) : null}
+            </div>
+            <div>
+              <NewCard toggleState={toggleState} data={dataBud} />
+            </div>
+          </BudgetContainer>
 
           <div>
             <AnimatePresence
               initial={false}
               exitBeforeEnter={true}
               onExitComplete={() => null}
-            >
-              {/* {budgetName && viewBudgetTab && (
-                <ViewBudget
-                  title="Detail"
-                  budgetName={budgetName}
-                  selectedBudgetId={selectedBudgetId}
-                  date={new Date()}
-                  budgetLeft={budgetLeft}
-                  des={budgetLeft >= 0 ? "Left" : "Overspent"}
-                  setDeleteModal={setDeleteModal}
-                  toggle={setViewBudgetTab}
-                  startDate={dateRange[0].startDate}
-                  endDate={dateRange[0].endDate}
-                />
-              )} */}
-            </AnimatePresence>
+            ></AnimatePresence>
           </div>
         </Main>
       </Container>
-
       <BudgetModal
         budgetModal={budgetModal}
         close={closeBudgetModal}
