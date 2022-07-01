@@ -33,7 +33,7 @@ const EditExpenseModal = ({ expenseModal, setExpenseModal, data }) => {
       description: descriptionRef.current.value,
     });
     closeEditExpense();
-    navigate("/expenses");
+    navigate(`/expenses`);
   };
 
   const customStyles = {
