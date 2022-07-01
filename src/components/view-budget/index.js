@@ -161,7 +161,7 @@ export default ViewBudget;
 const Container = styled(motion.div)`
   background: #ffffff;
   width: min(92vw, 600px);
-  height: min(100%, 620px);
+  height: 650px;
   border-radius: 4px;
   display: flex;
   flex-direction: column;
