@@ -44,7 +44,6 @@ const Report = () => {
     else setMonthData(data);
   };
 
-  console.log({ monthData });
   const toggleTab = (index) => {
     setToggleState(index);
   };
@@ -117,16 +116,38 @@ const Report = () => {
       <Head>
         <TotalCard noButton />
       </Head>
-      <Buttons>
-        <button onClick={() => toggleTab(1)}>This Month</button>
-        <button onClick={() => toggleTab(2)}>Last Month</button>
-      </Buttons>
+      <Select>
+        <label>Report for : </label>
+        <select
+          value={toggleState}
+          onChange={(e) => setToggleState(parseInt(e.target.value))}
+        >
+          <option value={1}>This Month</option>
+          <option value={2}>Last Month</option>
+        </select>
+      </Select>
       <ChartData>
         <Bar
           data={data}
           height={400}
           width={600}
           options={{
+            scales: {
+              y: {
+                ticks: {
+                  font: {
+                    size: 9,
+                  },
+                },
+              },
+              x: {
+                ticks: {
+                  font: {
+                    size: 10,
+                  },
+                },
+              },
+            },
             maintainAspectRatio: false,
           }}
         />
@@ -154,4 +175,14 @@ const ChartData = styled.div`
 
 const Buttons = styled.div`
   margin: 20px 0;
+`;
+const Select = styled.div`
+  font-size: 0.9rem;
+  padding: 20px;
+  z-index: 1;
+  select {
+    padding: 5px;
+    border-radius: 4px;
+    outline: none;
+  }
 `;
