@@ -69,7 +69,8 @@ const ExpenseModal = ({ expenseModal, close }) => {
                     <p>Budget Category</p>
                   </div>
                   <div>
-                    <select ref={nameRef}>
+                    <select ref={nameRef} required>
+                      <option value={null}></option>
                       {Category.map((budget) => {
                         return (
                           <option key={budget.id} value={budget.name}>
