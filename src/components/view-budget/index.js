@@ -112,7 +112,7 @@ const ViewBudget = () => {
         </Head>
         <Details>
           <h3>
-            {budgetName} : {currencyFormatter.format(budgetMax)}
+            {budgetName} <span>: {currencyFormatter.format(budgetMax)}</span>
           </h3>
           <p>{budgetDate && format(new Date(budgetDate), "EEEE, dd/MM/yy")}</p>
           {/* <p>{daysData()}</p> */}
@@ -230,6 +230,10 @@ const Details = styled.div`
   h3 {
     font-size: 24px;
     margin: 10px 0;
+    span {
+      font-size: 20px;
+      font-weight: 300;
+    }
   }
   p {
     font-size: 0.75rem;
