@@ -30,8 +30,8 @@ const EditBudgetModal = ({
 
   let navigate = useNavigate();
 
-  const start = startDate && parseISO(startDate);
-  const end = endDate && parseISO(endDate);
+  const start = parseISO(startDate);
+  const end = parseISO(endDate);
 
   const [showEditDate, setShowEditDate] = useState(false);
   const [editDateRange, setEditDateRange] = useState([
@@ -53,6 +53,7 @@ const EditBudgetModal = ({
       max: parseFloat(maxRef.current.value),
       startDate: addDays(new Date(editDateRange[0].startDate), 1),
       endDate: addDays(new Date(editDateRange[0].endDate), 1),
+      id: id,
     });
 
     setBudgetModal(false);
@@ -108,8 +109,8 @@ const EditBudgetModal = ({
                   </div>
                   <div>
                     <input
-                      value={`${start && format(start, "dd/MM/yyyy")} - ${
-                        end && format(end, "dd/MM/yyyy")
+                      value={`${start && format(start, "dd MMMM")} - ${
+                        end && format(end, "dd MMMM")
                       }`}
                       style={{ cursor: "pointer" }}
                       readOnly
