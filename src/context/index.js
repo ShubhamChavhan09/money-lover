@@ -152,6 +152,7 @@ export const BudgetsProvider = ({ children }) => {
           max: updatedBudget.max,
           startDate: updatedBudget.startDate,
           endDate: updatedBudget.endDate,
+          id: id,
         })
         .match({ id });
 
