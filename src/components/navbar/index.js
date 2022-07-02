@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import styled from "styled-components";
 import { MdAccountBalanceWallet, MdSave, MdLibraryBooks } from "react-icons/md";
 
@@ -11,7 +11,10 @@ const Navbar = () => {
         <h2>Budget</h2>
         <ul>
           <li>
-            <NavLinks to="">
+            <NavLinks
+              to=""
+              className={({ isActive }) => (isActive ? "active" : "inactive")}
+            >
               <Icon>
                 <MdSave />
               </Icon>
@@ -39,7 +42,10 @@ const Navbar = () => {
 
       {/* Nav 2 */}
       <BottomNav>
-        <BottomLink to="">
+        <BottomLink
+          to=""
+          className={({ isActive }) => (isActive ? "active" : "inactive")}
+        >
           <Icon>
             <MdSave />
           </Icon>
@@ -97,10 +103,9 @@ const Nav = styled.nav`
   }
 `;
 
-const NavLinks = styled(Link)`
+const NavLinks = styled(NavLink)`
   text-decoration: none;
   color: #999;
-  // color: #000000;
   transition: all 0.5s ease;
   display: flex;
   padding: 20px;
@@ -110,10 +115,10 @@ const NavLinks = styled(Link)`
 
   &:hover {
     background: #ffffff;
-    color: #000000;
+    color: #666666;
   }
   &.active {
-    background: red;
+    color: #1aa333;
   }
 `;
 const Icon = styled.div`
@@ -144,10 +149,14 @@ const BottomNav = styled.div`
     display: flex;
   }
 `;
-const BottomLink = styled(Link)`
+const BottomLink = styled(NavLink)`
   display: flex;
   color: #bdbdbd;
   text-decoration: none;
+
+  &.active {
+    color: #1aa333;
+  }
 `;
 const Bar = styled.div`
   height: 100vh;
