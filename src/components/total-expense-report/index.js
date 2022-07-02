@@ -58,7 +58,6 @@ const TotalExpenseReport = ({ chartData }) => {
         maxBarThickness: 70,
         label: "Spending",
         data: totalArr,
-        // expenseArr
         backgroundColor: [
           "rgba(255, 99, 132, 0.2)",
           "rgba(54, 162, 235, 0.2)",
@@ -81,22 +80,26 @@ const TotalExpenseReport = ({ chartData }) => {
   };
 
   return (
-    <ReportData
-    // style={{ textAlign: "center", width: "580px", height: "320px" }}
-    >
+    <ReportData>
       <Bar
         data={data}
-        // height={200}
-        // width={300}
         options={{
           maintainAspectRatio: false,
           scales: {
-            // x: {
-            //   min: format(new Date(startDate), "dd/MM/yyyy hh:mm:ss"),
-            //   max: format(new Date(endDate), "dd/MM/yyyy hh:mm:ss"),
-            // },
             y: {
               beginAtZero: true,
+              ticks: {
+                font: {
+                  size: 9,
+                },
+              },
+            },
+            x: {
+              ticks: {
+                font: {
+                  size: 10,
+                },
+              },
             },
           },
         }}
