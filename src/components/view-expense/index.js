@@ -63,7 +63,7 @@ const ViewExpense = ({ toggle }) => {
         </Head>
         <Details>
           <h3>{expName}</h3>
-          <p>{expDate && format(new Date(expDate), "EEEE, dd/MM/yy")}</p>
+          <p>{expDate && format(new Date(expDate), "EEEE, dd/MM/yyyy")}</p>
           <hr />
           <p>{expDescription}</p>
           <span>{currencyFormatter.format(Math.abs(expAmount))}</span>
