@@ -1,6 +1,6 @@
 export const Category = [
   {
-    name: "Food & Beveage",
+    name: "Food & Beverage",
     id: 1,
     url: "https://static.moneylover.me/img/icon/ic_category_foodndrink.png",
   },
