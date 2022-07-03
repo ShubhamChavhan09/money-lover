@@ -19,12 +19,6 @@ const BudgetModal = ({ budgetModal, close, dateRange, setDateRange }) => {
 
   const [showDate, setShowDate] = useState(false);
 
-  useEffect(() => {
-    if (nameRef.current) {
-      nameRef.current.focus();
-    }
-  }, [close]);
-
   const handleSubmit = (event) => {
     event.preventDefault();
     addBudget({
@@ -37,11 +31,16 @@ const BudgetModal = ({ budgetModal, close, dateRange, setDateRange }) => {
     close();
   };
 
-  // const close = (e) => {
-  //   if (modalRef.current === e.target) {
-  //     handleBudget();
-  //   }
-  // };
+  const handleBack = () => {
+    setShowDate(false);
+    setDateRange([
+      {
+        startDate: new Date(),
+        endDate: addDays(new Date(), 7),
+        key: "selection",
+      },
+    ]);
+  };
 
   return (
     <>
@@ -107,7 +106,7 @@ const BudgetModal = ({ budgetModal, close, dateRange, setDateRange }) => {
                       <Modal width="350px" height="530px">
                         <Title>
                           <TopLeft>
-                            <Close onClick={(e) => setShowDate(false)} />
+                            <Close onClick={handleBack} />
                             <p>Select time range</p>
                           </TopLeft>
                         </Title>
