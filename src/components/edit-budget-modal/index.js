@@ -25,7 +25,6 @@ const EditBudgetModal = ({
 }) => {
   const nameRef = useRef();
   const maxRef = useRef();
-  // const modalRef = useRef("");
   const { updateBudget } = useBudgets();
 
   let navigate = useNavigate();
@@ -43,7 +42,7 @@ const EditBudgetModal = ({
   ]);
 
   const handleBudget = () => {
-    setBudgetModal(!budgetModal);
+    setBudgetModal(false);
   };
 
   const handleSubmit = (e) => {
@@ -179,9 +178,6 @@ export const Overlay = styled.div`
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
-    // flex-wrap: wrap;
-    // gap: 10px;
-    //
     height: 100%;
   }
 `;
@@ -192,7 +188,6 @@ export const CloseModal = styled(CgClose)`
   right: 25px;
   font-size: 25px;
   cursor: pointer;
-  // vertical-align: bottom;
 `;
 
 export const Form = styled.form`
@@ -201,9 +196,7 @@ export const Form = styled.form`
   select {
     height: 32px;
     width: 100%;
-    // margin: 10px 0;
     font-size: 0.9rem;
-    // background: rgba(30, 39, 46, 0.2);
     border: none;
     outline: none;
     padding-top: 8px;
