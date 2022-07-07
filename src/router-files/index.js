@@ -4,6 +4,7 @@ import Report from "../pages/Report";
 import Dashboard from "../pages/Budgets";
 import ViewBudget from "../components/view-budget";
 import ViewExpense from "../components/view-expense";
+import ErrorPage from "../pages/ErrorPage";
 
 const RouterFiles = () => {
   return (
@@ -13,6 +14,7 @@ const RouterFiles = () => {
       <Route path="/expenses" element={<Expenses />} />
       <Route path="/expenses/:expenseId" element={<ViewExpense />} />
       <Route path="/report" element={<Report />} />
+      <Route path="*" element={<ErrorPage />} />
     </Routes>
   );
 };
