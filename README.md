@@ -15,6 +15,7 @@ The following technologies/dependencies have been used to create the app:
 * React -> Frontend Library
 * react-router-dom v6 -> Enable client side routing
 * styled-components -> CSS-in-JS styling
+* supabase -> PostgreSQL database
 * react-icons -> Icon library
 * chart-js -> Chart library
 * date-fns -> Library for date formatting and manipulation

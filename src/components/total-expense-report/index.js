@@ -81,29 +81,33 @@ const TotalExpenseReport = ({ chartData }) => {
 
   return (
     <ReportData>
-      <Bar
-        data={data}
-        options={{
-          maintainAspectRatio: false,
-          scales: {
-            y: {
-              beginAtZero: true,
-              ticks: {
-                font: {
-                  size: 9,
+      {totalArr.length !== 0 ? (
+        <Bar
+          data={data}
+          options={{
+            maintainAspectRatio: false,
+            scales: {
+              y: {
+                beginAtZero: true,
+                ticks: {
+                  font: {
+                    size: 9,
+                  },
+                },
+              },
+              x: {
+                ticks: {
+                  font: {
+                    size: 10,
+                  },
                 },
               },
             },
-            x: {
-              ticks: {
-                font: {
-                  size: 10,
-                },
-              },
-            },
-          },
-        }}
-      />
+          }}
+        />
+      ) : (
+        <p>no transactions</p>
+      )}
     </ReportData>
   );
 };
