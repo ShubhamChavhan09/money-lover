@@ -8,7 +8,7 @@ import ViewBudgetExpense from "../view-budget-expense";
 import TotalExpenseReport from "../total-expense-report";
 import { motion, AnimatePresence } from "framer-motion";
 import { IoArrowBack } from "react-icons/io5";
-import { useParams, useNavigate, useLocation } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import DeleteModal from "../delete-modal";
 import { supabase } from "../../supabaseClient";
 
@@ -16,7 +16,7 @@ const ViewBudget = () => {
   let { budgetId } = useParams();
   let navigate = useNavigate();
 
-  const { budgets, deleteBudget, budgetRange, newBudget } = useBudgets();
+  const { budgets, deleteBudget } = useBudgets();
 
   const [deleteModal, setDeleteModal] = useState(false);
   const [budgetRangeData, setBudgetRangeData] = useState([]);
@@ -114,8 +114,9 @@ const ViewBudget = () => {
           <h3>
             {budgetName} <span>: {currencyFormatter.format(budgetMax)}</span>
           </h3>
-          <p>{budgetDate && format(new Date(budgetDate), "EEEE, dd/MM/yy")}</p>
-          {/* <p>{daysData()}</p> */}
+          <p>
+            {budgetDate && format(new Date(budgetDate), "EEEE, dd/MM/yyyy")}
+          </p>
           <hr />
           <p>{budgetAmountLeft >= 0 ? "Left" : "Overspent"}</p>
           <h3>{currencyFormatter.format(Math.abs(budgetAmountLeft))}</h3>
